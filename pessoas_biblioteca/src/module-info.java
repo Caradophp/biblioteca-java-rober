@@ -1,8 +1,0 @@
-/**
- * 
- */
-/**
- * 
- */
-module pessoas_biblioteca {
-}
