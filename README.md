@@ -76,13 +76,13 @@ public double calcularMulta() {
 
 1.  **Clone o repositório:**
     ```bash
-    git clone https://github.com/seu-usuario/seu-repositorio.git
+    git clone https://github.com/Caradophp/biblioteca-java-rober.get
     cd seu-repositorio
     ```
 2.  **Compile as classes Java:**
     ```bash
     # Dependendo da sua estrutura de pacotes, pode ser necessário um comando mais complexo
-    javac -d bin src/**/*.java
+    javac -d bin src/Main.java
     ```
 3.  **Execute a classe principal:**
     ```bash
