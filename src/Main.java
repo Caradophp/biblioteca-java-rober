@@ -18,8 +18,8 @@ public class Main {
 //        b.cadastrarLivro(l);
 //        b.fazerEmprestimo(e);
 
-//        b.devolverLivro(1);
-        double v = e.calcularMulta();
-        System.out.println("Valor da multa: R$ " + v);
+        b.devolverLivro(1);
+//        double v = e.calcularMulta();
+//        System.out.println("Valor da multa: R$ " + v);
     }
 }

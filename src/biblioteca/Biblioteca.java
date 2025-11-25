@@ -527,7 +527,7 @@ public class Biblioteca {
      * Marca o livro como devolvido e atualiza a data de devolução para a data atual.
      */
     public boolean devolverLivro(long codigoEmprestimo) {
-
+        boolean result = false;
         try {
             limparArquivo(arquivoEmprestimos);
             for (Emprestimo emprestimo : emprestimos) {
@@ -535,7 +535,6 @@ public class Biblioteca {
 
                     if (emprestimo.isDevolvido()) {
                         System.out.println("Esse livro já foi devolvido");
-                        return false;
                     }
 
                     emprestimo.setDevolvido(true);
@@ -543,18 +542,17 @@ public class Biblioteca {
 
                     Files.write(arquivoEmprestimos, linhaAlterada.getBytes(), StandardOpenOption.APPEND);
 
+                    result = true;
                 } else {
                     String linhaIncerida = emprestimo.getCodigoEmprestimo() + ";" + emprestimo.getCodigoLivro() + ";" + emprestimo.getCodigoAluno() + ";" + emprestimo.getDataEmprestimoFormatada() + ";" + emprestimo.getDataDevolucaoFormatada() + ";" + "nao";
                     Files.write(arquivoEmprestimos, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
                 }
-
-                return true;
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
-        return false;
+        return result;
 
     }
 
