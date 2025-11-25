@@ -1,0 +1,140 @@
+package entidades;
+
+import java.util.List;
+
+/**
+ * Representa um Livro no acervo da biblioteca.
+ */
+public class Livro {
+
+    /** Código único do livro. */
+    private int codigo;
+    /** Título do livro. */
+    private String nome;
+    /** Categoria ou gênero do livro. */
+    private String categoria;
+    /** Autor do livro. */
+    private String autor;
+    /** Editora responsável pela publicação. */
+    private String editora;
+    /** Número ISBN (International Standard Book Number). */
+    private int isbn;
+    /** Quantidade de exemplares disponíveis para empréstimo. */
+    private int qtdDisponivel;
+
+    /** Lista de categorias aceitas */
+    private static final List<String> categorias = List.of("Ação", "Aventura", "Romance", "T.I.");
+
+    /**
+     * Construtor padrão.
+     */
+    public Livro() {
+    }
+
+    /**
+     * Construtor com todos os atributos.
+     * @param codigo Código único do livro.
+     * @param nome Título do livro.
+     * @param categoria Categoria/gênero.
+     * @param autor Autor do livro.
+     * @param editora Editora.
+     * @param isbn Número ISBN.
+     * @param qtdDisponivel Quantidade disponível.
+     */
+    public Livro(int codigo, String nome, String categoria, String autor, String editora, int isbn, int qtdDisponivel) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.categoria = categoria;
+        this.autor = autor;
+        this.editora = editora;
+        this.isbn = isbn;
+        this.qtdDisponivel = qtdDisponivel;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+
+        if (possuiCategoria(categoria)) {
+            this.categoria = categoria;
+            return;
+        }
+
+        System.out.println("Essa categoria não é suportada pelo sistema");
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
+    public String getEditora() {
+        return editora;
+    }
+
+    public void setEditora(String editora) {
+        this.editora = editora;
+    }
+
+    public int getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(int isbn) {
+        this.isbn = isbn;
+    }
+
+    public int getQtdDisponivel() {
+        return qtdDisponivel;
+    }
+
+    public void setQtdDisponivel(int qtdDisponivel) {
+        this.qtdDisponivel = qtdDisponivel;
+    }
+
+    /**
+     * Sobrescreve o método toString para representação em string do objeto.
+     * @return Uma string contendo os dados do Livro.
+     */
+    @Override
+    public String toString() {
+        return "Livro{" +
+                "codigo=" + codigo +
+                ", nome='" + nome + '\'' +
+                ", categoria='" + categoria + '\'' +
+                ", autor='" + autor + '\'' +
+                ", editora='" + editora + '\'' +
+                ", isbn=" + isbn +
+                ", qtdDisponivel=" + qtdDisponivel +
+                '}';
+    }
+
+    /**
+     * Verifica se a categoria informada está nas lista de categorias aceitas pelo sistema
+     * @return true se estiver na lista e false caso não esteja
+     */
+    private boolean possuiCategoria(String categoria) {
+        return categorias.contains(categoria);
+    }
+}

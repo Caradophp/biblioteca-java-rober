@@ -470,7 +470,7 @@ public class Biblioteca {
             return false;
         }
 
-        String linhaIncerida = emprestimo.getCodigoEmprestimo() + ";" + emprestimo.getCodigoLivro() + ";" + emprestimo.getCodigoAluno() + ";" + emprestimo.getDataEmprestimo() + ";" + emprestimo.getDataDevolucao() + ";" + "nao";
+        String linhaIncerida = emprestimo.getCodigoEmprestimo() + ";" + emprestimo.getCodigoLivro() + ";" + emprestimo.getCodigoAluno() + ";" + emprestimo.getDataEmprestimoFormatada() + ";" + emprestimo.getDataDevolucaoFormatada() + ";" + "nao";
 
         try {
             Files.write(arquivoEmprestimos, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
@@ -504,7 +504,7 @@ public class Biblioteca {
                 emprestimo.setCodigoEmprestimo(Integer.parseInt(l[0]));
                 emprestimo.setCodigoLivro(Integer.parseInt(l[1]));
                 emprestimo.setCodigoAluno(Integer.parseInt(l[2]));
-                emprestimo.setDevolvido(Boolean.parseBoolean(l[5]));
+                emprestimo.setDevolvido(l[5].equals("sim"));
 
                 // Divide a string de data para montar o objeto LocalDate (formato dd/MM/yyyy)
 
@@ -521,6 +521,41 @@ public class Biblioteca {
         }
 
         return emprestimoList;
+    }
+
+    /**
+     * Marca o livro como devolvido e atualiza a data de devolução para a data atual.
+     */
+    public boolean devolverLivro(long codigoEmprestimo) {
+
+        try {
+            limparArquivo(arquivoEmprestimos);
+            for (Emprestimo emprestimo : emprestimos) {
+                if (emprestimo.getCodigoEmprestimo() == codigoEmprestimo) {
+
+                    if (emprestimo.isDevolvido()) {
+                        System.out.println("Esse livro já foi devolvido");
+                        return false;
+                    }
+
+                    emprestimo.setDevolvido(true);
+                    String linhaAlterada= emprestimo.getCodigoEmprestimo() + ";" + emprestimo.getCodigoLivro() + ";" + emprestimo.getCodigoAluno() + ";" + emprestimo.getDataEmprestimoFormatada() + ";" + emprestimo.getDataDevolucaoFormatada() + ";" + "sim";
+
+                    Files.write(arquivoEmprestimos, linhaAlterada.getBytes(), StandardOpenOption.APPEND);
+
+                } else {
+                    String linhaIncerida = emprestimo.getCodigoEmprestimo() + ";" + emprestimo.getCodigoLivro() + ";" + emprestimo.getCodigoAluno() + ";" + emprestimo.getDataEmprestimoFormatada() + ";" + emprestimo.getDataDevolucaoFormatada() + ";" + "nao";
+                    Files.write(arquivoEmprestimos, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
+                }
+
+                return true;
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return false;
+
     }
 
     // Método para limpar arquivo

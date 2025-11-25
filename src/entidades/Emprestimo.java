@@ -1,6 +1,7 @@
 package entidades;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -17,7 +18,7 @@ public class Emprestimo {
     /** Código único do empréstimo. */
     private int codigoEmprestimo;
     /** Código (matrícula) do aluno que realizou o empréstimo. */
-    private int codigoAluno;
+    private long codigoAluno;
     /** Código (registro) do funcionário que registrou o empréstimo. */
     private int codigoFuncionario;
     /** Código do livro emprestado. */
@@ -46,15 +47,13 @@ public class Emprestimo {
      * @param codigoEmprestimo Código único do empréstimo.
      * @param codigoAluno Código do aluno.
      * @param codigoLivro Código do livro.
-     * @param dataEmprestimo Data do empréstimo.
-     * @param dataDevolucao Data prevista de devolução.
      */
-    public Emprestimo(int codigoEmprestimo, int codigoAluno, int codigoLivro, LocalDate dataEmprestimo, LocalDate dataDevolucao) {
+    public Emprestimo(int codigoEmprestimo, long codigoAluno, int codigoLivro) {
         this.codigoEmprestimo = codigoEmprestimo;
         this.codigoAluno = codigoAluno;
         this.codigoLivro = codigoLivro;
-        this.dataEmprestimo = dataEmprestimo;
-        this.dataDevolucao = dataDevolucao;
+        this.dataEmprestimo = LocalDate.now();
+        this.dataDevolucao = LocalDate.now().plusDays(10);
     }
 
     public int getCodigoEmprestimo() {
@@ -65,11 +64,11 @@ public class Emprestimo {
         this.codigoEmprestimo = codigoEmprestimo;
     }
 
-    public int getCodigoAluno() {
+    public long getCodigoAluno() {
         return codigoAluno;
     }
 
-    public void setCodigoAluno(int codigoAluno) {
+    public void setCodigoAluno(long codigoAluno) {
         this.codigoAluno = codigoAluno;
     }
 
@@ -130,30 +129,16 @@ public class Emprestimo {
     }
 
     /**
-     * Marca o livro como devolvido e atualiza a data de devolução para a data atual.
-     */
-    public void devolverLivro() {
-        if (this.isDevolvido()) {
-            System.out.println("Livro já devolvido.");
-            return;
-        }
-        this.dataDevolucao = LocalDate.now();
-        this.setDevolvido(true);
-    }
-
-    /**
      * Calcula o valor da multa com base nos dias de atraso.
      * @return O valor total da multa.
      */
     public double calcularMulta() {
-//        if (this.dataDevolucao == null) {
-//            return 0.0;
-//        }
-        long diasAtraso = ChronoUnit.DAYS.between(LocalDate.now(), dataDevolucao);
-        if (diasAtraso <= 0) {
+        Period p = Period.between(dataDevolucao, LocalDate.now());
+        if (p.getDays() < 0) {
             return 0.0;
         }
-        return diasAtraso * MULTA_DIA;
+
+        return p.getDays() * MULTA_DIA;
     }
 
     /**
