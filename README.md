@@ -77,7 +77,7 @@ public double calcularMulta() {
 1.  **Clone o repositório:**
     ```bash
     git clone https://github.com/Caradophp/biblioteca-java-rober.get
-    cd seu-repositorio
+    cd biblioteca-java-rober
     ```
 2.  **Compile as classes Java:**
     ```bash
@@ -99,6 +99,3 @@ Sinta-se à vontade para sugerir melhorias, como a implementação de um banco d
 3.  Commit suas mudanças (`git commit -m 'feat: Adiciona nova funcionalidade X'`).
 4.  Faça o Push para a branch (`git push origin feature/nova-funcionalidade`).
 5.  Abra um Pull Request.
-
----
-Feito com ❤️ por **[Seu Nome/Grupo]**

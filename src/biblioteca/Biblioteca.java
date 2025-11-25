@@ -4,6 +4,10 @@ import entidades.Aluno;
 import entidades.Bibliotecario;
 import entidades.Emprestimo;
 import entidades.Livro;
+import manipulators.AlunoManipulator;
+import manipulators.BibliotecarioManipulator;
+import manipulators.EmprestimoManipulator;
+import manipulators.LivroManipulator;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,22 +27,10 @@ import java.util.List;
  */
 public class Biblioteca {
 
-    /**
-     * Caminho para o arquivo de persistência dos livros.
-     */
-    private Path arquivoLivros = Paths.get("livros.txt");
-    /**
-     * Caminho para o arquivo de persistência dos alunos.
-     */
-    private Path arquivoAlunos = Paths.get("alunos.txt");
-    /**
-     * Caminho para o arquivo de persistência dos bibliotecários.
-     */
-    private Path arquivoFuncionarios = Paths.get("bibliotecarios.txt");
-    /**
-     * Caminho para o arquivo de persistência dos empréstimos.
-     */
-    private Path arquivoEmprestimos = Paths.get("emprestimos.txt");
+    private final static LivroManipulator livroManipulator = new LivroManipulator();
+    private final static AlunoManipulator alunoManipulator = new AlunoManipulator();
+    private final static BibliotecarioManipulator bibliotecarioManipulator = new BibliotecarioManipulator();
+    private final static EmprestimoManipulator emprestimoManipulator = new EmprestimoManipulator();
 
     /**
      * Nome da biblioteca.
@@ -48,32 +40,16 @@ public class Biblioteca {
      * Endereço da biblioteca.
      */
     private String endereco;
-    /**
-     * Lista de livros carregados em memória.
-     */
-    List<Livro> livros = new ArrayList<>();
-    /**
-     * Lista de alunos carregados em memória.
-     */
-    List<Aluno> alunos = new ArrayList<>();
-    /**
-     * Lista de bibliotecários carregados em memória.
-     */
-    List<Bibliotecario> bibliotecarios = new ArrayList<>();
-    /**
-     * Lista de empréstimos carregados em memória.
-     */
-    List<Emprestimo> emprestimos = new ArrayList<>();
 
     /**
      * Construtor da classe Biblioteca.
-     * Ao ser instanciada, carrega todos os dados dos arquivos para as listas em memória.
+     * Ao ser instanciado carrega todos os dados em memória
      */
     public Biblioteca() {
-        livros = buscarTodosLivros();
-        alunos = buscarTodosAlunos();
-        bibliotecarios = buscarTodosBibliotecarios();
-        emprestimos = buscarTodosEmprestimos();
+        buscarTodosLivros();
+        buscarTodosAlunos();
+        buscarTodosBibliotecarios();
+        buscarTodosEmprestimos();
     }
 
     /**
@@ -84,13 +60,13 @@ public class Biblioteca {
      * @return O objeto Aluno ou Bibliotecario se o login for bem-sucedido, ou null caso contrário.
      */
     public Object fazerLogin(String email, String senha) {
-        for (Aluno aluno : alunos) {
+        for (Aluno aluno : alunoManipulator.buscarTodosAlunos()) {
             if (aluno.getEmail().equals(email) && aluno.getSenha().equals(senha)) {
                 return aluno;
             }
         }
 
-        for (Bibliotecario bibliotecario : bibliotecarios) {
+        for (Bibliotecario bibliotecario : bibliotecarioManipulator.buscarTodosBibliotecarios()) {
             if (bibliotecario.getEmail().equals(email) && bibliotecario.getSenha().equals(senha)) {
                 return bibliotecario;
             }
@@ -106,17 +82,7 @@ public class Biblioteca {
      * @return true se o cadastro for bem-sucedido, false caso contrário.
      */
     public boolean cadastrarLivro(Livro livro) {
-
-        String linhaIncerida = livro.getCodigo() + ";" + livro.getNome() + ";" + livro.getCategoria() + ";" + livro.getAutor() + ";" + livro.getEditora() + ";" + livro.getIsbn() + ";" + livro.getQtdDisponivel();
-
-        try {
-            Files.write(arquivoLivros, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
-            Files.write(arquivoLivros, "\n".getBytes(), StandardOpenOption.APPEND);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return livroManipulator.cadastrarLivro(livro);
     }
 
     /**
@@ -125,36 +91,7 @@ public class Biblioteca {
      * @return Uma lista de todos os Livros.
      */
     public List<Livro> buscarTodosLivros() {
-        List<Livro> listaLivros = new ArrayList<>();
-
-        try {
-
-            /* Se o arquivo de livros não existir, ele é criado */
-            if (Files.notExists(arquivoLivros)) {
-                Files.createFile(arquivoLivros);
-            }
-
-            List<String> listaLivrosString = Files.readAllLines(arquivoLivros);
-
-            for (String s : listaLivrosString) {
-                String[] linha = s.split(";");
-                Livro livro = new Livro();
-                livro.setCodigo(Integer.parseInt(linha[0]));
-                livro.setNome(linha[1]);
-                livro.setCategoria(linha[2]);
-                livro.setAutor(linha[3]);
-                livro.setEditora(linha[4]);
-                livro.setIsbn(Integer.parseInt(linha[5]));
-                livro.setQtdDisponivel(Integer.parseInt(linha[6]));
-
-                listaLivros.add(livro);
-            }
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return listaLivros;
+        return livroManipulator.buscarTodosLivros();
     }
 
     /**
@@ -164,15 +101,7 @@ public class Biblioteca {
      * @return O objeto Livro encontrado ou null se não for encontrado.
      */
     public Livro buscarLivroPorNome(String nome) {
-
-        for (Livro livro : livros) {
-            if (livro.getNome().equalsIgnoreCase(nome)) {
-                return livro;
-            }
-        }
-
-        return null;
-
+        return livroManipulator.buscarLivroPorNome(nome);
     }
 
     /**
@@ -182,15 +111,7 @@ public class Biblioteca {
      * @return O objeto Livro encontrado ou null se não for encontrado.
      */
     public Livro buscarLivroPorCodigo(long isbn) {
-
-        for (Livro livro : livros) {
-            if (livro.getIsbn() == isbn) {
-                return livro;
-            }
-        }
-
-        return null;
-
+        return livroManipulator.buscarLivroPorCodigo(isbn);
     }
 
     /**
@@ -202,23 +123,7 @@ public class Biblioteca {
      * @return true se a atualização for bem-sucedida.
      */
     public boolean atualizarLivroPorCodigo(Livro livroParaAtualizar, long isbn) {
-
-        limparArquivo(arquivoLivros);
-        for (Livro livro : livros) {
-            if (livro.getIsbn() == isbn) {
-                livro.setNome(livroParaAtualizar.getNome());
-                livro.setCategoria(livroParaAtualizar.getCategoria());
-                livro.setAutor(livroParaAtualizar.getAutor());
-                livro.setEditora(livroParaAtualizar.getEditora());
-                livro.setIsbn(livroParaAtualizar.getIsbn());
-                livro.setQtdDisponivel(livroParaAtualizar.getQtdDisponivel());
-                cadastrarLivro(livro);
-            } else {
-                cadastrarLivro(livro);
-            }
-        }
-
-        return true;
+        return livroManipulator.atualizarLivroPorCodigo(livroParaAtualizar, isbn);
     }
 
     /**
@@ -229,21 +134,7 @@ public class Biblioteca {
      * @return true se a remoção for bem-sucedida, false caso contrário.
      */
     public boolean removerLivro(long isbn) {
-
-        try {
-
-            limparArquivo(arquivoLivros);
-            for (Livro livro : livros) {
-                if (livro.getIsbn() != isbn) {
-                    cadastrarLivro(livro);
-                }
-            }
-
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        return livroManipulator.removerLivro(isbn);
     }
 
     // Métodos para trabalhar com alunos
@@ -255,17 +146,7 @@ public class Biblioteca {
      * @return true se o cadastro for bem-sucedido, false caso contrário.
      */
     public boolean cadastrarAluno(Aluno aluno) {
-
-        String linhaIncerida = aluno.getMatricula() + ";" + aluno.getNome() + ";" + aluno.getEmail() + ";" + aluno.getSenha() + ";" + aluno.getTelefone() + ";" + aluno.getCurso();
-
-        try {
-            Files.write(arquivoAlunos, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
-            Files.write(arquivoAlunos, "\n".getBytes(), StandardOpenOption.APPEND);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return alunoManipulator.cadastrarAluno(aluno);
     }
 
     /**
@@ -275,12 +156,7 @@ public class Biblioteca {
      * @param matricula A matrícula do aluno a ser removido.
      */
     public void removerAluno(long matricula) {
-        limparArquivo(arquivoAlunos);
-        for (Aluno aluno : alunos) {
-            if (aluno.getMatricula() != matricula) {
-                cadastrarAluno(aluno);
-            }
-        }
+       alunoManipulator.removerAluno(matricula);
     }
 
     /**
@@ -290,15 +166,7 @@ public class Biblioteca {
      * @return O objeto Aluno encontrado ou null se não for encontrado.
      */
     public Aluno buscarAlunoPorMatricula(long matricula) {
-
-        for (Aluno aluno : alunos) {
-            if (aluno.getMatricula() == matricula) {
-                return aluno;
-            }
-        }
-
-        return null;
-
+        return alunoManipulator.buscarAlunoPorMatricula(matricula);
     }
 
     /**
@@ -307,51 +175,11 @@ public class Biblioteca {
      * @return Uma lista de todos os Alunos.
      */
     public List<Aluno> buscarTodosAlunos() {
-
-        List<Aluno> alunoList = new ArrayList<>();
-
-        try {
-
-            /* Se o arquivo de alunos não existir, ele é criado */
-            if (Files.notExists(arquivoAlunos)) {
-                Files.createFile(arquivoAlunos);
-            }
-
-            List<String> linhas = Files.readAllLines(arquivoAlunos);
-            for (String linha : linhas) {
-                String[] l = linha.split(";");
-                Aluno aluno = new Aluno();
-                aluno.setMatricula(Long.parseLong(l[0]));
-                aluno.setNome(l[1]);
-                aluno.setEmail(l[2]);
-                aluno.setSenha(l[3]);
-                aluno.setTelefone(Long.parseLong(l[4]));
-                aluno.setCurso(l[5]);
-                alunoList.add(aluno);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return alunoList;
+        return alunoManipulator.buscarTodosAlunos();
     }
 
     public boolean atualizarAluno(Aluno alunoAtualizado, long matricula) {
-        limparArquivo(arquivoAlunos);
-        for (Aluno aluno : alunos) {
-            if (aluno.getMatricula() == matricula) {
-                aluno.setNome(alunoAtualizado.getNome());
-                aluno.setEmail(alunoAtualizado.getEmail());
-                aluno.setSenha(alunoAtualizado.getSenha());
-                aluno.setTelefone(alunoAtualizado.getTelefone());
-                aluno.setCurso(alunoAtualizado.getCurso());
-                cadastrarAluno(aluno);
-            } else {
-                cadastrarAluno(aluno);
-            }
-        }
-
-        return true;
+        return alunoManipulator.atualizarAluno(alunoAtualizado, matricula);
     }
 
     // Métodos para trabalhar com funcionários
@@ -363,17 +191,7 @@ public class Biblioteca {
      * @return true se o cadastro for bem-sucedido, false caso contrário.
      */
     public boolean inserirBibliotecario(Bibliotecario bibliotecario) {
-
-        String linhaIncerida = bibliotecario.getRegistro() + ";" + bibliotecario.getNome() + ";" + bibliotecario.getEmail() + ";" + bibliotecario.getSenha() + ";" + bibliotecario.getDataAdmissao();
-
-        try {
-            Files.write(arquivoFuncionarios, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
-            Files.write(arquivoFuncionarios, "\n".getBytes(), StandardOpenOption.APPEND);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return bibliotecarioManipulator.inserirBibliotecario(bibliotecario);
     }
 
     /**
@@ -383,12 +201,7 @@ public class Biblioteca {
      * @param registro O registro do bibliotecário a ser removido.
      */
     public void removerFuncionario(int registro) {
-        limparArquivo(arquivoFuncionarios);
-        for (Bibliotecario bibliotecario : bibliotecarios) {
-            if (bibliotecario.getRegistro() != registro) {
-                inserirBibliotecario(bibliotecario);
-            }
-        }
+       bibliotecarioManipulator.removerFuncionario(registro);
     }
 
     /**
@@ -397,54 +210,11 @@ public class Biblioteca {
      * @return Uma lista de todos os Bibliotecarios.
      */
     public List<Bibliotecario> buscarTodosBibliotecarios() {
-
-        List<Bibliotecario> bibliotecarioList = new ArrayList<>();
-
-        try {
-
-            /* Se o arquivo de bibliotecarios não existir, ele é criado */
-            if (Files.notExists(arquivoFuncionarios)) {
-                Files.createFile(arquivoFuncionarios);
-            }
-
-            List<String> linhas = Files.readAllLines(arquivoFuncionarios);
-            for (String linha : linhas) {
-                String[] l = linha.split(";");
-                Bibliotecario bibliotecario = new Bibliotecario();
-                bibliotecario.setRegistro(Integer.parseInt(l[0]));
-                bibliotecario.setNome(l[1]);
-                bibliotecario.setEmail(l[2]);
-                bibliotecario.setSenha(l[3]);
-
-                // Divide a string de data para montar o objeto LocalDate (formato dd/MM/yyyy)
-                String[] data = l[4].split("/");
-                bibliotecario.setDataAdmissao(LocalDate.of(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0])));
-
-                bibliotecarioList.add(bibliotecario);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return bibliotecarioList;
+        return bibliotecarioManipulator.buscarTodosBibliotecarios();
     }
 
     public boolean atualizarBibliotecario(Bibliotecario bibliotecarioAtualizado, long registro) {
-
-        limparArquivo(arquivoFuncionarios);
-        for (Bibliotecario bibliotecario : bibliotecarios) {
-            if (bibliotecario.getRegistro() == registro) {
-                bibliotecario.setNome(bibliotecarioAtualizado.getNome());
-                bibliotecario.setEmail(bibliotecarioAtualizado.getEmail());
-                bibliotecario.setSenha(bibliotecarioAtualizado.getSenha());
-                bibliotecario.setTelefone(bibliotecarioAtualizado.getTelefone());
-                inserirBibliotecario(bibliotecario);
-            } else {
-                inserirBibliotecario(bibliotecario);
-            }
-        }
-
-        return true;
+        return bibliotecarioManipulator.atualizarBibliotecario(bibliotecarioAtualizado, registro);
     }
 
     // Métodos para trabalhar com empréstimos
@@ -457,40 +227,11 @@ public class Biblioteca {
      * @return true se o registro for bem-sucedido, false caso contrário.
      */
     public boolean fazerEmprestimo(Emprestimo emprestimo) {
-
-        Livro livro = buscarLivroPorCodigo(emprestimo.getCodigoLivro());
-        if (livro == null) {
-            System.out.println("Não existe um livro com o código indicado");
-            return false;
-        }
-
-        Aluno aluno = buscarAlunoPorMatricula(emprestimo.getCodigoAluno());
-        if (aluno == null) {
-            System.out.println("Aluno não encontrado");
-            return false;
-        }
-
-        String linhaIncerida = emprestimo.getCodigoEmprestimo() + ";" + emprestimo.getCodigoLivro() + ";" + emprestimo.getCodigoAluno() + ";" + emprestimo.getDataEmprestimoFormatada() + ";" + emprestimo.getDataDevolucaoFormatada() + ";" + "nao";
-
-        try {
-            Files.write(arquivoEmprestimos, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
-            Files.write(arquivoEmprestimos, "\n".getBytes(), StandardOpenOption.APPEND);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return emprestimoManipulator.fazerEmprestimo(emprestimo);
     }
 
     public void renovarEmprestimo(long codigoEmprestimo) {
-        limparArquivo(arquivoEmprestimos);
-        for (Emprestimo emprestimo : emprestimos) {
-            if (emprestimo.getCodigoEmprestimo() == codigoEmprestimo) {
-                emprestimo.renovarEmprestimo();
-            }
-
-            fazerEmprestimo(emprestimo);
-        }
+        emprestimoManipulator.renovarEmprestimo(codigoEmprestimo);
     }
 
     /**
@@ -499,91 +240,13 @@ public class Biblioteca {
      * @return Uma lista de todos os Emprestimos.
      */
     public List<Emprestimo> buscarTodosEmprestimos() {
-
-        List<Emprestimo> emprestimoList = new ArrayList<>();
-
-        try {
-
-            if (Files.notExists(arquivoEmprestimos)) {
-                Files.createFile(arquivoEmprestimos);
-            }
-
-            List<String> linhas = Files.readAllLines(arquivoEmprestimos);
-            for (String linha : linhas) {
-                String[] l = linha.split(";");
-                Emprestimo emprestimo = new Emprestimo();
-                emprestimo.setCodigoEmprestimo(Integer.parseInt(l[0]));
-                emprestimo.setCodigoLivro(Integer.parseInt(l[1]));
-                emprestimo.setCodigoAluno(Integer.parseInt(l[2]));
-                emprestimo.setDevolvido(l[5].equals("sim"));
-
-                // Divide a string de data para montar o objeto LocalDate (formato dd/MM/yyyy)
-
-                String[] dataEmprestimo = l[3].split("/");
-                emprestimo.setDataEmprestimo(LocalDate.of(Integer.parseInt(dataEmprestimo[2]), Integer.parseInt(dataEmprestimo[1]), Integer.parseInt(dataEmprestimo[0])));
-
-                String[] dataDevolucao = l[4].split("/");
-                emprestimo.setDataDevolucao(LocalDate.of(Integer.parseInt(dataDevolucao[2]), Integer.parseInt(dataDevolucao[1]), Integer.parseInt(dataDevolucao[0])));
-
-                emprestimoList.add(emprestimo);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return emprestimoList;
+        return emprestimoManipulator.buscarTodosEmprestimos();
     }
 
     /**
      * Marca o livro como devolvido e atualiza a data de devolução para a data atual.
      */
     public boolean devolverLivro(long codigoEmprestimo) {
-        boolean result = false;
-        try {
-            limparArquivo(arquivoEmprestimos);
-            for (Emprestimo emprestimo : emprestimos) {
-                if (emprestimo.getCodigoEmprestimo() == codigoEmprestimo) {
-
-                    emprestimo.devolverLivro();
-
-                    String linhaAlterada= emprestimo.getCodigoEmprestimo() + ";" + emprestimo.getCodigoLivro() + ";" + emprestimo.getCodigoAluno() + ";" + emprestimo.getDataEmprestimoFormatada() + ";" + emprestimo.getDataDevolucaoFormatada() + ";" + "sim";
-
-                    Files.write(arquivoEmprestimos, linhaAlterada.getBytes(), StandardOpenOption.APPEND);
-
-                    result = true;
-                } else {
-                    String linhaIncerida = emprestimo.getCodigoEmprestimo() + ";" + emprestimo.getCodigoLivro() + ";" + emprestimo.getCodigoAluno() + ";" + emprestimo.getDataEmprestimoFormatada() + ";" + emprestimo.getDataDevolucaoFormatada() + ";" + "nao";
-                    Files.write(arquivoEmprestimos, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
-                }
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        return result;
-
-    }
-
-    // Método para limpar arquivo
-
-    /**
-     * Limpa o conteúdo de um arquivo, preparando-o para uma reescrita.
-     *
-     * @param arquivo O caminho do arquivo a ser limpo.
-     */
-    private void limparArquivo(Path arquivo) {
-        OutputStream outputStream = null;
-
-        try {
-            outputStream = new FileOutputStream(arquivo.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                outputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        return emprestimoManipulator.devolverLivro(codigoEmprestimo);
     }
 }
