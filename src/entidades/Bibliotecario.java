@@ -33,12 +33,11 @@ public class Bibliotecario extends Pessoa {
      * @param senha Senha de acesso.
      * @param telefone Telefone do bibliotecário.
      * @param registro Número de registro.
-     * @param dataAdmissao Data de admissão.
      */
-    public Bibliotecario(String nome, String email, String senha, int telefone, long registro, LocalDate dataAdmissao) {
+    public Bibliotecario(String nome, String email, String senha, long telefone, long registro) {
         super(nome, email, senha, telefone);
         this.registro = registro;
-        this.dataAdmissao = dataAdmissao;
+        this.dataAdmissao = LocalDate.now();
     }
 
     public long getRegistro() {

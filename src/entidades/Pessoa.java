@@ -23,7 +23,7 @@ public class Pessoa {
     /**
      * Número de telefone para contato.
      */
-    private int telefone;
+    private long telefone;
 
     /**
      * Construtor padrão.
@@ -39,7 +39,7 @@ public class Pessoa {
      * @param senha    Senha de acesso.
      * @param telefone Telefone da pessoa.
      */
-    public Pessoa(String nome, String email, String senha, int telefone) {
+    public Pessoa(String nome, String email, String senha, long telefone) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
@@ -70,11 +70,11 @@ public class Pessoa {
         this.senha = senha;
     }
 
-    public int getTelefone() {
+    public long getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(int telefone) {
+    public void setTelefone(long telefone) {
         this.telefone = telefone;
     }
 

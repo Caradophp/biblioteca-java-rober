@@ -32,9 +32,10 @@ public class Aluno extends Pessoa {
      * @param telefone  Telefone do aluno.
      * @param matricula Número de matrícula.
      */
-    public Aluno(String nome, String email, String senha, int telefone, long matricula) {
+    public Aluno(String nome, String email, String senha, long telefone, long matricula, String curso) {
         super(nome, email, senha, telefone);
         this.matricula = matricula;
+        this.curso = curso;
     }
 
     public long getMatricula() {
