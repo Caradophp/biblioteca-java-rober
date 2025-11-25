@@ -150,7 +150,17 @@ public class Emprestimo {
             return;
         }
         this.dataDevolucao = this.dataDevolucao.plusDays(10);
-//        this.quantRenovacoes++;
+    }
+
+    public void devolverLivro() {
+
+        if (this.devolvido) {
+            System.out.println("Esse livro já foi devolvido");
+            return;
+        }
+
+        this.devolvido = true;
+        System.out.println("Livro devolvido com sucesso");
     }
 
     /**
