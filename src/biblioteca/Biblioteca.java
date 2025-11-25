@@ -1,9 +1,6 @@
 package biblioteca;
 
-import entidades.Aluno;
-import entidades.Bibliotecario;
-import entidades.Emprestimo;
-import entidades.Livro;
+import entidades.*;
 import manipulators.AlunoManipulator;
 import manipulators.BibliotecarioManipulator;
 import manipulators.EmprestimoManipulator;
@@ -59,7 +56,7 @@ public class Biblioteca {
      * @param senha A senha do usuário.
      * @return O objeto Aluno ou Bibliotecario se o login for bem-sucedido, ou null caso contrário.
      */
-    public Object fazerLogin(String email, String senha) {
+    public Pessoa fazerLogin(String email, String senha) {
         for (Aluno aluno : alunoManipulator.buscarTodosAlunos()) {
             if (aluno.getEmail().equals(email) && aluno.getSenha().equals(senha)) {
                 return aluno;
