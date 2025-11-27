@@ -54,6 +54,24 @@ public class Pessoa {
         this.nome = nome;
     }
 
+    public String getNomeAbreviado() {
+        String nomeAbreviado = "";
+        String[] nomePartes = this.nome.split(" ");
+
+        // Primeiro e último nome completos e o restante apenas
+        for (int i = 0; i <= nomePartes.length; i++) {
+            if (i == 0 || i == nomePartes.length-1) {
+                // string completa
+                nomeAbreviado += nomePartes[i];
+            } else {
+                // inicial da string
+                nomeAbreviado += nomePartes[i].charAt(0);
+            }
+        }
+
+        return nomeAbreviado;
+    }
+
     public String getEmail() {
         return email;
     }

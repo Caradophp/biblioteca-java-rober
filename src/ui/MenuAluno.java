@@ -16,8 +16,9 @@ public class MenuAluno {
     }
 
     public void iniciar() {
-        System.out.println("============================");
-        System.out.println("Bem-vindo, aluno " + this.alunoLogado.getNome().split(" ")[0]);
+        System.out.println("===================================");
+        System.out.println("Bem-vindo, aluno " + this.alunoLogado.getNomeAbreviado());
+        System.out.println();
         System.out.println("0. Sair");
         System.out.println("1. Consultar livros");
         System.out.println("2. Consultar livros emprestados");
@@ -28,37 +29,10 @@ public class MenuAluno {
                 this.menuInicial.iniciar();
                 break;
             case 1:
-                this.menuConsultarlivros();
+                MenusGlobais.menuConsultarLivros(this.menuInicial.getBiblioteca(), this::iniciar);
                 break;
             case 2:
                 this.menuLivrosEmprestados();
-                break;
-        }
-    }
-
-    private void menuConsultarlivros() {
-        System.out.println("===================================\n");
-        System.out.println("0. Voltar");
-        System.out.println("1. Buscar livros por título");
-        System.out.println("2. Buscar livros por categoria");
-        System.out.println("3. Buscar livro por ISBN");
-
-        int escolha = MenuUtils.lerOpcaoMenu(3, true);
-        switch (escolha) {
-            case 0:
-                this.iniciar();
-                break;
-            case 1:
-                // todo: busca livros filtrados por título
-                // menuLivrosFiltrados(livros);
-                break;
-            case 2:
-                // todo: busca livros filtrados por categoria
-                // menuLivrosFiltrados(livros);
-                break;
-            case 3:
-                // todo: busca livro por ISBN
-                // menuLivrosFiltrados(livros);
                 break;
         }
     }
@@ -78,7 +52,7 @@ public class MenuAluno {
         System.out.println("Selecione um livro para ver mais informações sobre:");
         int escolha = MenuUtils.lerOpcaoMenu(livros.size(), true);
         if (escolha == 0) {
-            this.menuConsultarlivros();
+            MenusGlobais.menuConsultarLivros(this.menuInicial.getBiblioteca(), this::iniciar);
         } else {
             printDetalheslivro(livros.get(escolha - 1));
         }
@@ -92,7 +66,7 @@ public class MenuAluno {
 
         // não importa o que for digitado, apenas volta para o menu de consulta de livros
         MenuInicial.reader.nextLine();
-        this.menuConsultarlivros();
+        MenusGlobais.menuConsultarLivros(this.menuInicial.getBiblioteca(), this::iniciar);
     }
 
     private void menuLivrosEmprestados() {
