@@ -5,6 +5,7 @@ import entidades.Aluno;
 import entidades.Bibliotecario;
 import entidades.Pessoa;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuInicial {
@@ -16,21 +17,35 @@ public class MenuInicial {
         this.biblioteca = biblioteca;
     }
 
+    public Biblioteca getBiblioteca() {
+        return this.biblioteca;
+    }
+
     public void iniciar() {
         System.out.println("============================");
         System.out.println("     SISTEMA BIBLIOTECA     ");
         System.out.println("============================");
         System.out.println();
-        System.out.println("0. Encerrar programa");
-        System.out.println("1. Fazer login");
 
-        int opcao = MenuUtils.lerOpcaoMenu(1, true);
-        switch (opcao) {
-            case 0:
-                reader.close();
-                System.exit(0);
-            case 1:
-                this.menuLogin();
+        if (!this.biblioteca.possuiBibliotecarios()) {
+            // fluxo padrão do sistema
+            System.out.println("0. Encerrar programa");
+            System.out.println("1. Fazer login");
+
+            int opcao = MenuUtils.lerOpcaoMenu(1, true);
+            switch (opcao) {
+                case 0:
+                    // fecha o Scanner e então garante que o programa encerre
+                    reader.close();
+                    System.exit(0);
+                case 1:
+                    this.menuLogin();
+            }
+        } else {
+            // como não existem bibliotecários cadastrados, o usuário recebe o prompt para criar o primeiro
+            System.out.println("Nenhum bibliotecário cadastrado no momento.");
+            this.cadastrarBibliotecario();
+            this.iniciar();
         }
     }
 
@@ -48,11 +63,28 @@ public class MenuInicial {
             System.out.println("Login inválido. Favor tentar novamente.\n");
             this.iniciar();
         } else if (pessoaLogada instanceof Aluno) {
-            MenuAluno menuAluno = new MenuAluno((Aluno) pessoaLogada);
+            MenuAluno menuAluno = new MenuAluno((Aluno) pessoaLogada, this);
             menuAluno.iniciar();
         } else if (pessoaLogada instanceof Bibliotecario) {
-            MenuBibliotecario menuBibliotecario = new MenuBibliotecario((Bibliotecario) pessoaLogada);
+            MenuBibliotecario menuBibliotecario = new MenuBibliotecario((Bibliotecario) pessoaLogada, this);
             menuBibliotecario.iniciar();
+        }
+    }
+
+    private void cadastrarBibliotecario() {
+        Bibliotecario bibliotecario = new Bibliotecario();
+
+        System.out.println("Informe dados para inclusão de um novo bibliotecário:");
+        bibliotecario.setRegistro(MenuUtils.lerLong("Número de registro: "));
+        bibliotecario.setNome(MenuUtils.lerString("Nome: "));
+        bibliotecario.setTelefone(MenuUtils.lerLong("Telefone: "));
+        bibliotecario.setEmail(MenuUtils.lerString("Email: "));
+        bibliotecario.setSenha(MenuUtils.lerString("Senha: "));
+
+        if (this.biblioteca.inserirBibliotecario(bibliotecario)) {
+            System.out.println("Bibliotecário incluído com sucesso");
+        } else {
+            System.out.println("Algum erro ocorreu que não permitiu a inclusão do bibliotecário. Tente novamente.");
         }
     }
 }

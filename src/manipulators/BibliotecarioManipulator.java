@@ -30,6 +30,9 @@ public class BibliotecarioManipulator {
         bibliotecarios = buscarTodosBibliotecarios();
     }
 
+    public int getNumBibliotecarios() {
+        return this.bibliotecarios.size();
+    }
 
     /**
      * Cadastra um novo bibliotecário no arquivo de persistência.

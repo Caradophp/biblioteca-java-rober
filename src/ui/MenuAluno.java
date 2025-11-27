@@ -8,9 +8,11 @@ import java.util.ArrayList;
 
 public class MenuAluno {
     private final Aluno alunoLogado;
+    private final MenuInicial menuInicial;
 
-    public MenuAluno(Aluno alunoLogado) {
+    public MenuAluno(Aluno alunoLogado, MenuInicial menuInicial) {
         this.alunoLogado = alunoLogado;
+        this.menuInicial = menuInicial;
     }
 
     public void iniciar() {
@@ -23,6 +25,7 @@ public class MenuAluno {
         int escolha = MenuUtils.lerOpcaoMenu(2, true);
         switch (escolha) {
             case 0:
+                this.menuInicial.iniciar();
                 break;
             case 1:
                 this.menuConsultarlivros();

@@ -6,15 +6,6 @@ import manipulators.BibliotecarioManipulator;
 import manipulators.EmprestimoManipulator;
 import manipulators.LivroManipulator;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -245,5 +236,12 @@ public class Biblioteca {
      */
     public boolean devolverLivro(long codigoEmprestimo) {
         return emprestimoManipulator.devolverLivro(codigoEmprestimo);
+    }
+
+    /**
+     * Verifica se existe algum bibliotecário cadastrado no sistema
+     */
+    public boolean possuiBibliotecarios() {
+        return bibliotecarioManipulator.getNumBibliotecarios() == 0;
     }
 }
