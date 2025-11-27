@@ -60,6 +60,7 @@ public class EmprestimoManipulator {
             return false;
         }
 
+        emprestimos.add(emprestimo);
         String linhaIncerida = emprestimo.getCodigoEmprestimo() + ";" + emprestimo.getCodigoLivro() + ";" + emprestimo.getCodigoAluno() + ";" + emprestimo.getDataEmprestimoFormatada() + ";" + emprestimo.getDataDevolucaoFormatada() + ";" + "nao";
 
         try {

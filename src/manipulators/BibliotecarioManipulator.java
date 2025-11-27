@@ -46,6 +46,7 @@ public class BibliotecarioManipulator {
      */
     public boolean inserirBibliotecario(Bibliotecario bibliotecario) {
 
+    	bibliotecarios.add(bibliotecario);
         String linhaIncerida = bibliotecario.getRegistro() + ";" + bibliotecario.getNome() + ";" + bibliotecario.getEmail() + ";" + bibliotecario.getSenha() + ";" + bibliotecario.getTelefone() + ";" + bibliotecario.getDataAdmissao();
 
         try {

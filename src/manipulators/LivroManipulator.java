@@ -41,6 +41,7 @@ public class LivroManipulator {
      */
     public boolean cadastrarLivro(Livro livro) {
 
+    	livros.add(livro);
         String linhaIncerida = livro.getCodigo() + ";" + livro.getNome() + ";" + livro.getCategoria() + ";" + livro.getAutor() + ";" + livro.getEditora() + ";" + livro.getIsbn() + ";" + livro.getQtdDisponivel();
 
         try {

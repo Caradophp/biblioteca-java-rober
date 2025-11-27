@@ -41,6 +41,7 @@ public class AlunoManipulator {
      */
     public boolean cadastrarAluno(Aluno aluno) {
 
+    	alunos.add(aluno);
         String linhaIncerida = aluno.getMatricula() + ";" + aluno.getNome() + ";" + aluno.getEmail() + ";" + aluno.getSenha() + ";" + aluno.getTelefone() + ";" + aluno.getCurso();
 
         try {
