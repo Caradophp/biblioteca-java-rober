@@ -33,6 +33,10 @@ public class BibliotecarioManipulator {
     public int getNumBibliotecarios() {
         return this.bibliotecarios.size();
     }
+    
+    public List<Bibliotecario> getBibliotecarios() {
+    	return bibliotecarios;
+    }
 
     /**
      * Cadastra um novo bibliotecário no arquivo de persistência.
@@ -42,7 +46,7 @@ public class BibliotecarioManipulator {
      */
     public boolean inserirBibliotecario(Bibliotecario bibliotecario) {
 
-        String linhaIncerida = bibliotecario.getRegistro() + ";" + bibliotecario.getNome() + ";" + bibliotecario.getEmail() + ";" + bibliotecario.getSenha() + ";" + bibliotecario.getDataAdmissao();
+        String linhaIncerida = bibliotecario.getRegistro() + ";" + bibliotecario.getNome() + ";" + bibliotecario.getEmail() + ";" + bibliotecario.getSenha() + ";" + bibliotecario.getTelefone() + ";" + bibliotecario.getDataAdmissao();
 
         try {
             Files.write(arquivoFuncionarios, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
@@ -74,7 +78,7 @@ public class BibliotecarioManipulator {
      *
      * @return Uma lista de todos os Bibliotecarios.
      */
-    public List<Bibliotecario> buscarTodosBibliotecarios() {
+    private List<Bibliotecario> buscarTodosBibliotecarios() {
 
         List<Bibliotecario> bibliotecarioList = new ArrayList<>();
 
@@ -93,9 +97,10 @@ public class BibliotecarioManipulator {
                 bibliotecario.setNome(l[1]);
                 bibliotecario.setEmail(l[2]);
                 bibliotecario.setSenha(l[3]);
+                bibliotecario.setTelefone(Long.parseLong(l[4]));
 
                 // Divide a string de data para montar o objeto LocalDate (formato dd/MM/yyyy)
-                String[] data = l[4].split("/");
+                String[] data = l[5].split("/");
                 bibliotecario.setDataAdmissao(LocalDate.of(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0])));
 
                 bibliotecarioList.add(bibliotecario);

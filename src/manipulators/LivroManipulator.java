@@ -28,6 +28,10 @@ public class LivroManipulator {
     public LivroManipulator() {
         livros = buscarTodosLivros();
     }
+    
+    public List<Livro> getLivros() {
+    	return livros;
+    }
 
     /**
      * Cadastra um novo livro no arquivo de persistência.
@@ -54,7 +58,7 @@ public class LivroManipulator {
      *
      * @return Uma lista de todos os Livros.
      */
-    public List<Livro> buscarTodosLivros() {
+    private List<Livro> buscarTodosLivros() {
         List<Livro> listaLivros = new ArrayList<>();
 
         try {

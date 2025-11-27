@@ -34,10 +34,6 @@ public class Biblioteca {
      * Ao ser instanciado carrega todos os dados em memória
      */
     public Biblioteca() {
-        buscarTodosLivros();
-        buscarTodosAlunos();
-        buscarTodosBibliotecarios();
-        buscarTodosEmprestimos();
     }
 
     /**
@@ -48,13 +44,13 @@ public class Biblioteca {
      * @return O objeto Aluno ou Bibliotecario se o login for bem-sucedido, ou null caso contrário.
      */
     public Pessoa fazerLogin(String email, String senha) {
-        for (Aluno aluno : alunoManipulator.buscarTodosAlunos()) {
+        for (Aluno aluno : alunoManipulator.getAlunos()) {
             if (aluno.getEmail().equals(email) && aluno.getSenha().equals(senha)) {
                 return aluno;
             }
         }
 
-        for (Bibliotecario bibliotecario : bibliotecarioManipulator.buscarTodosBibliotecarios()) {
+        for (Bibliotecario bibliotecario : bibliotecarioManipulator.getBibliotecarios()) {
             if (bibliotecario.getEmail().equals(email) && bibliotecario.getSenha().equals(senha)) {
                 return bibliotecario;
             }
@@ -79,7 +75,7 @@ public class Biblioteca {
      * @return Uma lista de todos os Livros.
      */
     public List<Livro> buscarTodosLivros() {
-        return livroManipulator.buscarTodosLivros();
+        return livroManipulator.getLivros();
     }
 
     /**
@@ -163,7 +159,7 @@ public class Biblioteca {
      * @return Uma lista de todos os Alunos.
      */
     public List<Aluno> buscarTodosAlunos() {
-        return alunoManipulator.buscarTodosAlunos();
+        return alunoManipulator.getAlunos();
     }
 
     public boolean atualizarAluno(Aluno alunoAtualizado, long matricula) {
@@ -198,7 +194,7 @@ public class Biblioteca {
      * @return Uma lista de todos os Bibliotecarios.
      */
     public List<Bibliotecario> buscarTodosBibliotecarios() {
-        return bibliotecarioManipulator.buscarTodosBibliotecarios();
+        return bibliotecarioManipulator.getBibliotecarios();
     }
 
     public boolean atualizarBibliotecario(Bibliotecario bibliotecarioAtualizado, long registro) {
@@ -228,7 +224,7 @@ public class Biblioteca {
      * @return Uma lista de todos os Emprestimos.
      */
     public List<Emprestimo> buscarTodosEmprestimos() {
-        return emprestimoManipulator.buscarTodosEmprestimos();
+        return emprestimoManipulator.getEmprestimos();
     }
 
     /**

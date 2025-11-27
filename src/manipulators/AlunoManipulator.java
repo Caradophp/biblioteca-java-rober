@@ -29,8 +29,11 @@ public class AlunoManipulator {
         alunos = buscarTodosAlunos();
     }
 
+    public List<Aluno> getAlunos() {
+		return alunos;
+	}
 
-    /**
+	/**
      * Cadastra um novo aluno no arquivo de persistência.
      *
      * @param aluno O objeto Aluno a ser cadastrado.
@@ -88,7 +91,7 @@ public class AlunoManipulator {
      *
      * @return Uma lista de todos os Alunos.
      */
-    public List<Aluno> buscarTodosAlunos() {
+    private List<Aluno> buscarTodosAlunos() {
 
         List<Aluno> alunoList = new ArrayList<>();
 

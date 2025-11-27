@@ -34,6 +34,10 @@ public class EmprestimoManipulator {
     public EmprestimoManipulator() {
         emprestimos = buscarTodosEmprestimos();
     }
+    
+    public List<Emprestimo> getEmprestimos() {
+    	return emprestimos;
+    }
 
     /**
      * Registra um novo empréstimo no arquivo de persistência.
@@ -84,7 +88,7 @@ public class EmprestimoManipulator {
      *
      * @return Uma lista de todos os Emprestimos.
      */
-    public List<Emprestimo> buscarTodosEmprestimos() {
+    private List<Emprestimo> buscarTodosEmprestimos() {
 
         List<Emprestimo> emprestimoList = new ArrayList<>();
 
