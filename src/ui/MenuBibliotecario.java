@@ -17,8 +17,7 @@ public class MenuBibliotecario {
 
     public void iniciar() {
         System.out.println("===================================");
-        System.out.println("Bem-vindo, bibliotecário " + this.bibliotecarioLogado.getNomeAbreviado());
-        System.out.println();
+        System.out.printf("Bem-vindo, bibliotecário %s\n\n", this.bibliotecarioLogado.getNomeAbreviado());
         System.out.println("0. Sair");
         System.out.println("1. Consultar livros");
         System.out.println("2. Emprestar livro para aluno");

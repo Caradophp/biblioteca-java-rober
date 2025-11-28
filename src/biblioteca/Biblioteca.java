@@ -6,6 +6,8 @@ import manipulators.BibliotecarioManipulator;
 import manipulators.EmprestimoManipulator;
 import manipulators.LivroManipulator;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -15,10 +17,10 @@ import java.util.List;
  */
 public class Biblioteca {
 
-    private final static LivroManipulator livroManipulator = new LivroManipulator();
-    private final static AlunoManipulator alunoManipulator = new AlunoManipulator();
-    private final static BibliotecarioManipulator bibliotecarioManipulator = new BibliotecarioManipulator();
-    private final static EmprestimoManipulator emprestimoManipulator = new EmprestimoManipulator();
+    private final LivroManipulator livroManipulator = new LivroManipulator();
+    private final AlunoManipulator alunoManipulator = new AlunoManipulator();
+    private final BibliotecarioManipulator bibliotecarioManipulator = new BibliotecarioManipulator();
+    private final EmprestimoManipulator emprestimoManipulator = new EmprestimoManipulator(livroManipulator, alunoManipulator);
 
     /**
      * Nome da biblioteca.
@@ -225,6 +227,27 @@ public class Biblioteca {
      */
     public List<Emprestimo> buscarTodosEmprestimos() {
         return emprestimoManipulator.getEmprestimos();
+    }
+
+    /**
+     * Busca todos os empréstimos ligados a um aluno
+     *
+     * @return Uma lista de Emprestimos do aluno.
+     */
+    public List<Emprestimo> buscarTodosEmprestimos(Aluno aluno) {
+        List<Emprestimo> emprestimosAluno = new ArrayList<>();
+        List<Emprestimo> todosEmprestimos = emprestimoManipulator.getEmprestimos();
+
+        // ordena pelos empréstimos com data de devolução mais próximas (ou que já passaram)
+        todosEmprestimos.sort(Comparator.comparing(Emprestimo::getDataDevolucao));
+
+        for (Emprestimo e : todosEmprestimos) {
+            if (e.getCodigoAluno() == aluno.getMatricula()) {
+                emprestimosAluno.add(e);
+            }
+        }
+
+        return emprestimosAluno;
     }
 
     /**

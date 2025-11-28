@@ -14,12 +14,22 @@ public class MenuUtils {
         }
     }
 
+    public static boolean aguardarConfirmacao(String stringPrompt) {
+        if (!stringPrompt.isEmpty()) {
+            System.out.print(stringPrompt);
+        }
+
+        String escolha = MenuInicial.reader.nextLine().trim().toLowerCase();
+        // retorna true para qualquer valor que não seja "n" ou "N"
+        return !escolha.equals("n");
+    }
+
     public static String lerString(String stringPrompt) {
         if (!stringPrompt.isEmpty()) {
             System.out.print(stringPrompt);
         }
 
-        return MenuInicial.reader.nextLine();
+        return MenuInicial.reader.nextLine().trim();
     }
 
     public static int lerInt(String stringPrompt) {
@@ -29,7 +39,7 @@ public class MenuUtils {
             }
 
             try {
-                return Integer.parseInt(MenuInicial.reader.nextLine());
+                return Integer.parseInt(MenuInicial.reader.nextLine().trim());
             } catch (NumberFormatException e) {
                 System.out.println("Valor inválido. Tente novamente apenas com números. ");
             }
@@ -43,7 +53,7 @@ public class MenuUtils {
             }
 
             try {
-                return Long.parseLong(MenuInicial.reader.nextLine());
+                return Long.parseLong(MenuInicial.reader.nextLine().trim());
             } catch (NumberFormatException e) {
                 System.out.println("Valor inválido. Tente novamente apenas com números. ");
             }

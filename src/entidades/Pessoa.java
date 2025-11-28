@@ -59,13 +59,16 @@ public class Pessoa {
         String[] nomePartes = this.nome.split(" ");
 
         // Primeiro e último nome completos e o restante apenas
-        for (int i = 0; i <= nomePartes.length; i++) {
-            if (i == 0 || i == nomePartes.length-1) {
-                // string completa
+        for (int i = 0; i < nomePartes.length; i++) {
+            if (i == 0) {
+                // primeiro nome completo
+                nomeAbreviado += nomePartes[i] + " ";
+            } else if (i == nomePartes.length-1) {
+                // último nome completo
                 nomeAbreviado += nomePartes[i];
             } else {
-                // inicial da string
-                nomeAbreviado += nomePartes[i].charAt(0);
+                // iniciais dos nomes do meio
+                nomeAbreviado += nomePartes[i].charAt(0) + ". ";
             }
         }
 

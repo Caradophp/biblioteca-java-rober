@@ -30,6 +30,8 @@ public class Emprestimo {
     /** Indica se o livro já foi devolvido. */
     private boolean devolvido;
 
+    private Livro livro;
+
     /** Formatador de data para exibição no formato dd/MM/yyyy. */
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -126,6 +128,21 @@ public class Emprestimo {
 
     public void setCodigoFuncionario(int codigoFuncionario) {
         this.codigoFuncionario = codigoFuncionario;
+    }
+
+    public Livro getLivro() {
+        return livro;
+    }
+
+    public void setLivro(Livro livro) {
+        this.livro = livro;
+    }
+    /**
+     * Verifica se a data atual já ultrapassou a data de devolução do empréstimo.
+     * @return true se o empréstimo está atrasado.
+     */
+    public boolean estaAtrasado() {
+        return dataDevolucao.isBefore(LocalDate.now());
     }
 
     /**

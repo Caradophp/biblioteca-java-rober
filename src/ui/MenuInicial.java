@@ -22,30 +22,31 @@ public class MenuInicial {
     }
 
     public void iniciar() {
-        System.out.println("============================");
-        System.out.println("     SISTEMA BIBLIOTECA     ");
-        System.out.println("============================");
-        System.out.println();
+        while (true) {
+            System.out.println("============================");
+            System.out.println("     SISTEMA BIBLIOTECA     ");
+            System.out.println("============================");
 
-        if (!this.biblioteca.possuiBibliotecarios()) {
-            // fluxo padrão do sistema
-            System.out.println("0. Encerrar programa");
-            System.out.println("1. Fazer login");
+            if (!this.biblioteca.possuiBibliotecarios()) {
+                // fluxo padrão do sistema
+                System.out.println("0. Encerrar programa");
+                System.out.println("1. Fazer login");
 
-            int opcao = MenuUtils.lerOpcaoMenu(1, true);
-            switch (opcao) {
-                case 0:
-                    // fecha o Scanner e então garante que o programa encerre
-                    reader.close();
-                    System.exit(0);
-                case 1:
-                    this.menuLogin();
+                int opcao = MenuUtils.lerOpcaoMenu(1, true);
+                switch (opcao) {
+                    case 0:
+                        // fecha o Scanner e então garante que o programa encerre
+                        reader.close();
+                        System.exit(0);
+                    case 1:
+                        this.menuLogin();
+                }
+            } else {
+                // como não existem bibliotecários cadastrados, o usuário recebe o prompt para criar o primeiro
+                System.out.println("Nenhum bibliotecário cadastrado no momento.");
+                this.cadastrarBibliotecario();
+                this.iniciar();
             }
-        } else {
-            // como não existem bibliotecários cadastrados, o usuário recebe o prompt para criar o primeiro
-            System.out.println("Nenhum bibliotecário cadastrado no momento.");
-            this.cadastrarBibliotecario();
-            this.iniciar();
         }
     }
 
@@ -61,7 +62,8 @@ public class MenuInicial {
         Pessoa pessoaLogada = this.biblioteca.fazerLogin(email, senha);
         if (pessoaLogada == null) {
             System.out.println("Login inválido. Favor tentar novamente.\n");
-            this.iniciar();
+            // retorna ao menu inicial
+            return;
         } else if (pessoaLogada instanceof Aluno) {
             MenuAluno menuAluno = new MenuAluno((Aluno) pessoaLogada, this);
             menuAluno.iniciar();

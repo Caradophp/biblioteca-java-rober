@@ -5,6 +5,7 @@ import entidades.Emprestimo;
 import entidades.Livro;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MenuAluno {
     private final Aluno alunoLogado;
@@ -16,24 +17,25 @@ public class MenuAluno {
     }
 
     public void iniciar() {
-        System.out.println("===================================");
-        System.out.println("Bem-vindo, aluno " + this.alunoLogado.getNomeAbreviado());
-        System.out.println();
-        System.out.println("0. Sair");
-        System.out.println("1. Consultar livros");
-        System.out.println("2. Consultar livros emprestados");
+        while (true) {
+            System.out.println("===================================");
+            System.out.printf("Bem-vindo, aluno %s\n\n", alunoLogado.getNomeAbreviado());
+            System.out.println("0. Sair");
+            System.out.println("1. Consultar livros");
+            System.out.println("2. Consultar livros emprestados");
 
-        int escolha = MenuUtils.lerOpcaoMenu(2, true);
-        switch (escolha) {
-            case 0:
-                this.menuInicial.iniciar();
-                break;
-            case 1:
-                MenusGlobais.menuConsultarLivros(this.menuInicial.getBiblioteca(), this::iniciar);
-                break;
-            case 2:
-                this.menuLivrosEmprestados();
-                break;
+            int escolha = MenuUtils.lerOpcaoMenu(2, true);
+            switch (escolha) {
+                case 0:
+                    // retorna ao menu inicial
+                    return;
+                case 1:
+                    MenusGlobais.menuConsultarLivros(menuInicial.getBiblioteca(), this::iniciar);
+                    break;
+                case 2:
+                    menuLivrosEmprestados();
+                    break;
+            }
         }
     }
 
@@ -52,7 +54,7 @@ public class MenuAluno {
         System.out.println("Selecione um livro para ver mais informações sobre:");
         int escolha = MenuUtils.lerOpcaoMenu(livros.size(), true);
         if (escolha == 0) {
-            MenusGlobais.menuConsultarLivros(this.menuInicial.getBiblioteca(), this::iniciar);
+            MenusGlobais.menuConsultarLivros(menuInicial.getBiblioteca(), this::iniciar);
         } else {
             printDetalheslivro(livros.get(escolha - 1));
         }
@@ -66,44 +68,44 @@ public class MenuAluno {
 
         // não importa o que for digitado, apenas volta para o menu de consulta de livros
         MenuInicial.reader.nextLine();
-        MenusGlobais.menuConsultarLivros(this.menuInicial.getBiblioteca(), this::iniciar);
+        MenusGlobais.menuConsultarLivros(menuInicial.getBiblioteca(), this::iniciar);
     }
 
     private void menuLivrosEmprestados() {
-        // todo: busca os empréstimos do aluno
-        // ArrayList<Emprestimo> emprestimos = this.alunoLogado.getEmprestimos();
-        ArrayList<Emprestimo> emprestimos = new ArrayList<>();
+        while (true) {
+            List<Emprestimo> emprestimosAluno = menuInicial.getBiblioteca().buscarTodosEmprestimos(alunoLogado);
 
-        System.out.println("===============================\n");
-        System.out.println("0. Voltar");
+            System.out.println("===============================\n");
+            if (emprestimosAluno.isEmpty()) {
+                System.out.println("Você não tem nenhum livro emprestado");
+            } else {
+                System.out.println("0. Voltar");
 
-        // todo: listar os empréstimos
+                MenusGlobais.listarEmprestimos(emprestimosAluno);
 
-        System.out.println("Selecione um livro para renová-lo:");
-        int escolha = MenuUtils.lerOpcaoMenu(emprestimos.size(), true);
-        if (escolha == 0) {
-            this.iniciar();
-        } else {
-            confirmarRenovacaoLivro(emprestimos.get(escolha - 1));
+                System.out.println("\nSelecione um livro para renová-lo:");
+                int escolha = MenuUtils.lerOpcaoMenu(2, true);
+                if (escolha == 0) {
+                    // retorna ao menu inicial do aluno
+                    return;
+                } else {
+                    confirmarRenovacaoLivro(emprestimosAluno.get(escolha - 1));
+                }
+            }
         }
     }
 
     private void confirmarRenovacaoLivro(Emprestimo emprestimo) {
-        System.out.println("===========================");
-        // todo: pegar livro a partir do emprestimo
-        //System.out.println("Confirma a renovação do livro '%s'? (S/n)\n", livro.getNome());
+        System.out.println("===============================");
+        System.out.printf("Confirma a renovação do livro '%s'? (S/n)\n", emprestimo.getLivro().getNome());
 
-        System.out.println("> ");
-
-        // não importa o que for digitado, apenas volta para o menu de consulta de livros
-        String escolha = MenuInicial.reader.nextLine().trim();
-        if (!escolha.equals("n")) {
-            // todo: renovação do livro
-            //emprestimo.renovar();
+        boolean confirmado = MenuUtils.aguardarConfirmacao("> ");
+        if (!confirmado) {
+            menuInicial.getBiblioteca().renovarEmprestimo(emprestimo.getCodigoEmprestimo());
+            // todo: testar se a data da variável emprestimo está sendo alterada
             System.out.printf("Livro renovado para a data %s.\n", emprestimo.getDataDevolucao().toString());
         } else {
             System.out.println("Renovação do livro cancelada.");
-            this.menuLivrosEmprestados();
         }
     }
 }

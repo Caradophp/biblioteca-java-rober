@@ -17,8 +17,8 @@ import java.util.List;
 
 public class EmprestimoManipulator {
 
-    private static final LivroManipulator livroManipulator = new LivroManipulator();
-    private static final AlunoManipulator alunoManipulator = new AlunoManipulator();
+    private final LivroManipulator livroManipulator;
+    private final AlunoManipulator alunoManipulator;
 
     /**
      * lista de emprestimos
@@ -31,7 +31,9 @@ public class EmprestimoManipulator {
      */
     private Path arquivoEmprestimos = Paths.get("emprestimos.txt");
 
-    public EmprestimoManipulator() {
+    public EmprestimoManipulator(LivroManipulator livroManipul, AlunoManipulator alunoManipul) {
+        livroManipulator = livroManipul;
+        alunoManipulator = alunoManipul;
         emprestimos = buscarTodosEmprestimos();
     }
     
@@ -115,6 +117,8 @@ public class EmprestimoManipulator {
 
                 String[] dataDevolucao = l[4].split("/");
                 emprestimo.setDataDevolucao(LocalDate.of(Integer.parseInt(dataDevolucao[2]), Integer.parseInt(dataDevolucao[1]), Integer.parseInt(dataDevolucao[0])));
+
+                emprestimo.setLivro(livroManipulator.buscarLivroPorCodigo(emprestimo.getCodigoLivro()));
 
                 emprestimoList.add(emprestimo);
             }
