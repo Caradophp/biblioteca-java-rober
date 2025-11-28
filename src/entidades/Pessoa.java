@@ -6,7 +6,7 @@ import java.util.Objects;
  * Classe base que representa uma Pessoa no sistema da biblioteca.
  * Contém atributos comuns a Alunos e Bibliotecários.
  */
-public class Pessoa {
+public abstract class Pessoa {
 
     /**
      * Nome completo da pessoa.
