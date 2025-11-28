@@ -68,6 +68,7 @@ public class BibliotecarioManipulator {
     public void removerFuncionario(int registro) {
         limparArquivo(arquivoFuncionarios);
         for (Bibliotecario bibliotecario : bibliotecarios) {
+            bibliotecarios.remove(bibliotecario);
             if (bibliotecario.getRegistro() != registro) {
                 inserirBibliotecario(bibliotecario);
             }
@@ -117,6 +118,7 @@ public class BibliotecarioManipulator {
 
         limparArquivo(arquivoFuncionarios);
         for (Bibliotecario bibliotecario : bibliotecarios) {
+            bibliotecarios.remove(bibliotecario);
             if (bibliotecario.getRegistro() == registro) {
                 bibliotecario.setNome(bibliotecarioAtualizado.getNome());
                 bibliotecario.setEmail(bibliotecarioAtualizado.getEmail());

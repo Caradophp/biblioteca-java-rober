@@ -63,6 +63,7 @@ public class AlunoManipulator {
     public void removerAluno(long matricula) {
         limparArquivo(arquivoAlunos);
         for (Aluno aluno : alunos) {
+            alunos.remove(aluno);
             if (aluno.getMatricula() != matricula) {
                 cadastrarAluno(aluno);
             }
@@ -125,16 +126,16 @@ public class AlunoManipulator {
     public boolean atualizarAluno(Aluno alunoAtualizado, long matricula) {
         limparArquivo(arquivoAlunos);
         for (Aluno aluno : alunos) {
+            alunos.remove(aluno);
             if (aluno.getMatricula() == matricula) {
                 aluno.setNome(alunoAtualizado.getNome());
                 aluno.setEmail(alunoAtualizado.getEmail());
                 aluno.setSenha(alunoAtualizado.getSenha());
                 aluno.setTelefone(alunoAtualizado.getTelefone());
                 aluno.setCurso(alunoAtualizado.getCurso());
-                cadastrarAluno(aluno);
-            } else {
-                cadastrarAluno(aluno);
             }
+
+            cadastrarAluno(aluno);
         }
 
         return true;

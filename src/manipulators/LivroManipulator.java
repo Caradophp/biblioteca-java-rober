@@ -140,6 +140,7 @@ public class LivroManipulator {
 
         limparArquivo(arquivoLivros);
         for (Livro livro : livros) {
+            livros.remove(livro);
             if (livro.getIsbn() == isbn) {
                 livro.setNome(livroParaAtualizar.getNome());
                 livro.setCategoria(livroParaAtualizar.getCategoria());
@@ -169,6 +170,7 @@ public class LivroManipulator {
 
             limparArquivo(arquivoLivros);
             for (Livro livro : livros) {
+                livros.remove(livro);
                 if (livro.getIsbn() != isbn) {
                     cadastrarLivro(livro);
                 }
