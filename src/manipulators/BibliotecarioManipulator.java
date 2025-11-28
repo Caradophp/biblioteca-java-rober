@@ -93,19 +93,21 @@ public class BibliotecarioManipulator {
 
             List<String> linhas = Files.readAllLines(arquivoFuncionarios);
             for (String linha : linhas) {
-                String[] l = linha.split(";");
-                Bibliotecario bibliotecario = new Bibliotecario();
-                bibliotecario.setRegistro(Integer.parseInt(l[0]));
-                bibliotecario.setNome(l[1]);
-                bibliotecario.setEmail(l[2]);
-                bibliotecario.setSenha(l[3]);
-                bibliotecario.setTelefone(Long.parseLong(l[4]));
+                if (!linha.equals("")) {
+                    String[] l = linha.split(";");
+                    Bibliotecario bibliotecario = new Bibliotecario();
+                    bibliotecario.setRegistro(Integer.parseInt(l[0]));
+                    bibliotecario.setNome(l[1]);
+                    bibliotecario.setEmail(l[2]);
+                    bibliotecario.setSenha(l[3]);
+                    bibliotecario.setTelefone(Long.parseLong(l[4]));
 
-                // Divide a string de data para montar o objeto LocalDate (formato dd/MM/yyyy)
-                String[] data = l[5].split("/");
-                bibliotecario.setDataAdmissao(LocalDate.of(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0])));
+                    // Divide a string de data para montar o objeto LocalDate (formato dd/MM/yyyy)
+                    String[] data = l[5].split("/");
+                    bibliotecario.setDataAdmissao(LocalDate.of(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0])));
 
-                bibliotecarioList.add(bibliotecario);
+                    bibliotecarioList.add(bibliotecario);
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

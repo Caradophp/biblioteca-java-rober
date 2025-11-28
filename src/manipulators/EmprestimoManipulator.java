@@ -103,24 +103,27 @@ public class EmprestimoManipulator {
 
             List<String> linhas = Files.readAllLines(arquivoEmprestimos);
             for (String linha : linhas) {
-                String[] l = linha.split(";");
-                Emprestimo emprestimo = new Emprestimo();
-                emprestimo.setCodigoEmprestimo(Integer.parseInt(l[0]));
-                emprestimo.setCodigoLivro(Integer.parseInt(l[1]));
-                emprestimo.setCodigoAluno(Integer.parseInt(l[2]));
-                emprestimo.setDevolvido(l[5].equals("sim"));
+                if (!linha.equals("")) {
+                    String[] l = linha.split(";");
+                    Emprestimo emprestimo = new Emprestimo();
+                    emprestimo.setCodigoEmprestimo(Integer.parseInt(l[0]));
+                    emprestimo.setCodigoLivro(Integer.parseInt(l[1]));
+                    emprestimo.setCodigoAluno(Integer.parseInt(l[2]));
+                    emprestimo.setDevolvido(l[5].equals("sim"));
 
-                // Divide a string de data para montar o objeto LocalDate (formato dd/MM/yyyy)
+                    // Divide a string de data para montar o objeto LocalDate (formato dd/MM/yyyy)
 
-                String[] dataEmprestimo = l[3].split("/");
-                emprestimo.setDataEmprestimo(LocalDate.of(Integer.parseInt(dataEmprestimo[2]), Integer.parseInt(dataEmprestimo[1]), Integer.parseInt(dataEmprestimo[0])));
+                    String[] dataEmprestimo = l[3].split("/");
+                    emprestimo.setDataEmprestimo(LocalDate.of(Integer.parseInt(dataEmprestimo[2]), Integer.parseInt(dataEmprestimo[1]), Integer.parseInt(dataEmprestimo[0])));
 
-                String[] dataDevolucao = l[4].split("/");
-                emprestimo.setDataDevolucao(LocalDate.of(Integer.parseInt(dataDevolucao[2]), Integer.parseInt(dataDevolucao[1]), Integer.parseInt(dataDevolucao[0])));
+                    String[] dataDevolucao = l[4].split("/");
+                    emprestimo.setDataDevolucao(LocalDate.of(Integer.parseInt(dataDevolucao[2]), Integer.parseInt(dataDevolucao[1]), Integer.parseInt(dataDevolucao[0])));
 
-                emprestimo.setLivro(livroManipulator.buscarLivroPorCodigo(emprestimo.getCodigoLivro()));
+                    emprestimo.setLivro(livroManipulator.buscarLivroPorCodigo(emprestimo.getCodigoLivro()));
 
-                emprestimoList.add(emprestimo);
+                    emprestimoList.add(emprestimo);
+
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

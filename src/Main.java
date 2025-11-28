@@ -13,10 +13,10 @@ public class Main {
         Livro l = new Livro(1, "Guerra dos Mundos", "Ação", "Desconhecido", "minha", 111222, 30);
         Emprestimo e = new Emprestimo(1, 25110463L, 1);
 
-//        b.cadastrarAluno(a);
-//        b.inserirBibliotecario(f);
-//        b.cadastrarLivro(l);
-//        b.fazerEmprestimo(e);
+        b.cadastrarAluno(a);
+        b.inserirBibliotecario(f);
+        b.cadastrarLivro(l);
+        b.fazerEmprestimo(e);
 
 //        b.atualizarBibliotecario(f, 12345);
 //        b.atualizarAluno(a, 25110463L);
@@ -26,21 +26,21 @@ public class Main {
 //        System.out.println(b.buscarLivroPorCodigo(111222));
 //        System.out.println(b.buscarAlunoPorMatricula(25110463L));
 
-        Object o = b.fazerLogin("luciano@mail.com", "123Mudar");
-
-        if (o instanceof Aluno aluno) {
-            System.out.println("Bem vindo, aluno " + aluno.getNome());
-        }
-
-        Object mudar123 = b.fazerLogin("maria@mail.com", "Mudar123");
-
-        if (mudar123 instanceof Bibliotecario bibliotecario) {
-            System.out.println("Bem vindo, bibliotecario " + bibliotecario.getNome());
-        }
-
-        b.removerAluno(25110463L);
-        b.removerLivro(111222);
-        b.removerFuncionario(12345);
+//        Object o = b.fazerLogin("luciano@mail.com", "123Mudar");
+//
+//        if (o instanceof Aluno aluno) {
+//            System.out.println("Bem vindo, aluno " + aluno.getNome());
+//        }
+//
+//        Object mudar123 = b.fazerLogin("maria@mail.com", "Mudar123");
+//
+//        if (mudar123 instanceof Bibliotecario bibliotecario) {
+//            System.out.println("Bem vindo, bibliotecario " + bibliotecario.getNome());
+//        }
+//
+//        b.removerAluno(25110463L);
+//        b.removerLivro(111222);
+//        b.removerFuncionario(12345);
 
 //        b.devolverLivro(1);
 //        double v = e.calcularMulta();

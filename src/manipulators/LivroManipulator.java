@@ -72,17 +72,19 @@ public class LivroManipulator {
             List<String> listaLivrosString = Files.readAllLines(arquivoLivros);
 
             for (String s : listaLivrosString) {
-                String[] linha = s.split(";");
-                Livro livro = new Livro();
-                livro.setCodigo(Integer.parseInt(linha[0]));
-                livro.setNome(linha[1]);
-                livro.setCategoria(linha[2]);
-                livro.setAutor(linha[3]);
-                livro.setEditora(linha[4]);
-                livro.setIsbn(Integer.parseInt(linha[5]));
-                livro.setQtdDisponivel(Integer.parseInt(linha[6]));
+                if (!s.equals("")) {
+                    String[] linha = s.split(";");
+                    Livro livro = new Livro();
+                    livro.setCodigo(Integer.parseInt(linha[0]));
+                    livro.setNome(linha[1]);
+                    livro.setCategoria(linha[2]);
+                    livro.setAutor(linha[3]);
+                    livro.setEditora(linha[4]);
+                    livro.setIsbn(Integer.parseInt(linha[5]));
+                    livro.setQtdDisponivel(Integer.parseInt(linha[6]));
 
-                listaLivros.add(livro);
+                    listaLivros.add(livro);
+                }
             }
 
         } catch (IOException e) {

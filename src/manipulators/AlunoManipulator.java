@@ -106,15 +106,17 @@ public class AlunoManipulator {
 
             List<String> linhas = Files.readAllLines(arquivoAlunos);
             for (String linha : linhas) {
-                String[] l = linha.split(";");
-                Aluno aluno = new Aluno();
-                aluno.setMatricula(Long.parseLong(l[0]));
-                aluno.setNome(l[1]);
-                aluno.setEmail(l[2]);
-                aluno.setSenha(l[3]);
-                aluno.setTelefone(Long.parseLong(l[4]));
-                aluno.setCurso(l[5]);
-                alunoList.add(aluno);
+                if (!linha.equals("")) {
+                    String[] l = linha.split(";");
+                    Aluno aluno = new Aluno();
+                    aluno.setMatricula(Long.parseLong(l[0]));
+                    aluno.setNome(l[1]);
+                    aluno.setEmail(l[2]);
+                    aluno.setSenha(l[3]);
+                    aluno.setTelefone(Long.parseLong(l[4]));
+                    aluno.setCurso(l[5]);
+                    alunoList.add(aluno);
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
