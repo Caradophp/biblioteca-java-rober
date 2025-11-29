@@ -8,19 +8,21 @@ public class Main {
     public static void main(String[] args) {
         Biblioteca b = new Biblioteca();
 
-        Aluno a = new Aluno("Luciano Friebe Feigl", "luciano@mail.com", "123Mudar", 27988610153L, 25110463L, "Ciência da Computação");
-        Bibliotecario f = new Bibliotecario("Maria", "maria@mail.com", "Mudar123", 27889161035L, 12345);
-        Livro l = new Livro(1, "Guerra dos Mundos", "Ação", "Desconhecido", "minha", 111222, 30);
+        Aluno a = new Aluno("Luciano Silva Friebe Feigl", "luciano@mail.com", "123Mudar", 27988610153L, 25110463L, "Ciência da Computação");
+        Bibliotecario f = new Bibliotecario("Maria", "mariana@mail.com", "Mudar123", 27889161035L, 1234);
+        Livro l = new Livro(1, "Guerra dos Mundos dois", "Ação", "Desconhecido", "minha", 111222, 30);
         Emprestimo e = new Emprestimo(1, 25110463L, 1);
 
-        b.cadastrarAluno(a);
-        b.inserirBibliotecario(f);
-        b.cadastrarLivro(l);
-        b.fazerEmprestimo(e);
+//        b.cadastrarAluno(a);
+//        b.inserirBibliotecario(f);
+//        b.cadastrarLivro(l);
+//        b.fazerEmprestimo(e);
+        
+        b.atualizarBibliotecario(f, 1234);
 
 //        b.atualizarBibliotecario(f, 12345);
-//        b.atualizarAluno(a, 25110463L);
-//        b.atualizarLivroPorCodigo(l, 111222);
+        b.atualizarAluno(a, 25110463L);
+        b.atualizarLivroPorCodigo(l, 111222);
 
 //        System.out.println(b.buscarLivroPorNome("Guerra dos Mundos"));
 //        System.out.println(b.buscarLivroPorCodigo(111222));

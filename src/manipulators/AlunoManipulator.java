@@ -14,15 +14,7 @@ import java.util.List;
 
 public class AlunoManipulator {
 
-    /**
-     * lista de alunos
-     */
-
     private List<Aluno> alunos = new ArrayList<>();
-
-    /**
-     * Caminho para o arquivo de persistência dos alunos.
-     */
     private Path arquivoAlunos = Paths.get("alunos.txt");
 
     public AlunoManipulator() {
@@ -30,162 +22,135 @@ public class AlunoManipulator {
     }
 
     public List<Aluno> getAlunos() {
-		return alunos;
-	}
+        return alunos;
+    }
 
-	/**
-     * Cadastra um novo aluno no arquivo de persistência.
-     *
-     * @param aluno O objeto Aluno a ser cadastrado.
-     * @return true se o cadastro for bem-sucedido, false caso contrário.
-     */
+    /** CADASTRAR ALUNO */
     public boolean cadastrarAluno(Aluno aluno) {
-    	
-    	for (Aluno a : alunos) {
-    		if ((a.getMatricula() == aluno.getMatricula()) || a.getEmail().equalsIgnoreCase(aluno.getEmail())) {
-        		System.out.println("Já existe um aluno com esses dados cadastrados");
-        		return false;
-        	}
-    	}
 
-    	alunos.add(aluno);
-        String linhaIncerida = aluno.getMatricula() + ";" + aluno.getNome() + ";" + aluno.getEmail() + ";" + aluno.getSenha() + ";" + aluno.getTelefone() + ";" + aluno.getCurso();
-
-        try {
-            Files.write(arquivoAlunos, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
-            Files.write(arquivoAlunos, "\n".getBytes(), StandardOpenOption.APPEND);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+        for (Aluno a : alunos) {
+            if (a.getMatricula() == aluno.getMatricula()
+                    || a.getEmail().equalsIgnoreCase(aluno.getEmail())) {
+                System.out.println("Já existe um aluno com esses dados cadastrados");
+                return false;
+            }
         }
-    }
-    
-    private boolean atualizaArquivo(Aluno aluno) {
 
-    	alunos.add(aluno);
-        String linhaIncerida = aluno.getMatricula() + ";" + aluno.getNome() + ";" + aluno.getEmail() + ";" + aluno.getSenha() + ";" + aluno.getTelefone() + ";" + aluno.getCurso();
+        alunos.add(aluno);
+        escreverAlunoNoArquivo(aluno);
 
-        try {
-            Files.write(arquivoAlunos, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
-            Files.write(arquivoAlunos, "\n".getBytes(), StandardOpenOption.APPEND);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return true;
     }
 
-    /**
-     * Remove um aluno do arquivo de persistência.
-     * O método limpa o arquivo e o reescreve com todos os alunos, exceto o removido.
-     *
-     * @param matricula A matrícula do aluno a ser removido.
-     */
+    /** REMOVER ALUNO */
     public void removerAluno(long matricula) {
+
+        List<Aluno> novaLista = new ArrayList<>();
         limparArquivo(arquivoAlunos);
-        for (Aluno aluno : alunos) {
-            alunos.remove(aluno);
-            if (aluno.getMatricula() != matricula) {
-            	atualizaArquivo(aluno);
+
+        for (Aluno a : alunos) {
+            if (a.getMatricula() != matricula) {
+                novaLista.add(a);
+                escreverAlunoNoArquivo(a);
             }
         }
+
+        alunos = novaLista;
     }
 
-    /**
-     * Busca um aluno na lista em memória pela matrícula.
-     *
-     * @param matricula A matrícula do aluno a ser buscado.
-     * @return O objeto Aluno encontrado ou null se não for encontrado.
-     */
+    /** ATUALIZAR ALUNO */
+    public boolean atualizarAluno(Aluno alunoAtualizado, long matricula) {
+
+        List<Aluno> novaLista = new ArrayList<>();
+        limparArquivo(arquivoAlunos);
+
+        for (Aluno a : alunos) {
+
+            if (a.getMatricula() == matricula) {
+                a.setNome(alunoAtualizado.getNome());
+                a.setEmail(alunoAtualizado.getEmail());
+                a.setSenha(alunoAtualizado.getSenha());
+                a.setTelefone(alunoAtualizado.getTelefone());
+                a.setCurso(alunoAtualizado.getCurso());
+            }
+
+            novaLista.add(a);
+            escreverAlunoNoArquivo(a);
+        }
+
+        alunos = novaLista;
+        return true;
+    }
+
+    /** BUSCAR ALUNO POR MATRÍCULA */
     public Aluno buscarAlunoPorMatricula(long matricula) {
-
-        for (Aluno aluno : alunos) {
-            if (aluno.getMatricula() == matricula) {
-                return aluno;
+        for (Aluno a : alunos) {
+            if (a.getMatricula() == matricula) {
+                return a;
             }
         }
-
         return null;
-
     }
 
-    /**
-     * Carrega todos os alunos do arquivo de persistência para a memória.
-     *
-     * @return Uma lista de todos os Alunos.
-     */
+    /** CARREGAR ALUNOS DO ARQUIVO */
     private List<Aluno> buscarTodosAlunos() {
 
-        List<Aluno> alunoList = new ArrayList<>();
+        List<Aluno> lista = new ArrayList<>();
 
         try {
-
-            /* Se o arquivo de alunos não existir, ele é criado */
             if (Files.notExists(arquivoAlunos)) {
                 Files.createFile(arquivoAlunos);
             }
 
             List<String> linhas = Files.readAllLines(arquivoAlunos);
+
             for (String linha : linhas) {
-                if (!linha.equals("")) {
-                    String[] l = linha.split(";");
-                    Aluno aluno = new Aluno();
-                    aluno.setMatricula(Long.parseLong(l[0]));
-                    aluno.setNome(l[1]);
-                    aluno.setEmail(l[2]);
-                    aluno.setSenha(l[3]);
-                    aluno.setTelefone(Long.parseLong(l[4]));
-                    aluno.setCurso(l[5]);
-                    alunoList.add(aluno);
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+                if (linha.trim().isEmpty()) continue;
 
-        return alunoList;
-    }
+                String[] l = linha.split(";");
 
-    public boolean atualizarAluno(Aluno alunoAtualizado, long matricula) {
-        limparArquivo(arquivoAlunos);
-        for (Aluno aluno : alunos) {
-            alunos.remove(aluno);
-            if (aluno.getMatricula() == matricula) {
-                aluno.setNome(alunoAtualizado.getNome());
-                aluno.setEmail(alunoAtualizado.getEmail());
-                aluno.setSenha(alunoAtualizado.getSenha());
-                aluno.setTelefone(alunoAtualizado.getTelefone());
-                aluno.setCurso(alunoAtualizado.getCurso());
+                Aluno aluno = new Aluno();
+                aluno.setMatricula(Long.parseLong(l[0]));
+                aluno.setNome(l[1]);
+                aluno.setEmail(l[2]);
+                aluno.setSenha(l[3]);
+                aluno.setTelefone(Long.parseLong(l[4]));
+                aluno.setCurso(l[5]);
+
+                lista.add(aluno);
             }
 
-            atualizaArquivo(aluno);
-        }
-
-        return true;
-    }
-
-    // Método para limpar arquivo
-
-    /**
-     * Limpa o conteúdo de um arquivo, preparando-o para uma reescrita.
-     *
-     * @param arquivo O caminho do arquivo a ser limpo.
-     */
-    private void limparArquivo(Path arquivo) {
-        OutputStream outputStream = null;
-
-        try {
-            outputStream = new FileOutputStream(arquivo.toString());
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                outputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        }
+
+        return lista;
+    }
+
+    /** LIMPAR ARQUIVO */
+    private void limparArquivo(Path arquivo) {
+        try (OutputStream os = new FileOutputStream(arquivo.toString())) {
+            // Abrir já limpa o arquivo
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    /** ESCREVER ALUNO NO ARQUIVO */
+    private void escreverAlunoNoArquivo(Aluno a) {
+
+        String linha = a.getMatricula() + ";" +
+                       a.getNome() + ";" +
+                       a.getEmail() + ";" +
+                       a.getSenha() + ";" +
+                       a.getTelefone() + ";" +
+                       a.getCurso();
+
+        try {
+            Files.write(arquivoAlunos, linha.getBytes(), StandardOpenOption.APPEND);
+            Files.write(arquivoAlunos, "\n".getBytes(), StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

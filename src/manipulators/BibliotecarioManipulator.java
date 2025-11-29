@@ -1,6 +1,5 @@
 package manipulators;
 
-import entidades.Aluno;
 import entidades.Bibliotecario;
 
 import java.io.FileOutputStream;
@@ -16,15 +15,7 @@ import java.util.List;
 
 public class BibliotecarioManipulator {
 
-    /**
-     * lista de bibliotecarios
-     */
-
     private List<Bibliotecario> bibliotecarios = new ArrayList<>();
-
-    /**
-     * Caminho para o arquivo de persistência dos livros.
-     */
     private Path arquivoFuncionarios = Paths.get("funcionarios.txt");
 
     public BibliotecarioManipulator() {
@@ -34,150 +25,135 @@ public class BibliotecarioManipulator {
     public int getNumBibliotecarios() {
         return this.bibliotecarios.size();
     }
-    
+
     public List<Bibliotecario> getBibliotecarios() {
-    	return bibliotecarios;
+        return bibliotecarios;
     }
 
-    /**
-     * Cadastra um novo bibliotecário no arquivo de persistência.
-     *
-     * @param bibliotecario O objeto Bibliotecario a ser cadastrado.
-     * @return true se o cadastro for bem-sucedido, false caso contrário.
-     */
+    /** INSERIR BIBLIOTECARIO */
     public boolean inserirBibliotecario(Bibliotecario bibliotecario) {
-    	
-    	for (Bibliotecario b : bibliotecarios) {
-    		if ((b.getRegistro() == bibliotecario.getRegistro()) || b.getEmail().equalsIgnoreCase(bibliotecario.getEmail())) {
-        		System.out.println("Já existe um bibliotecário com esses dados cadastrados");
-        		return false;
-        	}
-    	}
 
-    	bibliotecarios.add(bibliotecario);
-        String linhaIncerida = bibliotecario.getRegistro() + ";" + bibliotecario.getNome() + ";" + bibliotecario.getEmail() + ";" + bibliotecario.getSenha() + ";" + bibliotecario.getTelefone() + ";" + bibliotecario.getDataAdmissao();
-
-        try {
-            Files.write(arquivoFuncionarios, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
-            Files.write(arquivoFuncionarios, "\n".getBytes(), StandardOpenOption.APPEND);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * Remove um bibliotecário do arquivo de persistência.
-     * O método limpa o arquivo e o reescreve com todos os bibliotecários, exceto o removido.
-     *
-     * @param registro O registro do bibliotecário a ser removido.
-     */
-    public void removerFuncionario(int registro) {
-        limparArquivo(arquivoFuncionarios);
-        for (Bibliotecario bibliotecario : bibliotecarios) {
-            bibliotecarios.remove(bibliotecario);
-            if (bibliotecario.getRegistro() != registro) {
-            	atualizaArquivo(bibliotecario);
+        for (Bibliotecario b : bibliotecarios) {
+            if (b.getRegistro() == bibliotecario.getRegistro()
+                    || b.getEmail().equalsIgnoreCase(bibliotecario.getEmail())) {
+                System.out.println("Já existe um bibliotecário com esses dados cadastrados");
+                return false;
             }
         }
+
+        bibliotecarios.add(bibliotecario);
+        escreverBibliotecarioNoArquivo(bibliotecario);
+
+        return true;
     }
 
-    /**
-     * Carrega todos os bibliotecários do arquivo de persistência para a memória.
-     *
-     * @return Uma lista de todos os Bibliotecarios.
-     */
+    /** REMOVER BIBLIOTECARIO */
+    public void removerFuncionario(int registro) {
+
+        List<Bibliotecario> novaLista = new ArrayList<>();
+
+        limparArquivo(arquivoFuncionarios);
+
+        for (Bibliotecario b : bibliotecarios) {
+            if (b.getRegistro() != registro) {
+                novaLista.add(b);
+                escreverBibliotecarioNoArquivo(b);
+            }
+        }
+
+        bibliotecarios = novaLista;
+    }
+
+    /** ATUALIZAR BIBLIOTECARIO */
+    public boolean atualizarBibliotecario(Bibliotecario bibliotecarioAtualizado, long registro) {
+
+        List<Bibliotecario> novaLista = new ArrayList<>();
+
+        limparArquivo(arquivoFuncionarios);
+
+        for (Bibliotecario b : bibliotecarios) {
+            if (b.getRegistro() == registro) {
+                b.setNome(bibliotecarioAtualizado.getNome());
+                b.setEmail(bibliotecarioAtualizado.getEmail());
+                b.setSenha(bibliotecarioAtualizado.getSenha());
+                b.setTelefone(bibliotecarioAtualizado.getTelefone());
+            }
+
+            novaLista.add(b);
+            escreverBibliotecarioNoArquivo(b);
+        }
+
+        bibliotecarios = novaLista;
+        return true;
+    }
+
+    /** BUSCAR TODOS DO ARQUIVO */
     private List<Bibliotecario> buscarTodosBibliotecarios() {
 
-        List<Bibliotecario> bibliotecarioList = new ArrayList<>();
+        List<Bibliotecario> lista = new ArrayList<>();
 
         try {
-
-            /* Se o arquivo de bibliotecarios não existir, ele é criado */
             if (Files.notExists(arquivoFuncionarios)) {
                 Files.createFile(arquivoFuncionarios);
             }
 
             List<String> linhas = Files.readAllLines(arquivoFuncionarios);
+
             for (String linha : linhas) {
-                if (!linha.equals("")) {
-                    String[] l = linha.split(";");
-                    Bibliotecario bibliotecario = new Bibliotecario();
-                    bibliotecario.setRegistro(Integer.parseInt(l[0]));
-                    bibliotecario.setNome(l[1]);
-                    bibliotecario.setEmail(l[2]);
-                    bibliotecario.setSenha(l[3]);
-                    bibliotecario.setTelefone(Long.parseLong(l[4]));
 
-                    // Divide a string de data para montar o objeto LocalDate (formato dd/MM/yyyy)
-                    String[] data = l[5].split("/");
-                    bibliotecario.setDataAdmissao(LocalDate.of(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0])));
+                if (linha.trim().isEmpty()) continue;
 
-                    bibliotecarioList.add(bibliotecario);
-                }
+                String[] l = linha.split(";");
+
+                Bibliotecario b = new Bibliotecario();
+                b.setRegistro(Integer.parseInt(l[0]));
+                b.setNome(l[1]);
+                b.setEmail(l[2]);
+                b.setSenha(l[3]);
+                b.setTelefone(Long.parseLong(l[4]));
+
+                String[] data = l[5].split("/");
+                b.setDataAdmissao(
+                        LocalDate.of(Integer.parseInt(data[2]),
+                                Integer.parseInt(data[1]),
+                                Integer.parseInt(data[0]))
+                );
+
+                lista.add(b);
             }
+
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
-        return bibliotecarioList;
+        return lista;
     }
 
-    public boolean atualizarBibliotecario(Bibliotecario bibliotecarioAtualizado, long registro) {
-
-        limparArquivo(arquivoFuncionarios);
-        for (Bibliotecario bibliotecario : bibliotecarios) {
-            bibliotecarios.remove(bibliotecario);
-            if (bibliotecario.getRegistro() == registro) {
-                bibliotecario.setNome(bibliotecarioAtualizado.getNome());
-                bibliotecario.setEmail(bibliotecarioAtualizado.getEmail());
-                bibliotecario.setSenha(bibliotecarioAtualizado.getSenha());
-                bibliotecario.setTelefone(bibliotecarioAtualizado.getTelefone());
-                atualizaArquivo(bibliotecario);
-            } else {
-            	atualizaArquivo(bibliotecario);
-            }
-        }
-
-        return true;
-    }
-
-    // Método para limpar arquivo
-
-    /**
-     * Limpa o conteúdo de um arquivo, preparando-o para uma reescrita.
-     *
-     * @param arquivo O caminho do arquivo a ser limpo.
-     */
+    /** LIMPAR ARQUIVO */
     private void limparArquivo(Path arquivo) {
-        OutputStream outputStream = null;
-
-        try {
-            outputStream = new FileOutputStream(arquivo.toString());
+        try (OutputStream os = new FileOutputStream(arquivo.toString())) {
+            // Apenas abrir o arquivo já limpa o conteúdo
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                outputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
-    
-    private boolean atualizaArquivo(Bibliotecario bibliotecario) {
 
-    	bibliotecarios.add(bibliotecario);
-        String linhaIncerida = bibliotecario.getRegistro() + ";" + bibliotecario.getNome() + ";" + bibliotecario.getEmail() + ";" + bibliotecario.getSenha() + ";" + bibliotecario.getTelefone() + ";" + bibliotecario.getDataAdmissao();
+    /** ESCREVER REGISTRO NO ARQUIVO */
+    private void escreverBibliotecarioNoArquivo(Bibliotecario b) {
+
+        String linha = b.getRegistro() + ";" +
+                       b.getNome() + ";" +
+                       b.getEmail() + ";" +
+                       b.getSenha() + ";" +
+                       b.getTelefone() + ";" +
+                       b.getDataAdmissao();
 
         try {
-            Files.write(arquivoFuncionarios, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
+            Files.write(arquivoFuncionarios, linha.getBytes(), StandardOpenOption.APPEND);
             Files.write(arquivoFuncionarios, "\n".getBytes(), StandardOpenOption.APPEND);
-            return true;
+
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
         }
     }
 }
