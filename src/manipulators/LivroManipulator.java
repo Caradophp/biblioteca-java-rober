@@ -1,5 +1,6 @@
 package manipulators;
 
+import entidades.Aluno;
 import entidades.Livro;
 
 import java.io.FileOutputStream;
@@ -40,6 +41,13 @@ public class LivroManipulator {
      * @return true se o cadastro for bem-sucedido, false caso contrário.
      */
     public boolean cadastrarLivro(Livro livro) {
+    	
+    	for (Livro l : livros) {
+    		if (l.getIsbn() == livro.getIsbn()) {
+        		System.out.println("Já existe um livro com esses dados cadastrados");
+        		return false;
+        	}
+    	}
 
     	livros.add(livro);
         String linhaIncerida = livro.getCodigo() + ";" + livro.getNome() + ";" + livro.getCategoria() + ";" + livro.getAutor() + ";" + livro.getEditora() + ";" + livro.getIsbn() + ";" + livro.getQtdDisponivel();
@@ -150,9 +158,9 @@ public class LivroManipulator {
                 livro.setEditora(livroParaAtualizar.getEditora());
                 livro.setIsbn(livroParaAtualizar.getIsbn());
                 livro.setQtdDisponivel(livroParaAtualizar.getQtdDisponivel());
-                cadastrarLivro(livro);
+                atualizaArquivo(livro);
             } else {
-                cadastrarLivro(livro);
+            	atualizaArquivo(livro);
             }
         }
 
@@ -174,7 +182,7 @@ public class LivroManipulator {
             for (Livro livro : livros) {
                 livros.remove(livro);
                 if (livro.getIsbn() != isbn) {
-                    cadastrarLivro(livro);
+                	atualizaArquivo(livro);
                 }
             }
 
@@ -207,5 +215,22 @@ public class LivroManipulator {
             }
         }
     }
+    
+    private boolean atualizaArquivo(Livro livro) {
+    	
+
+    	livros.add(livro);
+        String linhaIncerida = livro.getCodigo() + ";" + livro.getNome() + ";" + livro.getCategoria() + ";" + livro.getAutor() + ";" + livro.getEditora() + ";" + livro.getIsbn() + ";" + livro.getQtdDisponivel();
+
+        try {
+            Files.write(arquivoLivros, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
+            Files.write(arquivoLivros, "\n".getBytes(), StandardOpenOption.APPEND);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }

@@ -40,6 +40,28 @@ public class AlunoManipulator {
      * @return true se o cadastro for bem-sucedido, false caso contrário.
      */
     public boolean cadastrarAluno(Aluno aluno) {
+    	
+    	for (Aluno a : alunos) {
+    		if ((a.getMatricula() == aluno.getMatricula()) || a.getEmail().equalsIgnoreCase(aluno.getEmail())) {
+        		System.out.println("Já existe um aluno com esses dados cadastrados");
+        		return false;
+        	}
+    	}
+
+    	alunos.add(aluno);
+        String linhaIncerida = aluno.getMatricula() + ";" + aluno.getNome() + ";" + aluno.getEmail() + ";" + aluno.getSenha() + ";" + aluno.getTelefone() + ";" + aluno.getCurso();
+
+        try {
+            Files.write(arquivoAlunos, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
+            Files.write(arquivoAlunos, "\n".getBytes(), StandardOpenOption.APPEND);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    private boolean atualizaArquivo(Aluno aluno) {
 
     	alunos.add(aluno);
         String linhaIncerida = aluno.getMatricula() + ";" + aluno.getNome() + ";" + aluno.getEmail() + ";" + aluno.getSenha() + ";" + aluno.getTelefone() + ";" + aluno.getCurso();
@@ -65,7 +87,7 @@ public class AlunoManipulator {
         for (Aluno aluno : alunos) {
             alunos.remove(aluno);
             if (aluno.getMatricula() != matricula) {
-                cadastrarAluno(aluno);
+            	atualizaArquivo(aluno);
             }
         }
     }
@@ -137,7 +159,7 @@ public class AlunoManipulator {
                 aluno.setCurso(alunoAtualizado.getCurso());
             }
 
-            cadastrarAluno(aluno);
+            atualizaArquivo(aluno);
         }
 
         return true;

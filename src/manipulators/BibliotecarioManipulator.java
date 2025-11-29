@@ -1,5 +1,6 @@
 package manipulators;
 
+import entidades.Aluno;
 import entidades.Bibliotecario;
 
 import java.io.FileOutputStream;
@@ -45,6 +46,13 @@ public class BibliotecarioManipulator {
      * @return true se o cadastro for bem-sucedido, false caso contrário.
      */
     public boolean inserirBibliotecario(Bibliotecario bibliotecario) {
+    	
+    	for (Bibliotecario b : bibliotecarios) {
+    		if ((b.getRegistro() == bibliotecario.getRegistro()) || b.getEmail().equalsIgnoreCase(bibliotecario.getEmail())) {
+        		System.out.println("Já existe um bibliotecário com esses dados cadastrados");
+        		return false;
+        	}
+    	}
 
     	bibliotecarios.add(bibliotecario);
         String linhaIncerida = bibliotecario.getRegistro() + ";" + bibliotecario.getNome() + ";" + bibliotecario.getEmail() + ";" + bibliotecario.getSenha() + ";" + bibliotecario.getTelefone() + ";" + bibliotecario.getDataAdmissao();
@@ -70,7 +78,7 @@ public class BibliotecarioManipulator {
         for (Bibliotecario bibliotecario : bibliotecarios) {
             bibliotecarios.remove(bibliotecario);
             if (bibliotecario.getRegistro() != registro) {
-                inserirBibliotecario(bibliotecario);
+            	atualizaArquivo(bibliotecario);
             }
         }
     }
@@ -126,9 +134,9 @@ public class BibliotecarioManipulator {
                 bibliotecario.setEmail(bibliotecarioAtualizado.getEmail());
                 bibliotecario.setSenha(bibliotecarioAtualizado.getSenha());
                 bibliotecario.setTelefone(bibliotecarioAtualizado.getTelefone());
-                inserirBibliotecario(bibliotecario);
+                atualizaArquivo(bibliotecario);
             } else {
-                inserirBibliotecario(bibliotecario);
+            	atualizaArquivo(bibliotecario);
             }
         }
 
@@ -155,6 +163,21 @@ public class BibliotecarioManipulator {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+    
+    private boolean atualizaArquivo(Bibliotecario bibliotecario) {
+
+    	bibliotecarios.add(bibliotecario);
+        String linhaIncerida = bibliotecario.getRegistro() + ";" + bibliotecario.getNome() + ";" + bibliotecario.getEmail() + ";" + bibliotecario.getSenha() + ";" + bibliotecario.getTelefone() + ";" + bibliotecario.getDataAdmissao();
+
+        try {
+            Files.write(arquivoFuncionarios, linhaIncerida.getBytes(), StandardOpenOption.APPEND);
+            Files.write(arquivoFuncionarios, "\n".getBytes(), StandardOpenOption.APPEND);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
