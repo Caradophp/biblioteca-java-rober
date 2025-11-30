@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,12 +64,12 @@ public class LivroManipulator {
                 String[] linha = s.split(";");
 
                 Livro livro = new Livro();
-                livro.setCodigo(Integer.parseInt(linha[0]));
+                livro.setAnoPublicacao(Year.parse(linha[0]));
                 livro.setNome(linha[1]);
                 livro.setCategoria(linha[2]);
                 livro.setAutor(linha[3]);
                 livro.setEditora(linha[4]);
-                livro.setIsbn(Integer.parseInt(linha[5]));
+                livro.setIsbn(Long.parseLong(linha[5]));
                 livro.setQtdDisponivel(Integer.parseInt(linha[6]));
 
                 listaLivros.add(livro);
@@ -84,13 +85,26 @@ public class LivroManipulator {
     /* ==========================================================
        BUSCAR POR NOME
        ========================================================== */
-    public Livro buscarLivroPorNome(String nome) {
+    public List<Livro> buscarLivroPorNome(String nome) {
+    	List<Livro> livrosEncontrados = new ArrayList<Livro>();
+    	
         for (Livro livro : livros) {
             if (livro.getNome().equalsIgnoreCase(nome)) {
-                return livro;
+                livrosEncontrados.add(livro);
             }
         }
-        return null;
+        return livrosEncontrados;
+    }
+    
+    public List<Livro> buscarLivrosPorCategoria(String categoria) {
+    	List<Livro> livrosEncontrados = new ArrayList<Livro>();
+    	
+        for (Livro livro : livros) {
+            if (livro.getCategoria().equalsIgnoreCase(categoria)) {
+                livrosEncontrados.add(livro);
+            }
+        }
+        return livrosEncontrados;
     }
 
     /* ==========================================================
@@ -172,7 +186,7 @@ public class LivroManipulator {
        ========================================================== */
     private void escreverLivroNoArquivo(Livro livro) {
 
-        String linha = livro.getCodigo() + ";" +
+        String linha = livro.getAnoPublicacao() + ";" +
                 livro.getNome() + ";" +
                 livro.getCategoria() + ";" +
                 livro.getAutor() + ";" +

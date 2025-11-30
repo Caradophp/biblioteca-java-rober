@@ -14,6 +14,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EmprestimoManipulator {
 
@@ -50,6 +51,8 @@ public class EmprestimoManipulator {
             return false;
         }
 
+        int qtdTotal = livro.getQtdDisponivel();
+        livro.setQtdDisponivel(qtdTotal++);
         emprestimos.add(emprestimo);
         escreverEmprestimoNoArquivo(emprestimo);
 
