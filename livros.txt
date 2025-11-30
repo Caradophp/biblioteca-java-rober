@@ -1,1 +1,30 @@
-1988;Guerra dos Mundos dois;Ação;Desconhecido;minha;111222;30;30
+1988;Guerra dos Mundos Dois;Ação;Desconhecido;Minha;111222;30;30
+1954;O Senhor dos Anéis;Fantasia;J.R.R. Tolkien;HarperCollins;100001;50;50
+1949;1984;Distopia;George Orwell;Companhia das Letras;100002;40;40
+1605;Dom Quixote;Romance;Miguel de Cervantes;Planeta;100003;25;25
+1943;O Pequeno Príncipe;Fábula;Saint-Exupéry;Harper;100004;60;60
+1945;A Revolução dos Bichos;Sátira;George Orwell;Cia das Letras;100005;45;45
+1851;Moby Dick;Aventura;Herman Melville;Penguin;100006;20;20
+1887;Sherlock Holmes;Mistério;Arthur Conan Doyle;Abril;100007;35;35
+1997;Harry Potter e a Pedra Filosofal;Fantasia;J.K. Rowling;Rocco;100008;80;80
+2005;Percy Jackson: O Ladrão de Raios;Aventura;Rick Riordan;Intrínseca;100009;55;55
+2008;Jogos Vorazes;Distopia;Suzanne Collins;Rocco;100010;48;48
+2003;O Código Da Vinci;Suspense;Dan Brown;Arqueiro;100011;42;42
+1986;IT: A Coisa;Terror;Stephen King;Suma;100012;33;33
+1977;O Iluminado;Terror;Stephen King;Record;100013;29;29
+1897;Drácula;Terror;Bram Stoker;Darkside;100014;18;18
+1818;Frankenstein;Terror;Mary Shelley;Penguin;100015;22;22
+1937;O Hobbit;Fantasia;J.R.R. Tolkien;Harper;100016;70;70
+2005;A Menina que Roubava Livros;Drama;Markus Zusak;Intrínseca;100017;41;41
+1813;Orgulho e Preconceito;Romance;Jane Austen;Martin Claret;100018;30;30
+1847;O Morro dos Ventos Uivantes;Romance;Emily Brontë;Penguin;100019;26;26
+1915;A Metamorfose;Drama;Franz Kafka;Companhia das Letras;100020;32;32
+1925;O Processo;Drama;Franz Kafka;Penguin;100021;28;28
+2007;O Nome do Vento;Fantasia;Patrick Rothfuss;Arqueiro;100022;52;52
+1965;Duna;Sci-Fi;Frank Herbert;Aleph;100023;34;34
+1984;Neuromancer;Cyberpunk;William Gibson;Aleph;100024;21;21
+1951;Fundação;Sci-Fi;Isaac Asimov;Aleph;100025;37;37
+1928;O Chamado de Cthulhu;Terror;H.P. Lovecraft;Darkside;100026;24;24
+1890;O Retrato de Dorian Gray;Drama;Oscar Wilde;Penguin;100027;31;31
+1320;A Divina Comédia;Poesia;Dante Alighieri;Martin Claret;100028;17;17
+1844;O Conde de Monte Cristo;Aventura;Alexandre Dumas;Zahar;100029;38;38

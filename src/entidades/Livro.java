@@ -26,7 +26,22 @@ public class Livro {
     private Year anoPublicacao;
 
     /** Lista de categorias aceitas */
-    public static final List<String> categoriasPermitidas = List.of("Ação", "Aventura", "Romance", "T.I.");
+    public static final List<String> categoriasPermitidas = List.of(
+            "Ação",
+            "Aventura",
+            "Fantasia",
+            "Distopia",
+            "Romance",
+            "Fábula",
+            "Sátira",
+            "Mistério",
+            "Suspense",
+            "Terror",
+            "Drama",
+            "Sci-Fi",
+            "Cyberpunk",
+            "Poesia"
+    );
 
     /**
      * Construtor padrão.

@@ -136,6 +136,8 @@ public class LivroManipulator {
                 l.setEditora(livroAtualizado.getEditora());
                 l.setIsbn(livroAtualizado.getIsbn());
                 l.setQtdDisponivel(livroAtualizado.getQtdDisponivel());
+                l.setQtdTotal(livroAtualizado.getQtdTotal());
+                l.setAnoPublicacao(livroAtualizado.getAnoPublicacao());
             }
             novaLista.add(l);
             escreverLivroNoArquivo(l);
