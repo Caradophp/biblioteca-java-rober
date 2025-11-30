@@ -24,7 +24,7 @@ public class Emprestimo {
     /** Código (registro) do funcionário que registrou o empréstimo. */
     private int codigoFuncionario;
     /** Código do livro emprestado. */
-    private int codigoLivro;
+    private long codigoLivro;
     /** Data em que o empréstimo foi realizado. */
     private LocalDate dataEmprestimo;
     /** Data prevista para a devolução. */
@@ -35,8 +35,8 @@ public class Emprestimo {
     private Livro livro;
 
     /** Formatador de data para exibição no formato dd/MM/yyyy. */
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private Random geradorId = new Random();
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private final Random geradorId = new Random();
 
     /**
      * Construtor padrão.
@@ -50,12 +50,11 @@ public class Emprestimo {
 
     /**
      * Construtor com parâmetros essenciais.
-     * @param codigoEmprestimo Código único do empréstimo.
      * @param codigoAluno Código do aluno.
      * @param codigoLivro Código do livro.
      */
-    public Emprestimo(int codigoEmprestimo, long codigoAluno, int codigoLivro) {
-        this.codigoEmprestimo = codigoEmprestimo;
+    public Emprestimo(long codigoAluno, long codigoLivro) {
+        this.codigoEmprestimo = geradorId.nextLong(10000);
         this.codigoAluno = codigoAluno;
         this.codigoLivro = codigoLivro;
         this.dataEmprestimo = LocalDate.now();
@@ -78,11 +77,11 @@ public class Emprestimo {
         this.codigoAluno = codigoAluno;
     }
 
-    public int getCodigoLivro() {
+    public long getCodigoLivro() {
         return codigoLivro;
     }
 
-    public void setCodigoLivro(int codigoLivro) {
+    public void setCodigoLivro(long codigoLivro) {
         this.codigoLivro = codigoLivro;
     }
 

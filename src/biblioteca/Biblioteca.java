@@ -100,11 +100,10 @@ public class Biblioteca {
      * O método limpa o arquivo e o reescreve com as informações atualizadas.
      *
      * @param livroParaAtualizar O objeto Livro com as novas informações.
-     * @param isbn               O ISBN do livro a ser atualizado.
      * @return true se a atualização for bem-sucedida.
      */
-    public boolean atualizarLivroPorCodigo(Livro livroParaAtualizar, long isbn) {
-        return livroManipulator.atualizarLivroPorCodigo(livroParaAtualizar, isbn);
+    public boolean atualizarLivro(Livro livroParaAtualizar) {
+        return livroManipulator.atualizarLivro(livroParaAtualizar);
     }
 
     /**
@@ -159,8 +158,8 @@ public class Biblioteca {
         return alunoManipulator.getAlunos();
     }
 
-    public boolean atualizarAluno(Aluno alunoAtualizado, long matricula) {
-        return alunoManipulator.atualizarAluno(alunoAtualizado, matricula);
+    public boolean atualizarAluno(Aluno alunoAtualizado) {
+        return alunoManipulator.atualizarAluno(alunoAtualizado);
     }
 
     // Métodos para trabalhar com funcionários
@@ -194,8 +193,8 @@ public class Biblioteca {
         return bibliotecarioManipulator.getBibliotecarios();
     }
 
-    public boolean atualizarBibliotecario(Bibliotecario bibliotecarioAtualizado, long registro) {
-        return bibliotecarioManipulator.atualizarBibliotecario(bibliotecarioAtualizado, registro);
+    public boolean atualizarBibliotecario(Bibliotecario bibliotecarioAtualizado) {
+        return bibliotecarioManipulator.atualizarBibliotecario(bibliotecarioAtualizado);
     }
 
     // Métodos para trabalhar com empréstimos

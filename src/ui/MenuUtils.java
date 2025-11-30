@@ -13,7 +13,24 @@ public class MenuUtils {
             if ((escolha <= numMaiorOpcao && escolha > 0) || (temOpcaoZero && escolha == 0)) {
                 return escolha;
             } else {
-                System.out.println("Opção inválida. Tente novamente. ");
+                System.out.println("Opção inválida. Tente novamente.");
+            }
+        }
+    }
+
+    public static long lerNovaMatricula(Biblioteca biblioteca) {
+        while (true) {
+            long matricula = MenuUtils.lerLong("Matrícula do aluno (0 para voltar): ");
+
+            if (matricula == 0) {
+                return 0;
+            }
+
+            Aluno aluno = biblioteca.buscarAlunoPorMatricula(matricula);
+            if (aluno == null) {
+                return matricula;
+            } else {
+                System.out.println("Já existe um aluno cadastrado com essa matrícula.");
             }
         }
     }
@@ -31,7 +48,24 @@ public class MenuUtils {
             if (aluno != null) {
                 return aluno;
             } else {
-                System.out.println("Nenhum aluno encontrado com essa matrícula");
+                System.out.println("Nenhum aluno encontrado com essa matrícula.");
+            }
+        }
+    }
+
+    public static long lerNovoISBN(Biblioteca biblioteca) {
+        while (true) {
+            long isbn = MenuUtils.lerLong("ISBN do livro (0 para voltar): ");
+
+            if (isbn == 0) {
+                return 0;
+            }
+
+            Livro livro = biblioteca.buscarLivroPorCodigo(isbn);
+            if (livro == null) {
+                return isbn;
+            } else {
+                System.out.println("Já existe um livro cadastrado com esse ISBN.");
             }
         }
     }
@@ -49,7 +83,24 @@ public class MenuUtils {
             if (livro != null) {
                 return livro;
             } else {
-                System.out.println("Nenhum livro encontrado com esse ISBN");
+                System.out.println("Nenhum livro encontrado com esse ISBN.");
+            }
+        }
+    }
+
+    public static String lerCategoria(String stringPrompt) {
+        String strCategoriasPermitidas = Livro.getStringCategoriasPermitidas();
+        while (true) {
+            System.out.printf("Categorias válidas %s", strCategoriasPermitidas);
+            if (!stringPrompt.isEmpty()) {
+                System.out.print("\n" + stringPrompt);
+            }
+
+            String categoria = MenuInicial.reader.nextLine().trim();
+            if (categoria.isEmpty() || Livro.possuiCategoriaValida(categoria)) {
+                return categoria;
+            } else {
+                System.out.println("Categoria inválida. Tente novamente.");
             }
         }
     }
@@ -81,7 +132,7 @@ public class MenuUtils {
             try {
                 return Integer.parseInt(MenuInicial.reader.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.println("Valor inválido. Tente novamente apenas com números. ");
+                System.out.println("Valor inválido. Tente novamente apenas com números.");
             }
         }
     }
@@ -95,7 +146,7 @@ public class MenuUtils {
             try {
                 return Long.parseLong(MenuInicial.reader.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.println("Valor inválido. Tente novamente apenas com números. ");
+                System.out.println("Valor inválido. Tente novamente apenas com números.");
             }
         }
     }

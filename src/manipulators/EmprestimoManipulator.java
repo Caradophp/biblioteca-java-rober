@@ -22,7 +22,7 @@ public class EmprestimoManipulator {
     private final AlunoManipulator alunoManipulator;
 
     private List<Emprestimo> emprestimos = new ArrayList<>();
-    private Path arquivoEmprestimos = Paths.get("emprestimos.txt");
+    private final Path arquivoEmprestimos = Paths.get("emprestimos.txt");
 
     public EmprestimoManipulator(LivroManipulator livroManipul, AlunoManipulator alunoManipul) {
         this.livroManipulator = livroManipul;

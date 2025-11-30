@@ -13,7 +13,9 @@ public class MenusGlobais {
         Livro l = menuBuscarPorLivro(biblioteca, "Selecione um livro (pelo número da lista) para ver mais informaçõe sobre ele: ");
 
         if (l != null) {
-            // todo: print detalhes do livro
+            printDetalhesLivro(l);
+            // apenas espera que o usuário digite qualquer coisa para voltar ao menu
+            MenuUtils.lerString("> ");
         }
     }
 
@@ -21,7 +23,7 @@ public class MenusGlobais {
         Livro livro = null;
         while (true) {
             System.out.println("0. Voltar");
-            System.out.println("1. Buscar livros por título");
+            System.out.println("1. Buscar livros por nome");
             System.out.println("2. Buscar livros por categoria");
             System.out.println("3. Buscar livro por ISBN");
 
@@ -34,8 +36,10 @@ public class MenusGlobais {
                     //livro = menuSelecaoLivro(biblioteca.buscarLivrosPorNome(nomeLivro), textoSelecao, true);
                     break;
                 case 2:
-                    String categoria = MenuUtils.lerString("Categorias permitidas "+ Livro.getStringCategoriasPermitidas() + ":\n> ");
-                    //livro = menuSelecaoLivro(biblioteca.buscarLivrosPorCategoria(nomeLivro), textoSelecao, true);
+                    String categoria = MenuUtils.lerCategoria("> ");
+                    if (!categoria.isEmpty()) {
+                        //livro = menuSelecaoLivro(biblioteca.buscarLivrosPorCategoria(nomeLivro), textoSelecao, true);
+                    }
                     break;
                 case 3:
                     livro = MenuUtils.lerLivro(biblioteca);
@@ -61,15 +65,13 @@ public class MenusGlobais {
 
         for (int i = 0; i < livros.size(); i++) {
             Livro l = livros.get(i);
-            // todo: adicionar ano de lançamento
-            System.out.printf("\n%d. %s (%d)\n", i+1, l.getNome(), 1000);
+            System.out.printf("\n%d. %s (%s)\n", i+1, l.getNome(), l.getAnoPublicacao());
             System.out.printf("  Editora: %s\n", l.getEditora());
             System.out.print("  Cópias disponíveis: ");
             if (l.getQtdDisponivel() == 0) {
-                System.out.println("0 (Indisponível)");
+                System.out.print("0 (Indisponível)\n");
             } else {
-                // todo: qtdTotal
-                System.out.printf("%d de %d\n", l.getQtdDisponivel(), -1);
+                System.out.printf("%d de %d\n", l.getQtdDisponivel(), l.getQtdTotal());
             }
         }
 
@@ -78,6 +80,19 @@ public class MenusGlobais {
         }
         int escolha = MenuUtils.lerOpcaoMenu(livros.size(), temOpcaoVoltar);
         return escolha == 0 ? null : livros.get(escolha-1);
+    }
+
+    public static void printDetalhesLivro(Livro l) {
+        if (l == null) {
+            return;
+        }
+        System.out.printf("Nome: %s\n", l.getNome());
+        System.out.printf("Editora: %s\n", l.getEditora());
+        System.out.printf("Ano de publicação: %s\n", l.getAnoPublicacao());
+        System.out.printf("Autor: %s\n", l.getEditora());
+        System.out.printf("ISBN: %d\n", l.getIsbn());
+        System.out.printf("Categoria: %s\n", l.getCategoria());
+        System.out.printf("Cópias: %d disponíveis de %d totais\n", l.getQtdDisponivel(), l.getQtdTotal());
     }
 
     public static void menuSelecaoEmprestimo(List<Emprestimo> emprestimos) {

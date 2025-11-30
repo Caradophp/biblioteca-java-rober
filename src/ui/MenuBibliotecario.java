@@ -5,6 +5,8 @@ import entidades.Bibliotecario;
 import entidades.Emprestimo;
 import entidades.Livro;
 
+import java.time.Year;
+
 public class MenuBibliotecario {
     private final Bibliotecario bibliotecarioLogado;
     private final MenuInicial menuInicial;
@@ -66,8 +68,7 @@ public class MenuBibliotecario {
         Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(), "Selecione um livro (pelo número da lista) para emprestá-lo:");
 
         if (livro != null) {
-            // todo: remover codigoEmprestimo random
-            Emprestimo emprestimo = new Emprestimo((int) (Math.random()*100), aluno.getMatricula(), livro.getIsbn());
+            Emprestimo emprestimo = new Emprestimo(aluno.getMatricula(), livro.getIsbn());
             // todo: fazerEmprestimo não altera a qtdDisponivel do livro
             boolean incluiu = menuInicial.getBiblioteca().fazerEmprestimo(emprestimo);
 
@@ -113,22 +114,74 @@ public class MenuBibliotecario {
         Livro livro = new Livro();
 
         System.out.println("Informe dados para inclusão de um novo livro:");
-        livro.setNome(MenuUtils.lerString("Título: "));
-        livro.setAutor(MenuUtils.lerString("Nome do autor: "));
+        long isbn = MenuUtils.lerNovaMatricula(menuInicial.getBiblioteca());
+        if (isbn == 0) {
+            // retorna ao menu anterior
+            return;
+        }
+        livro.setIsbn(isbn);
+        livro.setNome(MenuUtils.lerString("Nome do livro: "));
         livro.setEditora(MenuUtils.lerString("Editora: "));
-        livro.setIsbn(MenuUtils.lerInt("ISBN: "));
-        //livro.setQtdTotal(MenuUtils.lerInt("Número de cópias: "));
-        //livro.setQtdDisponivel(livro.getQtdTotal());
+        livro.setAnoPublicacao(Year.of(MenuUtils.lerInt("Ano de Publicação: ")));
+        livro.setAutor(MenuUtils.lerString("Nome do autor: "));
+        livro.setCategoria(MenuUtils.lerCategoria("Categoria: "));
+        livro.setQtdTotal(MenuUtils.lerInt("Número de cópias: "));
+        livro.setQtdDisponivel(livro.getQtdTotal());
 
         if (menuInicial.getBiblioteca().cadastrarLivro(livro)) {
             System.out.println("Livro incluído com sucesso.");
         } else {
-            System.out.println("Algum erro ocorreu impediu a inclusão do livro. Tente novamente.");
+            System.out.println("Algum erro ocorreu que impediu a inclusão do livro. Tente novamente.");
         }
     }
 
     public void menuEditarLivro() {
+        Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(), "Selecione um livro (pelo número da lista) para editar os dados dele: ");
+        if (livro == null) { return; }
 
+        String nome, editora, autor, categoria, anoPublicacao, qtdTotal;
+        MenusGlobais.printDetalhesLivro(livro);
+        System.out.println("\nInforme dados para alterar as informações acima (Enter para não alterar): ");
+
+        nome = MenuUtils.lerString("Nome: ");
+        if (!nome.isEmpty()) {
+            livro.setNome(nome);
+        }
+
+        editora = MenuUtils.lerString("Editora: ");
+        if (!editora.isEmpty()) {
+            livro.setEditora(editora);
+        }
+
+        anoPublicacao = MenuUtils.lerString("Ano de publicação: ");
+        if (!anoPublicacao.isEmpty()) {
+            try {
+                livro.setAnoPublicacao(Year.of(Integer.parseInt(anoPublicacao)));
+            } catch (NumberFormatException e) {
+                System.out.println("Valor inválido. Ano de publicação não alterado.");
+            }
+        }
+
+        autor = MenuUtils.lerString("Nome do autor: ");
+        if (!autor.isEmpty()) {
+            livro.setAutor(autor);
+        }
+
+        categoria = MenuUtils.lerCategoria("Categoria: ");
+        if (!categoria.isEmpty()) {
+            livro.setCategoria(categoria);
+        }
+
+        qtdTotal = MenuUtils.lerString("Quantidade total de cópias (não é possível editar a quantidade disponível): ");
+        if (!qtdTotal.isEmpty()) {
+            try {
+                livro.setQtdTotal(Integer.parseInt(qtdTotal));
+            } catch (NumberFormatException e) {
+                System.out.println("Valor inválido. Quantidade total de cópias não alterada.");
+            }
+        }
+
+        menuInicial.getBiblioteca().atualizarLivro(livro);
     }
 
     public void menuRemoverLivro() {
@@ -165,7 +218,12 @@ public class MenuBibliotecario {
         Aluno aluno = new Aluno();
 
         System.out.println("Informe dados para inclusão de um novo aluno:");
-        aluno.setMatricula(MenuUtils.lerLong("Matrícula: "));
+        long matricula = MenuUtils.lerNovaMatricula(menuInicial.getBiblioteca());
+        if (matricula == 0) {
+            // retorna ao menu anterior
+            return;
+        }
+        aluno.setMatricula(matricula);
         aluno.setNome(MenuUtils.lerString("Nome: "));
         aluno.setCurso(MenuUtils.lerString("Curso: "));
         aluno.setTelefone(MenuUtils.lerLong("Telefone: "));
@@ -175,7 +233,7 @@ public class MenuBibliotecario {
         if (menuInicial.getBiblioteca().cadastrarAluno(aluno)) {
             System.out.println("Aluno incluído com sucesso.");
         } else {
-            System.out.println("Algum erro ocorreu impediu a inclusão do aluno. Tente novamente.");
+            System.out.println("Algum erro ocorreu que impediu a inclusão do aluno. Tente novamente.");
         }
     }
 
