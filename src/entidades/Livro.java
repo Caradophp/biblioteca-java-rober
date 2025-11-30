@@ -51,7 +51,6 @@ public class Livro {
 
     /**
      * Construtor com todos os atributos.
-     * @param codigo Código único do livro.
      * @param nome Título do livro.
      * @param categoria Categoria/gênero.
      * @param autor Autor do livro.
@@ -159,7 +158,7 @@ public class Livro {
      * Verifica se a categoria informada está nas lista de categorias aceitas pelo sistema
      * @return true se estiver na lista e false caso não esteja
      */
-    public boolean possuiCategoriaValida(String categoria) {
+    public static boolean possuiCategoriaValida(String categoria) {
         return categoriasPermitidas.contains(categoria);
     }
 

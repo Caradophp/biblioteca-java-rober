@@ -16,7 +16,7 @@ import java.util.List;
 public class BibliotecarioManipulator {
 
     private List<Bibliotecario> bibliotecarios = new ArrayList<>();
-    private Path arquivoFuncionarios = Paths.get("funcionarios.txt");
+    private final Path arquivoFuncionarios = Paths.get("funcionarios.txt");
 
     public BibliotecarioManipulator() {
         bibliotecarios = buscarTodosBibliotecarios();
@@ -65,14 +65,14 @@ public class BibliotecarioManipulator {
     }
 
     /** ATUALIZAR BIBLIOTECARIO */
-    public boolean atualizarBibliotecario(Bibliotecario bibliotecarioAtualizado, long registro) {
+    public boolean atualizarBibliotecario(Bibliotecario bibliotecarioAtualizado) {
 
         List<Bibliotecario> novaLista = new ArrayList<>();
 
         limparArquivo(arquivoFuncionarios);
 
         for (Bibliotecario b : bibliotecarios) {
-            if (b.getRegistro() == registro) {
+            if (b.getRegistro() == bibliotecarioAtualizado.getRegistro()) {
                 b.setNome(bibliotecarioAtualizado.getNome());
                 b.setEmail(bibliotecarioAtualizado.getEmail());
                 b.setSenha(bibliotecarioAtualizado.getSenha());

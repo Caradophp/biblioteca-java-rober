@@ -15,7 +15,7 @@ import java.util.List;
 public class AlunoManipulator {
 
     private List<Aluno> alunos = new ArrayList<>();
-    private Path arquivoAlunos = Paths.get("alunos.txt");
+    private final Path arquivoAlunos = Paths.get("alunos.txt");
 
     public AlunoManipulator() {
         alunos = buscarTodosAlunos();
@@ -59,14 +59,14 @@ public class AlunoManipulator {
     }
 
     /** ATUALIZAR ALUNO */
-    public boolean atualizarAluno(Aluno alunoAtualizado, long matricula) {
+    public boolean atualizarAluno(Aluno alunoAtualizado) {
 
         List<Aluno> novaLista = new ArrayList<>();
         limparArquivo(arquivoAlunos);
 
         for (Aluno a : alunos) {
 
-            if (a.getMatricula() == matricula) {
+            if (a.getMatricula() == alunoAtualizado.getMatricula()) {
                 a.setNome(alunoAtualizado.getNome());
                 a.setEmail(alunoAtualizado.getEmail());
                 a.setSenha(alunoAtualizado.getSenha());

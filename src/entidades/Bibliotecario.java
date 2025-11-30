@@ -16,7 +16,7 @@ public class Bibliotecario extends Pessoa {
     private LocalDate dataAdmissao;
 
     /** Formatador de data para exibição no formato dd/MM/yyyy. */
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     /**
      * Construtor padrão.

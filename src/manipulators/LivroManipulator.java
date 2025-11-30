@@ -16,7 +16,7 @@ import java.util.List;
 public class LivroManipulator {
 
     private List<Livro> livros = new ArrayList<>();
-    private Path arquivoLivros = Paths.get("livros.txt");
+    private final Path arquivoLivros = Paths.get("livros.txt");
 
     public LivroManipulator() {
         livros = buscarTodosLivros();
@@ -123,19 +123,18 @@ public class LivroManipulator {
     /* ==========================================================
        ATUALIZAR LIVRO
        ========================================================== */
-    public boolean atualizarLivroPorCodigo(Livro livroAtualizado, long isbn) {
+    public boolean atualizarLivro(Livro livroAtualizado) {
 
         List<Livro> novaLista = new ArrayList<>();
         limparArquivo(arquivoLivros);
 
         for (Livro l : livros) {
-            if (l.getIsbn() == isbn) {
+            if (l.getIsbn() == livroAtualizado.getIsbn()) {
+                // isbn e qtdDisponivel não são editáveis
                 l.setNome(livroAtualizado.getNome());
                 l.setCategoria(livroAtualizado.getCategoria());
                 l.setAutor(livroAtualizado.getAutor());
                 l.setEditora(livroAtualizado.getEditora());
-                l.setIsbn(livroAtualizado.getIsbn());
-                l.setQtdDisponivel(livroAtualizado.getQtdDisponivel());
                 l.setQtdTotal(livroAtualizado.getQtdTotal());
                 l.setAnoPublicacao(livroAtualizado.getAnoPublicacao());
             }
