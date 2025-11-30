@@ -1,5 +1,9 @@
 package ui;
 
+import biblioteca.Biblioteca;
+import entidades.Aluno;
+import entidades.Livro;
+
 public class MenuUtils {
     public static int lerOpcaoMenu(int numMaiorOpcao, boolean temOpcaoZero) {
         while (true) {
@@ -10,6 +14,42 @@ public class MenuUtils {
                 return escolha;
             } else {
                 System.out.println("Opção inválida. Tente novamente. ");
+            }
+        }
+    }
+
+    public static Aluno lerAluno(Biblioteca biblioteca) {
+        while (true) {
+            System.out.println("============================");
+            long matricula = MenuUtils.lerLong("Matrícula do aluno (0 para voltar): ");
+
+            if (matricula == 0) {
+                return null;
+            }
+
+            Aluno aluno = biblioteca.buscarAlunoPorMatricula(matricula);
+            if (aluno != null) {
+                return aluno;
+            } else {
+                System.out.println("Nenhum aluno encontrado com essa matrícula");
+            }
+        }
+    }
+
+    public static Livro lerLivro(Biblioteca biblioteca) {
+        while (true) {
+            System.out.println("============================");
+            long isbn = MenuUtils.lerLong("ISBN do livro (0 para voltar): ");
+
+            if (isbn == 0) {
+                return null;
+            }
+
+            Livro livro = biblioteca.buscarLivroPorCodigo(isbn);
+            if (livro != null) {
+                return livro;
+            } else {
+                System.out.println("Nenhum livro encontrado com esse ISBN");
             }
         }
     }

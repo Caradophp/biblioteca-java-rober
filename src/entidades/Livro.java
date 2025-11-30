@@ -23,7 +23,7 @@ public class Livro {
     private int qtdDisponivel;
 
     /** Lista de categorias aceitas */
-    private static final List<String> categorias = List.of("Ação", "Aventura", "Romance", "T.I.");
+    public static final List<String> categoriasPermitidas = List.of("Ação", "Aventura", "Romance", "T.I.");
 
     /**
      * Construtor padrão.
@@ -73,7 +73,7 @@ public class Livro {
 
     public void setCategoria(String categoria) {
 
-        if (possuiCategoria(categoria)) {
+        if (possuiCategoriaValida(categoria)) {
             this.categoria = categoria;
             return;
         }
@@ -134,7 +134,19 @@ public class Livro {
      * Verifica se a categoria informada está nas lista de categorias aceitas pelo sistema
      * @return true se estiver na lista e false caso não esteja
      */
-    private boolean possuiCategoria(String categoria) {
-        return categorias.contains(categoria);
+    public boolean possuiCategoriaValida(String categoria) {
+        return categoriasPermitidas.contains(categoria);
+    }
+
+    public static String getStringCategoriasPermitidas() {
+        String categorias = "(";
+        for (int i = 0; i < categoriasPermitidas.size(); i++) {
+            if (i == categoriasPermitidas.size()-1) {
+                categorias += categoriasPermitidas.get(i) + ")";
+            } else {
+                categorias += categoriasPermitidas.get(i) + "|";
+            }
+        }
+        return categorias;
     }
 }

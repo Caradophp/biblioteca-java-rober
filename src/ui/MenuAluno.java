@@ -2,9 +2,7 @@ package ui;
 
 import entidades.Aluno;
 import entidades.Emprestimo;
-import entidades.Livro;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MenuAluno {
@@ -30,45 +28,13 @@ public class MenuAluno {
                     // retorna ao menu inicial
                     return;
                 case 1:
-                    MenusGlobais.menuConsultarLivros(menuInicial.getBiblioteca(), this::iniciar);
+                    MenusGlobais.menuConsultarLivro(menuInicial.getBiblioteca());
                     break;
                 case 2:
                     menuLivrosEmprestados();
                     break;
             }
         }
-    }
-
-    private void menuLivrosFiltrados(ArrayList<Livro> livros) {
-        System.out.println("==================================\n");
-        System.out.println("0. Voltar\n");
-
-        for (int i = 0; i < livros.size(); i++) {
-            Livro livro = livros.get(i);
-            // todo: livro está sem o ano de publicação
-            //System.out.printf("%d. %s (%d)\n", i+1, livro.getNome());
-            //System.out.printf("Editora: %s (%d " + (livro.getQtdDisponivel() == 1 ? "cópia disponível" : "cópias disponíveis") + ")\n", livro.getEditora(), livro.getQtdDisponivel());
-            //System.out.println();
-        }
-
-        System.out.println("Selecione um livro para ver mais informações sobre:");
-        int escolha = MenuUtils.lerOpcaoMenu(livros.size(), true);
-        if (escolha == 0) {
-            MenusGlobais.menuConsultarLivros(menuInicial.getBiblioteca(), this::iniciar);
-        } else {
-            printDetalheslivro(livros.get(escolha - 1));
-        }
-    }
-
-    private void printDetalheslivro(Livro livro) {
-        // por enquanto usa apenas o método toString(),
-        // mas é possível alterar do jeito que quiser
-        System.out.println(livro);
-        System.out.println("\n> ");
-
-        // não importa o que for digitado, apenas volta para o menu de consulta de livros
-        MenuInicial.reader.nextLine();
-        MenusGlobais.menuConsultarLivros(menuInicial.getBiblioteca(), this::iniciar);
     }
 
     private void menuLivrosEmprestados() {
@@ -81,7 +47,7 @@ public class MenuAluno {
             } else {
                 System.out.println("0. Voltar");
 
-                MenusGlobais.listarEmprestimos(emprestimosAluno);
+                MenusGlobais.menuSelecaoEmprestimo(emprestimosAluno);
 
                 System.out.println("\nSelecione um livro para renová-lo:");
                 int escolha = MenuUtils.lerOpcaoMenu(2, true);
