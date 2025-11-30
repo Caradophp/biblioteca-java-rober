@@ -1,5 +1,6 @@
 package entidades;
 
+import java.time.Year;
 import java.util.List;
 
 /**
@@ -7,8 +8,6 @@ import java.util.List;
  */
 public class Livro {
 
-    /** Código único do livro. */
-    private int codigo;
     /** Título do livro. */
     private String nome;
     /** Categoria ou gênero do livro. */
@@ -18,9 +17,11 @@ public class Livro {
     /** Editora responsável pela publicação. */
     private String editora;
     /** Número ISBN (International Standard Book Number). */
-    private int isbn;
+    private long isbn;
     /** Quantidade de exemplares disponíveis para empréstimo. */
     private int qtdDisponivel;
+    
+    private Year anoPublicacao;
 
     /** Lista de categorias aceitas */
     public static final List<String> categoriasPermitidas = List.of("Ação", "Aventura", "Romance", "T.I.");
@@ -41,22 +42,13 @@ public class Livro {
      * @param isbn Número ISBN.
      * @param qtdDisponivel Quantidade disponível.
      */
-    public Livro(int codigo, String nome, String categoria, String autor, String editora, int isbn, int qtdDisponivel) {
-        this.codigo = codigo;
+    public Livro(String nome, String categoria, String autor, String editora, int isbn, int qtdDisponivel) {
         this.nome = nome;
         this.categoria = categoria;
         this.autor = autor;
         this.editora = editora;
         this.isbn = isbn;
         this.qtdDisponivel = qtdDisponivel;
-    }
-
-    public int getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
     }
 
     public String getNome() {
@@ -97,11 +89,11 @@ public class Livro {
         this.editora = editora;
     }
 
-    public int getIsbn() {
+    public long getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(int isbn) {
+    public void setIsbn(long isbn) {
         this.isbn = isbn;
     }
 
@@ -113,14 +105,21 @@ public class Livro {
         this.qtdDisponivel = qtdDisponivel;
     }
 
-    /**
+    public Year getAnoPublicacao() {
+		return anoPublicacao;
+	}
+
+	public void setAnoPublicacao(Year anoPublicacao) {
+		this.anoPublicacao = anoPublicacao;
+	}
+
+	/**
      * Sobrescreve o método toString para representação em string do objeto.
      * @return Uma string contendo os dados do Livro.
      */
     @Override
     public String toString() {
         return "Livro{" +
-                "codigo=" + codigo +
                 ", nome='" + nome + '\'' +
                 ", categoria='" + categoria + '\'' +
                 ", autor='" + autor + '\'' +

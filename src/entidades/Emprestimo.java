@@ -5,6 +5,8 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Representa um Empréstimo de um Livro para um Aluno.
@@ -16,7 +18,7 @@ public class Emprestimo {
     private static final double MULTA_DIA = 4.0;
 
     /** Código único do empréstimo. */
-    private int codigoEmprestimo;
+    private long codigoEmprestimo;
     /** Código (matrícula) do aluno que realizou o empréstimo. */
     private long codigoAluno;
     /** Código (registro) do funcionário que registrou o empréstimo. */
@@ -34,12 +36,14 @@ public class Emprestimo {
 
     /** Formatador de data para exibição no formato dd/MM/yyyy. */
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private Random geradorId = new Random();
 
     /**
      * Construtor padrão.
      * Define a data de empréstimo como hoje e a data de devolução para 10 dias.
      */
     public Emprestimo() {
+    	this.codigoEmprestimo = geradorId.nextLong(10000);
         this.dataEmprestimo = LocalDate.now();
         this.dataDevolucao = this.dataEmprestimo.plusDays(10);
     }
@@ -58,7 +62,7 @@ public class Emprestimo {
         this.dataDevolucao = LocalDate.now().plusDays(10);
     }
 
-    public int getCodigoEmprestimo() {
+    public long getCodigoEmprestimo() {
         return codigoEmprestimo;
     }
 
@@ -177,6 +181,8 @@ public class Emprestimo {
         }
 
         this.devolvido = true;
+        int qtdTotal = livro.getQtdDisponivel();
+        livro.setQtdDisponivel(qtdTotal++);
         System.out.println("Livro devolvido com sucesso");
     }
 

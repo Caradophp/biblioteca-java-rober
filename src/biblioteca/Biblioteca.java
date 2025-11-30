@@ -23,15 +23,6 @@ public class Biblioteca {
     private final EmprestimoManipulator emprestimoManipulator = new EmprestimoManipulator(livroManipulator, alunoManipulator);
 
     /**
-     * Nome da biblioteca.
-     */
-    private String nome;
-    /**
-     * Endereço da biblioteca.
-     */
-    private String endereco;
-
-    /**
      * Construtor da classe Biblioteca.
      * Ao ser instanciado carrega todos os dados em memória
      */
@@ -86,8 +77,12 @@ public class Biblioteca {
      * @param nome O nome do livro a ser buscado.
      * @return O objeto Livro encontrado ou null se não for encontrado.
      */
-    public Livro buscarLivroPorNome(String nome) {
+    public List<Livro> buscarLivroPorNome(String nome) {
         return livroManipulator.buscarLivroPorNome(nome);
+    }
+    
+    public List<Livro> buscarLivrosPorCategoria(String categoria) {
+        return livroManipulator.buscarLivrosPorCategoria(categoria);
     }
 
     /**
