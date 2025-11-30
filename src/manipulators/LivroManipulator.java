@@ -71,6 +71,7 @@ public class LivroManipulator {
                 livro.setEditora(linha[4]);
                 livro.setIsbn(Long.parseLong(linha[5]));
                 livro.setQtdDisponivel(Integer.parseInt(linha[6]));
+                livro.setQtdTotal(Integer.parseInt(linha[7]));
 
                 listaLivros.add(livro);
             }
@@ -192,7 +193,8 @@ public class LivroManipulator {
                 livro.getAutor() + ";" +
                 livro.getEditora() + ";" +
                 livro.getIsbn() + ";" +
-                livro.getQtdDisponivel();
+                livro.getQtdDisponivel() + ";" +
+                livro.getQtdTotal();
 
         try {
             Files.write(arquivoLivros, linha.getBytes(), StandardOpenOption.APPEND);

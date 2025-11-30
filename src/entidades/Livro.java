@@ -21,6 +21,8 @@ public class Livro {
     /** Quantidade de exemplares disponíveis para empréstimo. */
     private int qtdDisponivel;
     
+    private int qtdTotal;
+    
     private Year anoPublicacao;
 
     /** Lista de categorias aceitas */
@@ -111,6 +113,15 @@ public class Livro {
 
 	public void setAnoPublicacao(Year anoPublicacao) {
 		this.anoPublicacao = anoPublicacao;
+	}
+	
+
+	public int getQtdTotal() {
+		return qtdTotal;
+	}
+
+	public void setQtdTotal(int qtdTotal) {
+		this.qtdTotal = qtdTotal;
 	}
 
 	/**
