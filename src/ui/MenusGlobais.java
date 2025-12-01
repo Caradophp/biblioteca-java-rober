@@ -1,11 +1,9 @@
 package ui;
 
 import biblioteca.Biblioteca;
-import entidades.Aluno;
 import entidades.Emprestimo;
 import entidades.Livro;
 
-import java.awt.*;
 import java.util.List;
 
 public class MenusGlobais {
@@ -86,7 +84,17 @@ public class MenusGlobais {
         return escolha == 0 ? null : livros.get(escolha-1);
     }
 
-    public static void menuSelecaoEmprestimo(List<Emprestimo> emprestimos) {
+    public static Emprestimo menuSelecaoEmprestimo(List<Emprestimo> emprestimos, String textoSelecao, boolean temOpcaoVoltar) {
+        System.out.println("=====================================");
+        if (emprestimos.isEmpty()) {
+            System.out.println("Nenhum empréstimo de livro encontrado");
+            return null;
+        }
+
+        if (temOpcaoVoltar) {
+            System.out.println("0. Voltar");
+        }
+
         for (int i = 0; i < emprestimos.size(); i++) {
             Emprestimo e = emprestimos.get(i);
             Livro l = e.getLivro();
@@ -95,14 +103,20 @@ public class MenusGlobais {
             if (estaAtrasado) {
                 System.out.println("  (EM ATRASO)");
             }
-            System.out.printf("%d. %s\n", i+1, l.getNome());
-            System.out.printf("  Emprestado em: %s\n", e.getDataEmprestimo());
-            System.out.printf("  Deve devolver em: %s\n", e.getDataDevolucao());
+            System.out.printf("\n%d. %s\n", i+1, l.getNome());
+            System.out.printf("  Emprestado em: %s\n", e.getDataEmprestimoFormatada());
+            System.out.printf("  Deve devolver até: %s\n", e.getDataDevolucaoPrevistaFormatada());
             // todo: adicionar o campo qtdRenovacoes
             //System.out.printf("Renovações: %d de %d", e.getQtdRenovacoes(), QTD_MAXIMA_RENOVACOES);
             if (estaAtrasado) {
                 System.out.printf("  Multa a ser paga: %.2f\n", e.calcularMulta());
             }
         }
+
+        if (!textoSelecao.isEmpty()) {
+            System.out.println("\n" + textoSelecao);
+        }
+        int escolha = MenuUtils.lerOpcaoMenu(emprestimos.size(), temOpcaoVoltar);
+        return escolha == 0 ? null : emprestimos.get(escolha-1);
     }
 }

@@ -58,23 +58,31 @@ public class MenuBibliotecario {
         Aluno aluno = MenuUtils.lerAluno(menuInicial.getBiblioteca());
 
         if (aluno == null) {
-            // volta ao menu anterior
+            // retorna ao menu anterior
             return;
         }
 
-        System.out.println("================================");
-        System.out.printf("Emprestar livro para o aluno '%s' de matrícula %d\n", aluno.getNomeAbreviado(), aluno.getMatricula());
+        System.out.printf("Emprestar livro para o aluno '%s' de matrícula %d:\n", aluno.getNomeAbreviado(), aluno.getMatricula());
         Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(), "Selecione um livro (pelo número da lista) para emprestá-lo:");
 
-        if (livro != null) {
+        if (livro == null) {
+            // retorna ao menu anterior
+            return;
+        }
+
+        boolean confirmado = MenuUtils.aguardarConfirmacao("===============================\n" +
+                String.format("Confirma o empréstimo do livro '%s' para o aluno %s? (S/n)\n", livro.getNome(), aluno.getNomeAbreviado()) +
+                "> ");
+        if (confirmado) {
             Emprestimo emprestimo = new Emprestimo(aluno.getMatricula(), livro.getIsbn());
             // todo: fazerEmprestimo não está alterando a qtdDisponivel do livro
-
             if (menuInicial.getBiblioteca().fazerEmprestimo(emprestimo)) {
-                System.out.println("O livro foi emprestado para o aluno.");
+                System.out.println("O livro foi emprestado com sucesso.");
             } else {
-                System.out.println("O livro não foi emprestado para o aluno.");
+                System.out.println("Algum erro ocorreu que impediu que o livro fosse emprestado. Tente novamente.");
             }
+        } else {
+            System.out.println("Empréstimo do livro cancelado.");
         }
     }
 

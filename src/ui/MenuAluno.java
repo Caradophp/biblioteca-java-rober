@@ -40,39 +40,23 @@ public class MenuAluno {
     private void menuLivrosEmprestados() {
         while (true) {
             List<Emprestimo> emprestimosAluno = menuInicial.getBiblioteca().buscarTodosEmprestimos(alunoLogado);
+            Emprestimo emprestimo = MenusGlobais.menuSelecaoEmprestimo(emprestimosAluno, "Selecione um livro (pelo número da lista) para renová-lo:", true);
 
-            System.out.println("===============================\n");
-            if (emprestimosAluno.isEmpty()) {
-                System.out.println("Você não tem nenhum livro emprestado");
+            if (emprestimo == null) {
+                // volta ao menu anterior
                 return;
-            } else {
-                System.out.println("0. Voltar");
-
-                MenusGlobais.menuSelecaoEmprestimo(emprestimosAluno);
-
-                System.out.println("\nSelecione um livro para renová-lo:");
-                int escolha = MenuUtils.lerOpcaoMenu(2, true);
-                if (escolha == 0) {
-                    // retorna ao menu inicial do aluno
-                    return;
-                } else {
-                    confirmarRenovacaoLivro(emprestimosAluno.get(escolha - 1));
-                }
             }
-        }
-    }
 
-    private void confirmarRenovacaoLivro(Emprestimo emprestimo) {
-        System.out.println("===============================");
-        System.out.printf("Confirma a renovação do livro '%s'? (S/n)\n", emprestimo.getLivro().getNome());
-
-        boolean confirmado = MenuUtils.aguardarConfirmacao("> ");
-        if (!confirmado) {
-            menuInicial.getBiblioteca().renovarEmprestimo(emprestimo.getCodigoEmprestimo());
-            // todo: testar se a data da variável emprestimo está sendo alterada
-            System.out.printf("Livro renovado para a data %s.\n", emprestimo.getDataDevolucao().toString());
-        } else {
-            System.out.println("Renovação do livro cancelada.");
+            boolean confirmado = MenuUtils.aguardarConfirmacao("===============================\n" +
+                    String.format("Confirma a renovação do livro '%s'? (S/n)\n", emprestimo.getLivro().getNome()) +
+                    "> ");
+            if (confirmado) {
+                menuInicial.getBiblioteca().renovarEmprestimo(emprestimo.getCodigoEmprestimo());
+                // todo: testar se a data da variável emprestimo está sendo alterada
+                System.out.printf("Livro renovado para a data %s.\n", emprestimo.getDataDevolucaoPrevistaFormatada());
+            } else {
+                System.out.println("Renovação do livro cancelada.");
+            }
         }
     }
 }

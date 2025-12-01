@@ -14,7 +14,6 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class EmprestimoManipulator {
 
@@ -50,6 +49,8 @@ public class EmprestimoManipulator {
             System.out.println("Aluno não encontrado");
             return false;
         }
+
+        emprestimo.setLivro(livro);
 
         int qtdDisponivel = livro.getQtdDisponivel() - 1;
         livro.setQtdDisponivel(qtdDisponivel);
@@ -143,7 +144,7 @@ public class EmprestimoManipulator {
                         Integer.parseInt(d1[0])));
 
                 String[] d2 = l[4].split("/");
-                e.setDataDevolucao(LocalDate.of(Integer.parseInt(d2[2]),
+                e.setDataDevolucaoPrevista(LocalDate.of(Integer.parseInt(d2[2]),
                         Integer.parseInt(d2[1]),
                         Integer.parseInt(d2[0])));
 
@@ -182,7 +183,7 @@ public class EmprestimoManipulator {
                        e.getCodigoLivro() + ";" +
                        e.getCodigoAluno() + ";" +
                        e.getDataEmprestimoFormatada() + ";" +
-                       e.getDataDevolucaoFormatada() + ";" +
+                       e.getDataDevolucaoPrevistaFormatada() + ";" +
                        devolvido;
 
         try {

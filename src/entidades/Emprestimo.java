@@ -3,10 +3,8 @@ package entidades;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * Representa um Empréstimo de um Livro para um Aluno.
@@ -28,7 +26,7 @@ public class Emprestimo {
     /** Data em que o empréstimo foi realizado. */
     private LocalDate dataEmprestimo;
     /** Data prevista para a devolução. */
-    private LocalDate dataDevolucao;
+    private LocalDate dataDevolucaoPrevista;
     /** Indica se o livro já foi devolvido. */
     private boolean devolvido;
 
@@ -45,7 +43,7 @@ public class Emprestimo {
     public Emprestimo() {
     	this.codigoEmprestimo = geradorId.nextLong(10000);
         this.dataEmprestimo = LocalDate.now();
-        this.dataDevolucao = this.dataEmprestimo.plusDays(10);
+        this.dataDevolucaoPrevista = this.dataEmprestimo.plusDays(10);
     }
 
     /**
@@ -58,7 +56,7 @@ public class Emprestimo {
         this.codigoAluno = codigoAluno;
         this.codigoLivro = codigoLivro;
         this.dataEmprestimo = LocalDate.now();
-        this.dataDevolucao = LocalDate.now().plusDays(10);
+        this.dataDevolucaoPrevista = this.dataEmprestimo.plusDays(10);
     }
 
     public long getCodigoEmprestimo() {
@@ -101,20 +99,20 @@ public class Emprestimo {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public LocalDate getDataDevolucao() {
-        return dataDevolucao;
+    public LocalDate getDataDevolucaoPrevista() {
+        return dataDevolucaoPrevista;
     }
 
     /**
      * Retorna a data de devolução formatada.
      * @return Data de devolução no formato dd/MM/yyyy.
      */
-    public String getDataDevolucaoFormatada() {
-        return dataDevolucao.format(formatter);
+    public String getDataDevolucaoPrevistaFormatada() {
+        return dataDevolucaoPrevista.format(formatter);
     }
 
-    public void setDataDevolucao(LocalDate dataDevolucao) {
-        this.dataDevolucao = dataDevolucao;
+    public void setDataDevolucaoPrevista(LocalDate dataDevolucaoPrevista) {
+        this.dataDevolucaoPrevista = dataDevolucaoPrevista;
     }
 
     public boolean isDevolvido() {
@@ -145,7 +143,7 @@ public class Emprestimo {
      * @return true se o empréstimo está atrasado.
      */
     public boolean estaAtrasado() {
-        return dataDevolucao.isBefore(LocalDate.now());
+        return dataDevolucaoPrevista.isBefore(LocalDate.now());
     }
 
     /**
@@ -153,7 +151,7 @@ public class Emprestimo {
      * @return O valor total da multa.
      */
     public double calcularMulta() {
-        Period p = Period.between(dataDevolucao, LocalDate.now());
+        Period p = Period.between(dataDevolucaoPrevista, LocalDate.now());
         if (p.getDays() < 0) {
             return 0.0;
         }
@@ -165,11 +163,8 @@ public class Emprestimo {
      * Renova o empréstimo, estendendo a data de devolução por mais 10 dias.
      */
     public void renovarEmprestimo() {
-        if (this.dataDevolucao != null) {
-            System.out.println("Não é possível renovar, livro já devolvido.");
-            return;
-        }
-        this.dataDevolucao = this.dataDevolucao.plusDays(10);
+        // todo: adicionar lógica de limites de renovação
+        this.dataDevolucaoPrevista = this.dataDevolucaoPrevista.plusDays(10);
     }
 
     public Livro devolverLivro() {
@@ -195,7 +190,7 @@ public class Emprestimo {
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;
         Emprestimo that = (Emprestimo) object;
-        return codigoEmprestimo == that.codigoEmprestimo && codigoAluno == that.codigoAluno && codigoFuncionario == that.codigoFuncionario && codigoLivro == that.codigoLivro && devolvido == that.devolvido && Objects.equals(dataEmprestimo, that.dataEmprestimo) && Objects.equals(dataDevolucao, that.dataDevolucao) && Objects.equals(formatter, that.formatter);
+        return codigoEmprestimo == that.codigoEmprestimo && codigoAluno == that.codigoAluno && codigoFuncionario == that.codigoFuncionario && codigoLivro == that.codigoLivro && devolvido == that.devolvido && Objects.equals(dataEmprestimo, that.dataEmprestimo) && Objects.equals(dataDevolucaoPrevista, that.dataDevolucaoPrevista) && Objects.equals(formatter, that.formatter);
     }
 
     /**
@@ -204,7 +199,7 @@ public class Emprestimo {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(codigoEmprestimo, codigoAluno, codigoFuncionario, codigoLivro, dataEmprestimo, dataDevolucao, devolvido, formatter);
+        return Objects.hash(codigoEmprestimo, codigoAluno, codigoFuncionario, codigoLivro, dataEmprestimo, dataDevolucaoPrevista, devolvido, formatter);
     }
 
     /**
@@ -219,7 +214,7 @@ public class Emprestimo {
                 ", codigoFuncionario=" + codigoFuncionario +
                 ", codigoLivro=" + codigoLivro +
                 ", dataEmprestimo=" + dataEmprestimo +
-                ", dataDevolucao=" + dataDevolucao +
+                ", dataDevolucao=" + dataDevolucaoPrevista +
                 ", devolvido=" + devolvido +
                 ", formatter=" + formatter +
                 '}';

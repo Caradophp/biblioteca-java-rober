@@ -233,7 +233,7 @@ public class Biblioteca {
         List<Emprestimo> todosEmprestimos = emprestimoManipulator.getEmprestimos();
 
         // ordena pelos empréstimos com data de devolução mais próximas (ou que já passaram)
-        todosEmprestimos.sort(Comparator.comparing(Emprestimo::getDataDevolucao));
+        todosEmprestimos.sort(Comparator.comparing(Emprestimo::getDataDevolucaoPrevista));
 
         for (Emprestimo e : todosEmprestimos) {
             if (e.getCodigoAluno() == aluno.getMatricula()) {
