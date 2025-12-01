@@ -84,7 +84,9 @@ public class Aluno extends Pessoa {
      */
     @Override
     public String toString() {
-        return "Matrícula: " + matricula + "\n" +
+        return "============================\n" +
+                "Dados do Aluno\n\n" +
+                "Matrícula: " + matricula + "\n" +
                 super.toString() + "\n" +
                 "Curso: " + curso;
     }

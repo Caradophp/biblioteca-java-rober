@@ -36,18 +36,17 @@ public class MenuBibliotecario {
                     MenusGlobais.menuConsultarLivro(menuInicial.getBiblioteca());
                     break;
                 case 2:
+                    // todo: verificar a lógica
                     menuEmprestarLivro();
                     break;
                 case 3:
-                    // todo
+                    // todo: fazer
                     menuVerEmprestimosAluno();
                     break;
                 case 4:
-                    // todo
                     menuGestaoLivros();
                     break;
                 case 5:
-                    // todo
                     menuGestaoAlunos();
                     break;
             }
@@ -69,7 +68,7 @@ public class MenuBibliotecario {
 
         if (livro != null) {
             Emprestimo emprestimo = new Emprestimo(aluno.getMatricula(), livro.getIsbn());
-            // todo: fazerEmprestimo não altera a qtdDisponivel do livro
+            // todo: fazerEmprestimo não está alterando a qtdDisponivel do livro
 
             if (menuInicial.getBiblioteca().fazerEmprestimo(emprestimo)) {
                 System.out.println("O livro foi emprestado para o aluno.");
@@ -123,7 +122,7 @@ public class MenuBibliotecario {
         livro.setEditora(MenuUtils.lerString("Editora: "));
         livro.setAnoPublicacao(Year.of(MenuUtils.lerInt("Ano de Publicação: ")));
         livro.setAutor(MenuUtils.lerString("Nome do autor: "));
-        livro.setCategoria(MenuUtils.lerCategoria("Categoria: "));
+        livro.setCategoria(MenuUtils.lerCategoria());
         livro.setQtdTotal(MenuUtils.lerInt("Número de cópias: "));
         livro.setQtdDisponivel(livro.getQtdTotal());
 
@@ -167,7 +166,7 @@ public class MenuBibliotecario {
             livro.setAutor(autor);
         }
 
-        categoria = MenuUtils.lerCategoria("Número da categoria: ");
+        categoria = MenuUtils.lerCategoria();
         if (!categoria.isEmpty()) {
             livro.setCategoria(categoria);
         }

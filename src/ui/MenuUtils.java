@@ -9,7 +9,7 @@ import java.util.List;
 public class MenuUtils {
     public static int lerOpcaoMenu(int numMaiorOpcao, boolean temOpcaoZero) {
         while (true) {
-            int escolha = lerInt("\n> ");
+            int escolha = lerInt("> ");
             // a escolha precisa ser menor ou igual ao número de opções existentes e maior que 0,
             // ou então igual a 0, caso exista a opção "Voltar"
             if ((escolha <= numMaiorOpcao && escolha > 0) || (temOpcaoZero && escolha == 0)) {
@@ -90,16 +90,12 @@ public class MenuUtils {
         }
     }
 
-    public static String lerCategoria(String stringPrompt) {
+    public static String lerCategoria() {
         System.out.println("\nCategorias válidas:");
         for (int i = 0; i < Livro.categoriasPermitidas.size(); i++) {
             System.out.printf("%d. %s\n", i+1, Livro.categoriasPermitidas.get(i));
         }
         System.out.println("Digite o número de uma categoria válida (0 para cancelar).");
-
-        if (!stringPrompt.isEmpty()) {
-            System.out.print(stringPrompt);
-        }
 
         int escolha = lerOpcaoMenu(Livro.categoriasPermitidas.size(), true);
         return escolha == 0 ? "" : Livro.categoriasPermitidas.get(escolha-1);

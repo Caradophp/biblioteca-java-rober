@@ -72,13 +72,13 @@ public class Biblioteca {
     }
 
     /**
-     * Busca um livro na lista em memória pelo nome.
+     * Filtra a lista de livros em memória com o parâmetro passado.
      *
      * @param nome O nome do livro a ser buscado.
-     * @return O objeto Livro encontrado ou null se não for encontrado.
+     * @return Uma lista de livros que tenham o parâmetro contido no nome.
      */
-    public List<Livro> buscarLivroPorNome(String nome) {
-        return livroManipulator.buscarLivroPorNome(nome);
+    public List<Livro> buscarLivrosPorNome(String nome) {
+        return livroManipulator.buscarLivrosPorNome(nome);
     }
     
     public List<Livro> buscarLivrosPorCategoria(String categoria) {

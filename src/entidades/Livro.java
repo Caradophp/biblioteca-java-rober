@@ -144,14 +144,15 @@ public class Livro {
      */
     @Override
     public String toString() {
-        return "Livro{" +
-                ", nome='" + nome + '\'' +
-                ", categoria='" + categoria + '\'' +
-                ", autor='" + autor + '\'' +
-                ", editora='" + editora + '\'' +
-                ", isbn=" + isbn +
-                ", qtdDisponivel=" + qtdDisponivel +
-                '}';
+        return "============================\n" +
+                "Dados do Livro\n\n" +
+                "ISBN: " + isbn + "\n" +
+                "Nome: " + nome + "\n" +
+                "Editora: " + editora + "\n" +
+                "Ano de publicação: " + anoPublicacao + "\n" +
+                "Autor: " + autor + "\n" +
+                "Categoria: " + categoria + "\n" +
+                "Cópias: " + qtdDisponivel + " disponíveis de " + qtdTotal + " totais";
     }
 
     /**

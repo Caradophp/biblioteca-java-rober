@@ -86,14 +86,16 @@ public class LivroManipulator {
     /* ==========================================================
        BUSCAR POR NOME
        ========================================================== */
-    public List<Livro> buscarLivroPorNome(String nome) {
+    public List<Livro> buscarLivrosPorNome(String nome) {
     	List<Livro> livrosEncontrados = new ArrayList<Livro>();
-    	
+
+    	nome = nome.toLowerCase();
         for (Livro livro : livros) {
-            if (livro.getNome().equalsIgnoreCase(nome)) {
+            if (livro.getNome().toLowerCase().contains(nome)) {
                 livrosEncontrados.add(livro);
             }
         }
+
         return livrosEncontrados;
     }
     

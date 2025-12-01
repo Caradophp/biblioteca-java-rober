@@ -10,12 +10,12 @@ import java.util.List;
 
 public class MenusGlobais {
     public static void menuConsultarLivro(Biblioteca biblioteca) {
-        System.out.println("============================");
         Livro l = menuBuscarPorLivro(biblioteca, "Selecione um livro (pelo número da lista) para ver mais informaçõe sobre ele: ");
 
         if (l != null) {
             System.out.println(l);
             // apenas espera que o usuário digite qualquer coisa para voltar ao menu
+            System.out.println("\n(Enter para continuar)");
             MenuUtils.lerString("> ");
         }
     }
@@ -35,12 +35,14 @@ public class MenusGlobais {
                     return null;
                 case 1:
                     String nomeLivro = MenuUtils.lerString("Nome do livro:\n> ");
-                    //livro = menuSelecaoLivro(biblioteca.buscarLivrosPorNome(nomeLivro), textoSelecao, true);
+                    if (!nomeLivro.isEmpty()) {
+                        livro = menuSelecaoLivro(biblioteca.buscarLivrosPorNome(nomeLivro), textoSelecao, true);
+                    }
                     break;
                 case 2:
-                    String categoria = MenuUtils.lerCategoria("> ");
+                    String categoria = MenuUtils.lerCategoria();
                     if (!categoria.isEmpty()) {
-                        //livro = menuSelecaoLivro(biblioteca.buscarLivrosPorCategoria(nomeLivro), textoSelecao, true);
+                        livro = menuSelecaoLivro(biblioteca.buscarLivrosPorCategoria(categoria), textoSelecao, true);
                     }
                     break;
                 case 3:
@@ -78,7 +80,7 @@ public class MenusGlobais {
         }
 
         if (!textoSelecao.isEmpty()) {
-            System.out.println(textoSelecao);
+            System.out.println("\n" + textoSelecao);
         }
         int escolha = MenuUtils.lerOpcaoMenu(livros.size(), temOpcaoVoltar);
         return escolha == 0 ? null : livros.get(escolha-1);
