@@ -66,23 +66,6 @@ public class EmprestimoManipulator {
         return true;
     }
 
-    public void atualizarEmprestimo(Emprestimo emprestimo) {
-
-        Emprestimo em = emprestimos.stream()
-                .filter(e -> e.getCodigoEmprestimo() == emprestimo.getCodigoEmprestimo())
-                .findFirst()
-                .orElseThrow();
-
-        if (em != null) {
-            emprestimos.remove(em);
-            em = emprestimo;
-            emprestimos.add(em);
-        }
-
-        limparArquivo(arquivoEmprestimos);
-        emprestimos.forEach(this::escreverEmprestimoNoArquivo);
-    }
-
     /* ===========================
        RENOVAR EMPRÉSTIMO
        ========================== */
@@ -90,7 +73,6 @@ public class EmprestimoManipulator {
 
         boolean renovou = false;
 
-        Emprestimo emprestimo = null;
         List<Emprestimo> novaLista = new ArrayList<>();
         limparArquivo(arquivoEmprestimos);
 
@@ -101,7 +83,7 @@ public class EmprestimoManipulator {
             }
 
             novaLista.add(e);
-            atualizarEmprestimo(e);
+            escreverEmprestimoNoArquivo(e);
         }
 
         emprestimos = novaLista;
