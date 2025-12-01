@@ -132,11 +132,12 @@ public class LivroManipulator {
 
         for (Livro l : livros) {
             if (l.getIsbn() == livroAtualizado.getIsbn()) {
-                // isbn e qtdDisponivel não são editáveis
+                // isbn não é editável
                 l.setNome(livroAtualizado.getNome());
                 l.setCategoria(livroAtualizado.getCategoria());
                 l.setAutor(livroAtualizado.getAutor());
                 l.setEditora(livroAtualizado.getEditora());
+                l.setQtdDisponivel(livroAtualizado.getQtdTotal());
                 l.setQtdTotal(livroAtualizado.getQtdTotal());
                 l.setAnoPublicacao(livroAtualizado.getAnoPublicacao());
             }
@@ -188,7 +189,7 @@ public class LivroManipulator {
     /* ==========================================================
        ESCREVER LIVRO NO ARQUIVO
        ========================================================== */
-    private void escreverLivroNoArquivo(Livro livro) {
+    public void escreverLivroNoArquivo(Livro livro) {
 
         String linha = livro.getAnoPublicacao() + ";" +
                 livro.getNome() + ";" +
