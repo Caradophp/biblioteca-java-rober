@@ -100,14 +100,14 @@ public class MenusGlobais {
             Livro l = e.getLivro();
             boolean estaAtrasado = e.estaAtrasado();
 
+            System.out.println();
             if (estaAtrasado) {
                 System.out.println("  (EM ATRASO)");
             }
-            System.out.printf("\n%d. %s\n", i+1, l.getNome());
+            System.out.printf("%d. %s\n", i+1, l.getNome());
             System.out.printf("  Emprestado em: %s\n", e.getDataEmprestimoFormatada());
             System.out.printf("  Deve devolver até: %s\n", e.getDataDevolucaoPrevistaFormatada());
-            // todo: adicionar o campo qtdRenovacoes
-            //System.out.printf("Renovações: %d de %d", e.getQtdRenovacoes(), QTD_MAXIMA_RENOVACOES);
+            System.out.printf("  Renovações: %d de %d\n", e.getQtdRenovacoes(), Emprestimo.QTD_MAXIMA_RENOVACOES);
             if (estaAtrasado) {
                 System.out.printf("  Multa a ser paga: %.2f\n", e.calcularMulta());
             }

@@ -17,7 +17,7 @@
 1937;O Hobbit;Fantasia;J.R.R. Tolkien;Harper;100016;70;70
 2005;A Menina que Roubava Livros;Drama;Markus Zusak;Intrínseca;100017;41;41
 1813;Orgulho e Preconceito;Romance;Jane Austen;Martin Claret;100018;30;30
-1847;O Morro dos Ventos Uivantes;Romance;Emily Brontë;Penguin;100019;26;26
+1847;O Morro dos Ventos Uivantes;Romance;Emily Brontë;Penguin;100019;24;26
 1915;A Metamorfose;Drama;Franz Kafka;Companhia das Letras;100020;32;32
 1925;O Processo;Drama;Franz Kafka;Penguin;100021;28;28
 2007;O Nome do Vento;Fantasia;Patrick Rothfuss;Arqueiro;100022;52;52

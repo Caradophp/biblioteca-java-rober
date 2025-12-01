@@ -52,7 +52,7 @@ public class MenuInicial {
 
     private void menuLogin() {
         System.out.println("\n==========================");
-        System.out.println("          LOGIN\n");
+        System.out.println("          LOGIN");
         System.out.print("Email: ");
         String email = reader.nextLine();
 

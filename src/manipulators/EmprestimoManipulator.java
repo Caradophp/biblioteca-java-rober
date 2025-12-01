@@ -40,13 +40,18 @@ public class EmprestimoManipulator {
 
         Livro livro = livroManipulator.buscarLivroPorCodigo(emprestimo.getCodigoLivro());
         if (livro == null) {
-            System.out.println("Não existe um livro com o código indicado");
+            System.out.println("Não existe um livro com o código indicado.");
+            return false;
+        }
+
+        if (livro.getQtdDisponivel() <= 0) {
+            System.out.println("Não existe nenhuma cópia disponível do livro.");
             return false;
         }
 
         Aluno aluno = alunoManipulator.buscarAlunoPorMatricula(emprestimo.getCodigoAluno());
         if (aluno == null) {
-            System.out.println("Aluno não encontrado");
+            System.out.println("Aluno não encontrado.");
             return false;
         }
 
@@ -76,8 +81,6 @@ public class EmprestimoManipulator {
 
         limparArquivo(arquivoEmprestimos);
         emprestimos.forEach(this::escreverEmprestimoNoArquivo);
-
-
     }
 
     /* ===========================
@@ -85,10 +88,11 @@ public class EmprestimoManipulator {
        ========================== */
     public boolean renovarEmprestimo(long codigoEmprestimo) {
 
+        boolean renovou = false;
+
         Emprestimo emprestimo = null;
         List<Emprestimo> novaLista = new ArrayList<>();
         limparArquivo(arquivoEmprestimos);
-        boolean renovou = false;
 
         for (Emprestimo e : emprestimos) {
 
@@ -98,7 +102,6 @@ public class EmprestimoManipulator {
 
             novaLista.add(e);
             atualizarEmprestimo(e);
-
         }
 
         emprestimos = novaLista;
@@ -111,22 +114,20 @@ public class EmprestimoManipulator {
     public boolean devolverLivro(long codigoEmprestimo) {
 
         boolean devolvido = false;
-
-        Livro livro = null;
         List<Emprestimo> novaLista = new ArrayList<>();
         limparArquivo(arquivoEmprestimos);
 
         for (Emprestimo e : emprestimos) {
 
             if (e.getCodigoEmprestimo() == codigoEmprestimo) {
-                livro = e.devolverLivro();
-                devolvido = true;
+                devolvido = e.devolverLivro();
+
+                if (devolvido && e.getLivro() != null) {
+                    livroManipulator.atualizarLivro(e.getLivro());
+                }
             }
 
             novaLista.add(e);
-            if (livro != null) {
-                livroManipulator.atualizarLivro(livro);
-            }
             escreverEmprestimoNoArquivo(e);
         }
 
@@ -160,6 +161,7 @@ public class EmprestimoManipulator {
                 e.setCodigoLivro(Integer.parseInt(l[1]));
                 e.setCodigoAluno(Integer.parseInt(l[2]));
                 e.setDevolvido(l[5].equals("sim"));
+                e.setQtdRenovacoes(Integer.parseInt(l[6]));
 
                 String[] d1 = l[3].split("/");
                 e.setDataEmprestimo(LocalDate.of(Integer.parseInt(d1[2]),

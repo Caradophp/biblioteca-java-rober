@@ -48,8 +48,7 @@ public class MenuAluno {
             }
 
             boolean confirmado = MenuUtils.aguardarConfirmacao("===============================\n" +
-                    String.format("Confirma a renovação do livro '%s'? (S/n)\n", emprestimo.getLivro().getNome()) +
-                    "> ");
+                    String.format("Confirma a renovação do livro '%s'?", emprestimo.getLivro().getNome()));
             if (!confirmado) {
                 System.out.println("Renovação do livro cancelada.");
                 // volta ao menu anterior

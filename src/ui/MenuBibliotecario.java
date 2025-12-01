@@ -6,6 +6,7 @@ import entidades.Emprestimo;
 import entidades.Livro;
 
 import java.time.Year;
+import java.util.List;
 
 public class MenuBibliotecario {
     private final Bibliotecario bibliotecarioLogado;
@@ -23,7 +24,7 @@ public class MenuBibliotecario {
             System.out.println("0. Sair");
             System.out.println("1. Consultar livros");
             System.out.println("2. Emprestar livro para aluno");
-            System.out.println("3. Ver empréstimos de um aluno");
+            System.out.println("3. Ver empréstimos e devolver livro");
             System.out.println("4. Gestão de livros");
             System.out.println("5. Gestão de alunos");
 
@@ -36,7 +37,6 @@ public class MenuBibliotecario {
                     MenusGlobais.menuConsultarLivro(menuInicial.getBiblioteca());
                     break;
                 case 2:
-                    // todo: verificar a lógica
                     menuEmprestarLivro();
                     break;
                 case 3:
@@ -56,38 +56,62 @@ public class MenuBibliotecario {
     public void menuEmprestarLivro() {
         // lê matrícula do aluno para qual vai emprestar o livro
         Aluno aluno = MenuUtils.lerAluno(menuInicial.getBiblioteca());
-
         if (aluno == null) {
             // retorna ao menu anterior
             return;
         }
 
-        System.out.printf("Emprestar livro para o aluno '%s' de matrícula %d:\n", aluno.getNomeAbreviado(), aluno.getMatricula());
-        Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(), "Selecione um livro (pelo número da lista) para emprestá-lo:");
+        while (true) {
+            System.out.printf("\nEmprestar livro para o aluno '%s' de matrícula %d:\n", aluno.getNomeAbreviado(), aluno.getMatricula());
+            Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(), "Selecione um livro (pelo número da lista) para emprestá-lo:");
+            if (livro == null) {
+                // retorna ao menu anterior
+                return;
+            }
 
-        if (livro == null) {
-            // retorna ao menu anterior
-            return;
-        }
+            boolean confirmado = MenuUtils.aguardarConfirmacao("===============================\n" +
+                    String.format("Confirma o empréstimo do livro '%s' para o aluno '%s'?", livro.getNome(), aluno.getNomeAbreviado()));
+            if (!confirmado) {
+                System.out.println("Empréstimo do livro cancelado.");
+                // volta ao menu anterior
+                return;
+            }
 
-        boolean confirmado = MenuUtils.aguardarConfirmacao("===============================\n" +
-                String.format("Confirma o empréstimo do livro '%s' para o aluno %s? (S/n)\n", livro.getNome(), aluno.getNomeAbreviado()) +
-                "> ");
-        if (confirmado) {
             Emprestimo emprestimo = new Emprestimo(aluno.getMatricula(), livro.getIsbn());
-            // todo: fazerEmprestimo não está alterando a qtdDisponivel do livro
             if (menuInicial.getBiblioteca().fazerEmprestimo(emprestimo)) {
                 System.out.println("O livro foi emprestado com sucesso.");
-            } else {
-                System.out.println("Algum erro ocorreu que impediu que o livro fosse emprestado. Tente novamente.");
             }
-        } else {
-            System.out.println("Empréstimo do livro cancelado.");
         }
     }
 
     public void menuVerEmprestimosAluno() {
+        Aluno aluno = MenuUtils.lerAluno(menuInicial.getBiblioteca());
+        if (aluno == null) {
+            // retorna ao menu anterior
+            return;
+        }
 
+        while (true) {
+            List<Emprestimo> emprestimosAluno = menuInicial.getBiblioteca().buscarTodosEmprestimos(aluno);
+            Emprestimo emprestimo = MenusGlobais.menuSelecaoEmprestimo(emprestimosAluno, "Selecione um livro para devolvê-lo à biblioteca: ", true);
+            if (emprestimo == null) {
+                // retorna ao menu anterior
+                return;
+            }
+
+            boolean confirmado = MenuUtils.aguardarConfirmacao("===================================\n" +
+                    String.format("Confirma a devolução do livro '%s'?", emprestimo.getLivro().getNome()) +
+                    (emprestimo.estaAtrasado() ? " Tenha certeza que a multa de atraso foi paga" : ""));
+            if (!confirmado) {
+                // retorna ao menu anterior
+                return;
+            }
+
+            boolean devolvido = menuInicial.getBiblioteca().devolverLivro(emprestimo.getCodigoEmprestimo());
+            if (devolvido) {
+                System.out.println("Livro devolvido com sucesso.");
+            }
+        }
     }
 
     public void menuGestaoLivros() {
@@ -207,8 +231,7 @@ public class MenuBibliotecario {
         if (livro == null) { return; }
 
         boolean confirmado = MenuUtils.aguardarConfirmacao("=================================\n" +
-                String.format("Confirma a exclusão do livro '%s'? (S/n)\n", livro.getNome()) +
-                "> ");
+                String.format("Confirma a exclusão do livro '%s'?", livro.getNome()));
 
         if (confirmado) {
             if (menuInicial.getBiblioteca().removerLivro(livro.getIsbn())) {
@@ -320,8 +343,7 @@ public class MenuBibliotecario {
         if (aluno == null) { return; }
 
         boolean confirmado = MenuUtils.aguardarConfirmacao("=================================\n" +
-                String.format("Confirma a exclusão do aluno '%s'? (S/n)\n", aluno.getNome()) +
-                "> ");
+                String.format("Confirma a exclusão do aluno '%s'?", aluno.getNome()));
 
         if (confirmado) {
             if (menuInicial.getBiblioteca().removerAluno(aluno.getMatricula())) {

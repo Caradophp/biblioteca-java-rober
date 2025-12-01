@@ -15,7 +15,11 @@ import java.util.Random;
 public class Emprestimo {
 
     /** Valor da multa por dia de atraso. */
-    private static final double MULTA_DIA = 4.0;
+    public static final double MULTA_DIA = 4.0;
+    /** Número de dias que são aumentados da data de devolução prevista ao renovar o empréstimo */
+    public static final int AUMENTO_DIAS_RENOVACAO = 10;
+    /** Número de vezes máxima que um empréstimo pode ser renovado */
+    public static final int QTD_MAXIMA_RENOVACOES = 3;
 
     /** Código único do empréstimo. */
     private long codigoEmprestimo;
@@ -40,16 +44,14 @@ public class Emprestimo {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final Random geradorId = new Random();
 
-    private final int QTD_MAXIMA_RENOVACOES = 3;
-
     /**
      * Construtor padrão.
-     * Define a data de empréstimo como hoje e a data de devolução para 10 dias.
+     * Define a data de empréstimo como hoje e a data de devolução baseada na constante.
      */
     public Emprestimo() {
     	this.codigoEmprestimo = geradorId.nextLong(10000);
         this.dataEmprestimo = LocalDate.now();
-        this.dataDevolucaoPrevista = this.dataEmprestimo.plusDays(10);
+        this.dataDevolucaoPrevista = this.dataEmprestimo.plusDays(AUMENTO_DIAS_RENOVACAO);
     }
 
     /**
@@ -62,7 +64,7 @@ public class Emprestimo {
         this.codigoAluno = codigoAluno;
         this.codigoLivro = codigoLivro;
         this.dataEmprestimo = LocalDate.now();
-        this.dataDevolucaoPrevista = this.dataEmprestimo.plusDays(10);
+        this.dataDevolucaoPrevista = this.dataEmprestimo.plusDays(AUMENTO_DIAS_RENOVACAO);
     }
 
     public long getCodigoEmprestimo() {
@@ -157,11 +159,8 @@ public class Emprestimo {
      * Verifica se a data atual já ultrapassou a data de devolução do empréstimo.
      * @return true se o empréstimo está atrasado.
      */
-
-
-
     public boolean estaAtrasado() {
-        return dataDevolucaoPrevista.isBefore(LocalDate.now());
+        return LocalDate.now().isAfter(dataDevolucaoPrevista);
     }
 
     /**
@@ -181,35 +180,37 @@ public class Emprestimo {
      * Renova o empréstimo, estendendo a data de devolução por mais 10 dias.
      */
     public boolean renovarEmprestimo() {
-        WeekFields wf = WeekFields.of(Locale.getDefault());
-        LocalDate hoje = LocalDate.now();
-
-        if (dataDevolucaoPrevista.get(wf.weekOfWeekBasedYear()) == hoje.get(wf.weekOfWeekBasedYear())) {
-            System.out.println("Faz pouco tempo que você renovou esse empréstimo, portanto não pode renová-lo novamente.");
+        if (estaAtrasado()) {
+            System.out.println("O empréstimo está atrasado. Entre em contato com um bibliotecário para devolver o livro e pagar sua multa.");
             return false;
         }
 
         if (qtdRenovacoes >= 3) {
-            System.out.println("Números máximos de renovações atingido.");
+            System.out.println("Número máximo de renovações atingido. Devolva o livro na biblioteca.");
             return false;
         }
+
+        WeekFields wf = WeekFields.of(Locale.getDefault());
+        LocalDate hoje = LocalDate.now();
+        if (dataDevolucaoPrevista.get(wf.weekOfWeekBasedYear()) != hoje.get(wf.weekOfWeekBasedYear())) {
+            System.out.println("Faz pouco tempo que você renovou esse empréstimo, portanto não pode renová-lo novamente.");
+            return false;
+        }
+
         this.setQtdRenovacoes(qtdRenovacoes+1);
-        this.dataDevolucaoPrevista = this.dataDevolucaoPrevista.plusDays(10);
+        this.dataDevolucaoPrevista = this.dataDevolucaoPrevista.plusDays(AUMENTO_DIAS_RENOVACAO);
         return true;
     }
 
-    public Livro devolverLivro() {
-
+    public boolean devolverLivro() {
         if (this.devolvido) {
             System.out.println("Esse livro já foi devolvido");
-            return null;
+            return false;
         }
 
         this.devolvido = true;
-        int qtdDisponivel = livro.getQtdDisponivel() + 1;
-        livro.setQtdDisponivel(qtdDisponivel);
-        System.out.println("Livro devolvido com sucesso");
-        return livro;
+        livro.setQtdDisponivel(livro.getQtdDisponivel() + 1);
+        return true;
     }
 
     /**

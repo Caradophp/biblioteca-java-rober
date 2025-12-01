@@ -103,8 +103,9 @@ public class MenuUtils {
 
     public static boolean aguardarConfirmacao(String stringPrompt) {
         if (!stringPrompt.isEmpty()) {
-            System.out.print(stringPrompt);
+            System.out.println(stringPrompt + " (S/n)");
         }
+        System.out.print("> ");
 
         String escolha = MenuInicial.reader.nextLine().trim().toLowerCase();
         // retorna true para qualquer valor que não seja "n" ou "N"
