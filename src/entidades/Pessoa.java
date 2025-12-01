@@ -139,9 +139,8 @@ public abstract class Pessoa {
      */
     @Override
     public String toString() {
-        return "Pessoa{" +
-                "nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", senha='" + senha + '\'';
+        return "Nome: " + nome + "\n" +
+                "Email: " + email + "\n" +
+                "Telefone: " + telefone;
     }
 }

@@ -87,6 +87,8 @@ public class Bibliotecario extends Pessoa {
      */
     @Override
     public String toString() {
-        return super.toString() + ", registro=" + registro + ", data de adimissão=" + dataAdmissao.format(formatter);
+        return "Registro: " + registro + "\n" +
+                super.toString() + "\n" +
+                "Data de Adimissão: " + dataAdmissao.format(formatter);
     }
 }

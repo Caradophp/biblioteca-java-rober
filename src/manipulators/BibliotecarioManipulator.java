@@ -1,5 +1,6 @@
 package manipulators;
 
+import entidades.Aluno;
 import entidades.Bibliotecario;
 
 import java.io.FileOutputStream;
@@ -48,20 +49,27 @@ public class BibliotecarioManipulator {
     }
 
     /** REMOVER BIBLIOTECARIO */
-    public void removerFuncionario(int registro) {
+    public boolean removerFuncionario(int registro) {
 
         List<Bibliotecario> novaLista = new ArrayList<>();
 
-        limparArquivo(arquivoFuncionarios);
+        try {
+            limparArquivo(arquivoFuncionarios);
 
-        for (Bibliotecario b : bibliotecarios) {
-            if (b.getRegistro() != registro) {
-                novaLista.add(b);
-                escreverBibliotecarioNoArquivo(b);
+            for (Bibliotecario b : bibliotecarios) {
+                if (b.getRegistro() != registro) {
+                    novaLista.add(b);
+                    escreverBibliotecarioNoArquivo(b);
+                }
             }
-        }
 
-        bibliotecarios = novaLista;
+            bibliotecarios = novaLista;
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /** ATUALIZAR BIBLIOTECARIO */

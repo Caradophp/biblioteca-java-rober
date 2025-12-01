@@ -162,15 +162,4 @@ public class Livro {
         return categoriasPermitidas.contains(categoria);
     }
 
-    public static String getStringCategoriasPermitidas() {
-        String categorias = "(";
-        for (int i = 0; i < categoriasPermitidas.size(); i++) {
-            if (i == categoriasPermitidas.size()-1) {
-                categorias += categoriasPermitidas.get(i) + ")";
-            } else {
-                categorias += categoriasPermitidas.get(i) + "|";
-            }
-        }
-        return categorias;
-    }
 }

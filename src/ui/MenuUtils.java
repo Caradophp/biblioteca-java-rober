@@ -4,6 +4,8 @@ import biblioteca.Biblioteca;
 import entidades.Aluno;
 import entidades.Livro;
 
+import java.util.List;
+
 public class MenuUtils {
     public static int lerOpcaoMenu(int numMaiorOpcao, boolean temOpcaoZero) {
         while (true) {
@@ -13,7 +15,7 @@ public class MenuUtils {
             if ((escolha <= numMaiorOpcao && escolha > 0) || (temOpcaoZero && escolha == 0)) {
                 return escolha;
             } else {
-                System.out.println("Opção inválida. Tente novamente.");
+                System.out.print("Opção inválida. Tente novamente.");
             }
         }
     }
@@ -89,20 +91,18 @@ public class MenuUtils {
     }
 
     public static String lerCategoria(String stringPrompt) {
-        String strCategoriasPermitidas = Livro.getStringCategoriasPermitidas();
-        while (true) {
-            System.out.printf("Categorias válidas %s", strCategoriasPermitidas);
-            if (!stringPrompt.isEmpty()) {
-                System.out.print("\n" + stringPrompt);
-            }
-
-            String categoria = MenuInicial.reader.nextLine().trim();
-            if (categoria.isEmpty() || Livro.possuiCategoriaValida(categoria)) {
-                return categoria;
-            } else {
-                System.out.println("Categoria inválida. Tente novamente.");
-            }
+        System.out.println("\nCategorias válidas:");
+        for (int i = 0; i < Livro.categoriasPermitidas.size(); i++) {
+            System.out.printf("%d. %s\n", i+1, Livro.categoriasPermitidas.get(i));
         }
+        System.out.println("Digite o número de uma categoria válida (0 para cancelar).");
+
+        if (!stringPrompt.isEmpty()) {
+            System.out.print(stringPrompt);
+        }
+
+        int escolha = lerOpcaoMenu(Livro.categoriasPermitidas.size(), true);
+        return escolha == 0 ? "" : Livro.categoriasPermitidas.get(escolha-1);
     }
 
     public static boolean aguardarConfirmacao(String stringPrompt) {

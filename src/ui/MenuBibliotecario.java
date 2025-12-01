@@ -70,9 +70,8 @@ public class MenuBibliotecario {
         if (livro != null) {
             Emprestimo emprestimo = new Emprestimo(aluno.getMatricula(), livro.getIsbn());
             // todo: fazerEmprestimo não altera a qtdDisponivel do livro
-            boolean incluiu = menuInicial.getBiblioteca().fazerEmprestimo(emprestimo);
 
-            if (incluiu) {
+            if (menuInicial.getBiblioteca().fazerEmprestimo(emprestimo)) {
                 System.out.println("O livro foi emprestado para o aluno.");
             } else {
                 System.out.println("O livro não foi emprestado para o aluno.");
@@ -90,7 +89,7 @@ public class MenuBibliotecario {
             System.out.println("0. Voltar");
             System.out.println("1. Adicionar livro na biblioteca");
             System.out.println("2. Editar livro da biblioteca");
-            System.out.println("3. Remover livro da biblioteac");
+            System.out.println("3. Remover livro da biblioteca");
 
             int escolha = MenuUtils.lerOpcaoMenu(3, true);
             switch (escolha) {
@@ -101,10 +100,10 @@ public class MenuBibliotecario {
                     menuCadastrarLivro();
                     break;
                 case 2:
-                    // todo
+                    menuEditarLivro();
                     break;
                 case 3:
-                    // todo
+                    menuRemoverLivro();
                     break;
             }
         }
@@ -114,7 +113,7 @@ public class MenuBibliotecario {
         Livro livro = new Livro();
 
         System.out.println("Informe dados para inclusão de um novo livro:");
-        long isbn = MenuUtils.lerNovaMatricula(menuInicial.getBiblioteca());
+        long isbn = MenuUtils.lerNovoISBN(menuInicial.getBiblioteca());
         if (isbn == 0) {
             // retorna ao menu anterior
             return;
@@ -140,8 +139,9 @@ public class MenuBibliotecario {
         if (livro == null) { return; }
 
         String nome, editora, autor, categoria, anoPublicacao, qtdTotal;
-        MenusGlobais.printDetalhesLivro(livro);
+        System.out.println(livro);
         System.out.println("\nInforme dados para alterar as informações acima (Enter para não alterar): ");
+        System.out.println("(Não é possível editar o ISBN nem a quantidade de cópias disponíveis)");
 
         nome = MenuUtils.lerString("Nome: ");
         if (!nome.isEmpty()) {
@@ -167,25 +167,43 @@ public class MenuBibliotecario {
             livro.setAutor(autor);
         }
 
-        categoria = MenuUtils.lerCategoria("Categoria: ");
+        categoria = MenuUtils.lerCategoria("Número da categoria: ");
         if (!categoria.isEmpty()) {
             livro.setCategoria(categoria);
         }
 
-        qtdTotal = MenuUtils.lerString("Quantidade total de cópias (não é possível editar a quantidade disponível): ");
+        qtdTotal = MenuUtils.lerString("Quantidade total de cópias: ");
         if (!qtdTotal.isEmpty()) {
+            // a quantidade total mínima precisa ser o número de cópias emprestadas (qtdTotal - qtdDisponivel)
             try {
-                livro.setQtdTotal(Integer.parseInt(qtdTotal));
+                int intQtdTotal = Integer.parseInt(qtdTotal);
+                int qtdEmprestada = livro.getQtdTotal() - livro.getQtdDisponivel();
+                if (intQtdTotal >= qtdEmprestada) {
+                    livro.setQtdTotal(Integer.parseInt(qtdTotal));
+                } else {
+                    System.out.println("Existem mais livros emprestados do que a quantidade total informada. Não foi possível alterar o valor.");
+                }
             } catch (NumberFormatException e) {
                 System.out.println("Valor inválido. Quantidade total de cópias não alterada.");
             }
         }
 
-        menuInicial.getBiblioteca().atualizarLivro(livro);
+        if (menuInicial.getBiblioteca().atualizarLivro(livro)) {
+            System.out.println("Os dados do livro foram atualizados com sucesso.");
+        } else {
+            System.out.println("Algum erro impediu a atualização dos dados do livro. Tente novamente.");
+        }
     }
 
     public void menuRemoverLivro() {
+        Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(), "Selecione um livro (pelo número da lista) para editar os dados dele: ");
+        if (livro == null) { return; }
 
+        if (menuInicial.getBiblioteca().removerLivro(livro.getIsbn())) {
+            System.out.println("Livro excluído com sucesso.");
+        } else {
+            System.out.println("Algum erro impediu a exclusão do livro. Tente novamente.");
+        }
     }
 
     public void menuGestaoAlunos() {
@@ -205,10 +223,10 @@ public class MenuBibliotecario {
                     menuCadastrarAluno();
                     break;
                 case 2:
-                    // todo
+                    menuEditarAluno();
                     break;
                 case 3:
-                    // todo
+                    menuRemoverAluno();
                     break;
             }
         }
@@ -238,10 +256,58 @@ public class MenuBibliotecario {
     }
 
     public void menuEditarAluno() {
+        Aluno aluno = MenuUtils.lerAluno(menuInicial.getBiblioteca());
+        if (aluno == null) { return; }
 
+        String nome, curso, email, senha, telefone;
+        System.out.println(aluno);
+        System.out.println("\nInforme dados para alterar as informações acima (Enter para não alterar): ");
+        System.out.println("(Não é possível editar a matrícula)");
+
+        nome = MenuUtils.lerString("Nome: ");
+        if (!nome.isEmpty()) {
+            aluno.setNome(nome);
+        }
+
+        curso = MenuUtils.lerString("Curso: ");
+        if (!curso.isEmpty()) {
+            aluno.setCurso(curso);
+        }
+
+        telefone = MenuUtils.lerString("Telefone: ");
+        if (!telefone.isEmpty()) {
+            try {
+                aluno.setTelefone(Long.parseLong(telefone));
+            } catch (NumberFormatException e) {
+                System.out.println("Valor inválido. Telefone não alterado.");
+            }
+        }
+
+        email = MenuUtils.lerString("Email: ");
+        if (!email.isEmpty()) {
+            aluno.setEmail(email);
+        }
+
+        senha = MenuUtils.lerString("Nova senha: ");
+        if (!senha.isEmpty()) {
+            aluno.setSenha(senha);
+        }
+
+        if (menuInicial.getBiblioteca().atualizarAluno(aluno)) {
+            System.out.println("Os dados do aluno foram atualizados com sucesso.");
+        } else {
+            System.out.println("Algum erro impediu a atualização dos dados do aluno. Tente novamente.");
+        }
     }
 
     public void menuRemoverAluno() {
+        Aluno aluno = MenuUtils.lerAluno(menuInicial.getBiblioteca());
+        if (aluno == null) { return; }
 
+        if (menuInicial.getBiblioteca().removerAluno(aluno.getMatricula())) {
+            System.out.println("Aluno excluído com sucesso.");
+        } else {
+            System.out.println("Algum erro impediu a exclusão do aluno. Tente novamente.");
+        }
     }
 }

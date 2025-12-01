@@ -1,6 +1,7 @@
 package ui;
 
 import biblioteca.Biblioteca;
+import entidades.Aluno;
 import entidades.Emprestimo;
 import entidades.Livro;
 
@@ -13,7 +14,7 @@ public class MenusGlobais {
         Livro l = menuBuscarPorLivro(biblioteca, "Selecione um livro (pelo número da lista) para ver mais informaçõe sobre ele: ");
 
         if (l != null) {
-            printDetalhesLivro(l);
+            System.out.println(l);
             // apenas espera que o usuário digite qualquer coisa para voltar ao menu
             MenuUtils.lerString("> ");
         }
@@ -22,6 +23,7 @@ public class MenusGlobais {
     public static Livro menuBuscarPorLivro(Biblioteca biblioteca, String textoSelecao) {
         Livro livro = null;
         while (true) {
+            System.out.println("==================================");
             System.out.println("0. Voltar");
             System.out.println("1. Buscar livros por nome");
             System.out.println("2. Buscar livros por categoria");
@@ -80,19 +82,6 @@ public class MenusGlobais {
         }
         int escolha = MenuUtils.lerOpcaoMenu(livros.size(), temOpcaoVoltar);
         return escolha == 0 ? null : livros.get(escolha-1);
-    }
-
-    public static void printDetalhesLivro(Livro l) {
-        if (l == null) {
-            return;
-        }
-        System.out.printf("Nome: %s\n", l.getNome());
-        System.out.printf("Editora: %s\n", l.getEditora());
-        System.out.printf("Ano de publicação: %s\n", l.getAnoPublicacao());
-        System.out.printf("Autor: %s\n", l.getEditora());
-        System.out.printf("ISBN: %d\n", l.getIsbn());
-        System.out.printf("Categoria: %s\n", l.getCategoria());
-        System.out.printf("Cópias: %d disponíveis de %d totais\n", l.getQtdDisponivel(), l.getQtdTotal());
     }
 
     public static void menuSelecaoEmprestimo(List<Emprestimo> emprestimos) {

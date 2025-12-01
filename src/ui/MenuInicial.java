@@ -76,7 +76,7 @@ public class MenuInicial {
     private void cadastrarBibliotecario() {
         Bibliotecario bibliotecario = new Bibliotecario();
 
-        System.out.println("Informe dados para inclusão de um novo bibliotecário:");
+        System.out.println("Informe dados para inclusão de um novo bibliotecário.");
         bibliotecario.setRegistro(MenuUtils.lerLong("Número de registro: "));
         bibliotecario.setNome(MenuUtils.lerString("Nome: "));
         bibliotecario.setTelefone(MenuUtils.lerLong("Telefone: "));

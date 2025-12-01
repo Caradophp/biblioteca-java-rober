@@ -1,6 +1,7 @@
 package manipulators;
 
 import entidades.Aluno;
+import entidades.Livro;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,19 +44,27 @@ public class AlunoManipulator {
     }
 
     /** REMOVER ALUNO */
-    public void removerAluno(long matricula) {
+    public boolean removerAluno(long matricula) {
 
         List<Aluno> novaLista = new ArrayList<>();
-        limparArquivo(arquivoAlunos);
 
-        for (Aluno a : alunos) {
-            if (a.getMatricula() != matricula) {
-                novaLista.add(a);
-                escreverAlunoNoArquivo(a);
+        try {
+            limparArquivo(arquivoAlunos);
+
+            for (Aluno a : alunos) {
+                if (a.getMatricula() != matricula) {
+                    novaLista.add(a);
+                    escreverAlunoNoArquivo(a);
+                }
             }
-        }
 
-        alunos = novaLista;
+            alunos = novaLista;
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /** ATUALIZAR ALUNO */

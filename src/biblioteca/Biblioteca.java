@@ -135,8 +135,8 @@ public class Biblioteca {
      *
      * @param matricula A matrícula do aluno a ser removido.
      */
-    public void removerAluno(long matricula) {
-       alunoManipulator.removerAluno(matricula);
+    public boolean removerAluno(long matricula) {
+       return alunoManipulator.removerAluno(matricula);
     }
 
     /**
@@ -180,8 +180,8 @@ public class Biblioteca {
      *
      * @param registro O registro do bibliotecário a ser removido.
      */
-    public void removerFuncionario(int registro) {
-       bibliotecarioManipulator.removerFuncionario(registro);
+    public boolean removerFuncionario(int registro) {
+       return bibliotecarioManipulator.removerFuncionario(registro);
     }
 
     /**
