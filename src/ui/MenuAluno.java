@@ -44,6 +44,7 @@ public class MenuAluno {
             System.out.println("===============================\n");
             if (emprestimosAluno.isEmpty()) {
                 System.out.println("Você não tem nenhum livro emprestado");
+                return;
             } else {
                 System.out.println("0. Voltar");
 
