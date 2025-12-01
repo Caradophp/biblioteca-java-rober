@@ -51,10 +51,11 @@ public class EmprestimoManipulator {
             return false;
         }
 
-        int qtdTotal = livro.getQtdDisponivel();
-        livro.setQtdDisponivel(qtdTotal++);
+        int qtdDisponivel = livro.getQtdDisponivel() - 1;
+        livro.setQtdDisponivel(qtdDisponivel);
         emprestimos.add(emprestimo);
         escreverEmprestimoNoArquivo(emprestimo);
+        livroManipulator.atualizarLivro(livro);
 
         return true;
     }
@@ -87,17 +88,21 @@ public class EmprestimoManipulator {
 
         boolean devolvido = false;
 
+        Livro livro = null;
         List<Emprestimo> novaLista = new ArrayList<>();
         limparArquivo(arquivoEmprestimos);
 
         for (Emprestimo e : emprestimos) {
 
             if (e.getCodigoEmprestimo() == codigoEmprestimo) {
-                e.devolverLivro();
+                livro = e.devolverLivro();
                 devolvido = true;
             }
 
             novaLista.add(e);
+            if (livro != null) {
+                livroManipulator.atualizarLivro(livro);
+            }
             escreverEmprestimoNoArquivo(e);
         }
 

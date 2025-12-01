@@ -172,17 +172,18 @@ public class Emprestimo {
         this.dataDevolucao = this.dataDevolucao.plusDays(10);
     }
 
-    public void devolverLivro() {
+    public Livro devolverLivro() {
 
         if (this.devolvido) {
             System.out.println("Esse livro já foi devolvido");
-            return;
+            return null;
         }
 
         this.devolvido = true;
-        int qtdTotal = livro.getQtdDisponivel();
-        livro.setQtdDisponivel(qtdTotal++);
+        int qtdDisponivel = livro.getQtdDisponivel() + 1;
+        livro.setQtdDisponivel(qtdDisponivel);
         System.out.println("Livro devolvido com sucesso");
+        return livro;
     }
 
     /**
