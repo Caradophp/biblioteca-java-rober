@@ -228,7 +228,7 @@ public class Biblioteca {
      *
      * @return Uma lista de Emprestimos do aluno.
      */
-    public List<Emprestimo> buscarTodosEmprestimos(Aluno aluno) {
+    public List<Emprestimo> buscarEmprestimosPendentes(Aluno aluno) {
         List<Emprestimo> emprestimosAluno = new ArrayList<>();
         List<Emprestimo> todosEmprestimos = emprestimoManipulator.getEmprestimos();
 
@@ -236,7 +236,7 @@ public class Biblioteca {
         todosEmprestimos.sort(Comparator.comparing(Emprestimo::getDataDevolucaoPrevista));
 
         for (Emprestimo e : todosEmprestimos) {
-            if (e.getCodigoAluno() == aluno.getMatricula()) {
+            if (!e.isDevolvido() && e.getCodigoAluno() == aluno.getMatricula()) {
                 emprestimosAluno.add(e);
             }
         }

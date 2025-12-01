@@ -39,7 +39,7 @@ public class MenuAluno {
 
     private void menuLivrosEmprestados() {
         while (true) {
-            List<Emprestimo> emprestimosAluno = menuInicial.getBiblioteca().buscarTodosEmprestimos(alunoLogado);
+            List<Emprestimo> emprestimosAluno = menuInicial.getBiblioteca().buscarEmprestimosPendentes(alunoLogado);
             Emprestimo emprestimo = MenusGlobais.menuSelecaoEmprestimo(emprestimosAluno, "Selecione um livro (pelo número da lista) para renová-lo:", true);
 
             if (emprestimo == null) {

@@ -24,7 +24,7 @@ public class MenuBibliotecario {
             System.out.println("0. Sair");
             System.out.println("1. Consultar livros");
             System.out.println("2. Emprestar livro para aluno");
-            System.out.println("3. Ver empréstimos e devolver livro");
+            System.out.println("3. Ver empréstimos de aluno e devolver livro");
             System.out.println("4. Gestão de livros");
             System.out.println("5. Gestão de alunos");
 
@@ -40,7 +40,6 @@ public class MenuBibliotecario {
                     menuEmprestarLivro();
                     break;
                 case 3:
-                    // todo: fazer
                     menuVerEmprestimosAluno();
                     break;
                 case 4:
@@ -92,10 +91,10 @@ public class MenuBibliotecario {
         }
 
         while (true) {
-            List<Emprestimo> emprestimosAluno = menuInicial.getBiblioteca().buscarTodosEmprestimos(aluno);
+            List<Emprestimo> emprestimosAluno = menuInicial.getBiblioteca().buscarEmprestimosPendentes(aluno);
             Emprestimo emprestimo = MenusGlobais.menuSelecaoEmprestimo(emprestimosAluno, "Selecione um livro para devolvê-lo à biblioteca: ", true);
             if (emprestimo == null) {
-                // retorna ao menu anterior
+                // retorna ao menu inicial
                 return;
             }
 
@@ -103,8 +102,8 @@ public class MenuBibliotecario {
                     String.format("Confirma a devolução do livro '%s'?", emprestimo.getLivro().getNome()) +
                     (emprestimo.estaAtrasado() ? " Tenha certeza que a multa de atraso foi paga" : ""));
             if (!confirmado) {
-                // retorna ao menu anterior
-                return;
+                // retorna ao menu de seleção de empréstimos
+                continue;
             }
 
             boolean devolvido = menuInicial.getBiblioteca().devolverLivro(emprestimo.getCodigoEmprestimo());
