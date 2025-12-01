@@ -30,11 +30,15 @@ public class Emprestimo {
     /** Indica se o livro já foi devolvido. */
     private boolean devolvido;
 
+    private int qtdRenovacoes;
+
     private Livro livro;
 
     /** Formatador de data para exibição no formato dd/MM/yyyy. */
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final Random geradorId = new Random();
+
+    private final int QTD_MAXIMA_RENOVACOES = 3;
 
     /**
      * Construtor padrão.
@@ -138,10 +142,22 @@ public class Emprestimo {
     public void setLivro(Livro livro) {
         this.livro = livro;
     }
+
+    public int getQtdRenovacoes() {
+        return qtdRenovacoes;
+    }
+
+    public void setQtdRenovacoes(int qtdRenovacoes) {
+        this.qtdRenovacoes = qtdRenovacoes;
+    }
+
     /**
      * Verifica se a data atual já ultrapassou a data de devolução do empréstimo.
      * @return true se o empréstimo está atrasado.
      */
+
+
+
     public boolean estaAtrasado() {
         return dataDevolucaoPrevista.isBefore(LocalDate.now());
     }
@@ -162,9 +178,18 @@ public class Emprestimo {
     /**
      * Renova o empréstimo, estendendo a data de devolução por mais 10 dias.
      */
-    public void renovarEmprestimo() {
+    public Emprestimo renovarEmprestimo() {
         // todo: adicionar lógica de limites de renovação
+
+        if (LocalDate.now().isBefore(this.dataDevolucaoPrevista)) return null;
+
+        if (getQtdRenovacoes() >= 3) {
+            System.out.println("Números máximos de renovações atingido");
+            return null;
+        }
+        this.setQtdRenovacoes(getQtdRenovacoes()+1);
         this.dataDevolucaoPrevista = this.dataDevolucaoPrevista.plusDays(10);
+        return this;
     }
 
     public Livro devolverLivro() {

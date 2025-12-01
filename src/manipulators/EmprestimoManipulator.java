@@ -61,22 +61,43 @@ public class EmprestimoManipulator {
         return true;
     }
 
+    public void atualizarEmprestimo(Emprestimo emprestimo) {
+
+        Emprestimo em = emprestimos.stream()
+                .filter(e -> e.getCodigoEmprestimo() == emprestimo.getCodigoEmprestimo())
+                .findFirst()
+                .orElseThrow();
+
+        if (em != null) {
+            emprestimos.remove(em);
+            em = emprestimo;
+            emprestimos.add(em);
+        }
+
+        limparArquivo(arquivoEmprestimos);
+        emprestimos.forEach(this::escreverEmprestimoNoArquivo);
+
+
+    }
+
     /* ===========================
        RENOVAR EMPRÉSTIMO
        ========================== */
     public void renovarEmprestimo(long codigoEmprestimo) {
 
+        Emprestimo emprestimo = null;
         List<Emprestimo> novaLista = new ArrayList<>();
         limparArquivo(arquivoEmprestimos);
 
         for (Emprestimo e : emprestimos) {
 
             if (e.getCodigoEmprestimo() == codigoEmprestimo) {
-                e.renovarEmprestimo();
+               emprestimo = e.renovarEmprestimo();
             }
 
             novaLista.add(e);
-            escreverEmprestimoNoArquivo(e);
+            atualizarEmprestimo(e);
+
         }
 
         emprestimos = novaLista;
@@ -165,7 +186,9 @@ public class EmprestimoManipulator {
        MÉTODOS AUXILIARES
        ========================== */
 
-    /** Limpa o conteúdo do arquivo */
+    /**
+     * Limpa o conteúdo do arquivo
+     */
     private void limparArquivo(Path arquivo) {
         try (OutputStream os = new FileOutputStream(arquivo.toString())) {
             // Somente abrir já limpa
@@ -174,17 +197,20 @@ public class EmprestimoManipulator {
         }
     }
 
-    /** Escreve um empréstimo individual no arquivo */
+    /**
+     * Escreve um empréstimo individual no arquivo
+     */
     private void escreverEmprestimoNoArquivo(Emprestimo e) {
 
         String devolvido = e.isDevolvido() ? "sim" : "nao";
 
         String linha = e.getCodigoEmprestimo() + ";" +
-                       e.getCodigoLivro() + ";" +
-                       e.getCodigoAluno() + ";" +
-                       e.getDataEmprestimoFormatada() + ";" +
-                       e.getDataDevolucaoPrevistaFormatada() + ";" +
-                       devolvido;
+                e.getCodigoLivro() + ";" +
+                e.getCodigoAluno() + ";" +
+                e.getDataEmprestimoFormatada() + ";" +
+                e.getDataDevolucaoPrevistaFormatada() + ";" +
+                devolvido + ";" +
+                e.getQtdRenovacoes();
 
         try {
             Files.write(arquivoEmprestimos, linha.getBytes(), StandardOpenOption.APPEND);
