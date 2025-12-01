@@ -1,10 +1,10 @@
 package entidades;
 
+import utils.Utils;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.WeekFields;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 
@@ -13,13 +13,6 @@ import java.util.Random;
  * Contém a lógica para cálculo de multa e renovação.
  */
 public class Emprestimo {
-
-    /** Valor da multa por dia de atraso. */
-    public static final double MULTA_DIA = 4.0;
-    /** Número de dias que são aumentados da data de devolução prevista ao renovar o empréstimo */
-    public static final int AUMENTO_DIAS_RENOVACAO = 10;
-    /** Número de vezes máxima que um empréstimo pode ser renovado */
-    public static final int QTD_MAXIMA_RENOVACOES = 3;
 
     /** Código único do empréstimo. */
     private long codigoEmprestimo;
@@ -51,7 +44,7 @@ public class Emprestimo {
     public Emprestimo() {
     	this.codigoEmprestimo = geradorId.nextLong(10000);
         this.dataEmprestimo = LocalDate.now();
-        this.dataDevolucaoPrevista = this.dataEmprestimo.plusDays(AUMENTO_DIAS_RENOVACAO);
+        this.dataDevolucaoPrevista = this.dataEmprestimo.plusDays((long) Utils.AUMENTO_DIAS_RENOVACAO.getVal());
     }
 
     /**
@@ -64,7 +57,7 @@ public class Emprestimo {
         this.codigoAluno = codigoAluno;
         this.codigoLivro = codigoLivro;
         this.dataEmprestimo = LocalDate.now();
-        this.dataDevolucaoPrevista = this.dataEmprestimo.plusDays(AUMENTO_DIAS_RENOVACAO);
+        this.dataDevolucaoPrevista = this.dataEmprestimo.plusDays((long) Utils.AUMENTO_DIAS_RENOVACAO.getVal());
     }
 
     public long getCodigoEmprestimo() {
@@ -173,7 +166,7 @@ public class Emprestimo {
             return 0.0;
         }
 
-        return p.getDays() * MULTA_DIA;
+        return p.getDays() * Utils.MULTA_DIA.getVal();
     }
 
     /**
@@ -185,7 +178,7 @@ public class Emprestimo {
             return false;
         }
 
-        if (qtdRenovacoes >= 3) {
+        if (qtdRenovacoes >= Utils.QTD_MAXIMA_RENOVACOES.getVal()) {
             System.out.println("Número máximo de renovações atingido. Devolva o livro na biblioteca.");
             return false;
         }
@@ -196,7 +189,7 @@ public class Emprestimo {
         }
 
         this.setQtdRenovacoes(qtdRenovacoes+1);
-        this.dataDevolucaoPrevista = this.dataDevolucaoPrevista.plusDays(AUMENTO_DIAS_RENOVACAO);
+        this.dataDevolucaoPrevista = this.dataDevolucaoPrevista.plusDays((long) Utils.AUMENTO_DIAS_RENOVACAO.getVal());
         return true;
     }
 
