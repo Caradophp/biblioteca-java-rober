@@ -108,7 +108,7 @@ public class MenusGlobais {
             System.out.printf("%d. %s\n", i+1, l.getNome());
             System.out.printf("  Emprestado em: %s\n", e.getDataEmprestimoFormatada());
             System.out.printf("  Deve devolver até: %s\n", e.getDataDevolucaoPrevistaFormatada());
-            System.out.printf("  Renovações: %d de %d\n", e.getQtdRenovacoes(), Utils.QTD_MAXIMA_RENOVACOES.getVal());
+            System.out.printf("  Renovações: %d de %d\n", e.getQtdRenovacoes(), (int) Utils.QTD_MAXIMA_RENOVACOES.getVal());
             if (estaAtrasado) {
                 System.out.printf("  Multa a ser paga: %.2f\n", e.calcularMulta());
             }
