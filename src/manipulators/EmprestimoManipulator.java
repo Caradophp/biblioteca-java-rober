@@ -92,7 +92,7 @@ public class EmprestimoManipulator {
         for (Emprestimo e : emprestimos) {
 
             if (e.getCodigoEmprestimo() == codigoEmprestimo) {
-               emprestimo = e.renovarEmprestimo();
+               e.renovarEmprestimo();
             }
 
             novaLista.add(e);
