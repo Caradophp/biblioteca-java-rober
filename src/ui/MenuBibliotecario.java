@@ -195,13 +195,21 @@ public class MenuBibliotecario {
     }
 
     public void menuRemoverLivro() {
-        Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(), "Selecione um livro (pelo número da lista) para editar os dados dele: ");
+        Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(), "Selecione um livro (pelo número da lista) para removê-lo da biblioteca: ");
         if (livro == null) { return; }
 
-        if (menuInicial.getBiblioteca().removerLivro(livro.getIsbn())) {
-            System.out.println("Livro excluído com sucesso.");
+        boolean confirmado = MenuUtils.aguardarConfirmacao("=================================\n" +
+                String.format("Confirma a exclusão do livro '%s'? (S/n)\n", livro.getNome()) +
+                "> ");
+
+        if (confirmado) {
+            if (menuInicial.getBiblioteca().removerLivro(livro.getIsbn())) {
+                System.out.println("Livro excluído com sucesso.");
+            } else {
+                System.out.println("Algum erro impediu a exclusão do livro. Tente novamente.");
+            }
         } else {
-            System.out.println("Algum erro impediu a exclusão do livro. Tente novamente.");
+            System.out.println("Exclusão do livro cancelada.");
         }
     }
 
@@ -241,7 +249,7 @@ public class MenuBibliotecario {
             return;
         }
         aluno.setMatricula(matricula);
-        aluno.setNome(MenuUtils.lerString("Nome: "));
+        aluno.setNome(MenuUtils.lerString("Nome completo: "));
         aluno.setCurso(MenuUtils.lerString("Curso: "));
         aluno.setTelefone(MenuUtils.lerLong("Telefone: "));
         aluno.setEmail(MenuUtils.lerString("Email: "));
@@ -263,7 +271,7 @@ public class MenuBibliotecario {
         System.out.println("\nInforme dados para alterar as informações acima (Enter para não alterar): ");
         System.out.println("(Não é possível editar a matrícula)");
 
-        nome = MenuUtils.lerString("Nome: ");
+        nome = MenuUtils.lerString("Nome completo: ");
         if (!nome.isEmpty()) {
             aluno.setNome(nome);
         }
@@ -303,10 +311,18 @@ public class MenuBibliotecario {
         Aluno aluno = MenuUtils.lerAluno(menuInicial.getBiblioteca());
         if (aluno == null) { return; }
 
-        if (menuInicial.getBiblioteca().removerAluno(aluno.getMatricula())) {
-            System.out.println("Aluno excluído com sucesso.");
+        boolean confirmado = MenuUtils.aguardarConfirmacao("=================================\n" +
+                String.format("Confirma a exclusão do aluno '%s'? (S/n)\n", aluno.getNome()) +
+                "> ");
+
+        if (confirmado) {
+            if (menuInicial.getBiblioteca().removerAluno(aluno.getMatricula())) {
+                System.out.println("Aluno excluído com sucesso.");
+            } else {
+                System.out.println("Algum erro impediu a exclusão do aluno. Tente novamente.");
+            }
         } else {
-            System.out.println("Algum erro impediu a exclusão do aluno. Tente novamente.");
+            System.out.println("Exclusão do aluno cancelada.");
         }
     }
 }

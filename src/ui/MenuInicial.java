@@ -61,7 +61,7 @@ public class MenuInicial {
 
         Pessoa pessoaLogada = this.biblioteca.fazerLogin(email, senha);
         if (pessoaLogada == null) {
-            System.out.println("Login inválido. Favor tentar novamente.\n");
+            System.out.println("\nLogin inválido. Favor tentar novamente.");
             // retorna ao menu inicial
             return;
         } else if (pessoaLogada instanceof Aluno) {
@@ -78,7 +78,7 @@ public class MenuInicial {
 
         System.out.println("Informe dados para inclusão de um novo bibliotecário.");
         bibliotecario.setRegistro(MenuUtils.lerLong("Número de registro: "));
-        bibliotecario.setNome(MenuUtils.lerString("Nome: "));
+        bibliotecario.setNome(MenuUtils.lerString("Nome completo: "));
         bibliotecario.setTelefone(MenuUtils.lerLong("Telefone: "));
         bibliotecario.setEmail(MenuUtils.lerString("Email: "));
         bibliotecario.setSenha(MenuUtils.lerString("Senha: "));
