@@ -3,6 +3,8 @@ package entidades;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 
@@ -181,7 +183,13 @@ public class Emprestimo {
     public Emprestimo renovarEmprestimo() {
         // todo: adicionar lógica de limites de renovação
 
-        if (LocalDate.now().isBefore(this.dataDevolucaoPrevista)) return null;
+        WeekFields wf = WeekFields.of(Locale.getDefault());
+        LocalDate hoje = LocalDate.now();
+
+        if (getDataDevolucaoPrevista().get(wf.weekOfWeekBasedYear()) == hoje.get(wf.weekOfWeekBasedYear())) {
+            System.out.println("Faz pouco tempo que você renovou esse emprestimo, portanto não pode renová-lo novamente");
+            return null;
+        }
 
         if (getQtdRenovacoes() >= 3) {
             System.out.println("Números máximos de renovações atingido");
