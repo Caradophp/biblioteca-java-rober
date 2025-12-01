@@ -210,8 +210,8 @@ public class Biblioteca {
         return emprestimoManipulator.fazerEmprestimo(emprestimo);
     }
 
-    public void renovarEmprestimo(long codigoEmprestimo) {
-        emprestimoManipulator.renovarEmprestimo(codigoEmprestimo);
+    public boolean renovarEmprestimo(long codigoEmprestimo) {
+        return emprestimoManipulator.renovarEmprestimo(codigoEmprestimo);
     }
 
     /**

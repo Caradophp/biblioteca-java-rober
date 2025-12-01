@@ -35,7 +35,7 @@ public class MenuInicial {
                 int opcao = MenuUtils.lerOpcaoMenu(1, true);
                 switch (opcao) {
                     case 0:
-                        // fecha o Scanner e então garante que o programa encerre
+                        // fecha o Scanner e garante que o programa encerre
                         reader.close();
                         System.exit(0);
                     case 1:

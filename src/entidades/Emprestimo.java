@@ -181,21 +181,19 @@ public class Emprestimo {
      * Renova o empréstimo, estendendo a data de devolução por mais 10 dias.
      */
     public boolean renovarEmprestimo() {
-        // todo: adicionar lógica de limites de renovação
-
         WeekFields wf = WeekFields.of(Locale.getDefault());
         LocalDate hoje = LocalDate.now();
 
-        if (getDataDevolucaoPrevista().get(wf.weekOfWeekBasedYear()) == hoje.get(wf.weekOfWeekBasedYear())) {
-            System.out.println("Faz pouco tempo que você renovou esse emprestimo, portanto não pode renová-lo novamente");
+        if (dataDevolucaoPrevista.get(wf.weekOfWeekBasedYear()) == hoje.get(wf.weekOfWeekBasedYear())) {
+            System.out.println("Faz pouco tempo que você renovou esse empréstimo, portanto não pode renová-lo novamente.");
             return false;
         }
 
-        if (getQtdRenovacoes() >= 3) {
-            System.out.println("Números máximos de renovações atingido");
+        if (qtdRenovacoes >= 3) {
+            System.out.println("Números máximos de renovações atingido.");
             return false;
         }
-        this.setQtdRenovacoes(getQtdRenovacoes()+1);
+        this.setQtdRenovacoes(qtdRenovacoes+1);
         this.dataDevolucaoPrevista = this.dataDevolucaoPrevista.plusDays(10);
         return true;
     }

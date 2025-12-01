@@ -50,12 +50,15 @@ public class MenuAluno {
             boolean confirmado = MenuUtils.aguardarConfirmacao("===============================\n" +
                     String.format("Confirma a renovação do livro '%s'? (S/n)\n", emprestimo.getLivro().getNome()) +
                     "> ");
-            if (confirmado) {
-                menuInicial.getBiblioteca().renovarEmprestimo(emprestimo.getCodigoEmprestimo());
-                // todo: testar se a data da variável emprestimo está sendo alterada
-                System.out.printf("Livro renovado para a data %s.\n", emprestimo.getDataDevolucaoPrevistaFormatada());
-            } else {
+            if (!confirmado) {
                 System.out.println("Renovação do livro cancelada.");
+                // volta ao menu anterior
+                return;
+            }
+
+            boolean renovado = menuInicial.getBiblioteca().renovarEmprestimo(emprestimo.getCodigoEmprestimo());
+            if (renovado) {
+                System.out.printf("Livro renovado para a data %s.\n", emprestimo.getDataDevolucaoPrevistaFormatada());
             }
         }
     }

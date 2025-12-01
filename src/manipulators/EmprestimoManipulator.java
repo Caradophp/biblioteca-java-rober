@@ -83,16 +83,17 @@ public class EmprestimoManipulator {
     /* ===========================
        RENOVAR EMPRÉSTIMO
        ========================== */
-    public void renovarEmprestimo(long codigoEmprestimo) {
+    public boolean renovarEmprestimo(long codigoEmprestimo) {
 
         Emprestimo emprestimo = null;
         List<Emprestimo> novaLista = new ArrayList<>();
         limparArquivo(arquivoEmprestimos);
+        boolean renovou = false;
 
         for (Emprestimo e : emprestimos) {
 
             if (e.getCodigoEmprestimo() == codigoEmprestimo) {
-               e.renovarEmprestimo();
+               renovou = e.renovarEmprestimo();
             }
 
             novaLista.add(e);
@@ -101,6 +102,7 @@ public class EmprestimoManipulator {
         }
 
         emprestimos = novaLista;
+        return renovou;
     }
 
     /* ===========================
