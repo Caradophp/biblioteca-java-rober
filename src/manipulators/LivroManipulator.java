@@ -137,7 +137,7 @@ public class LivroManipulator {
                 l.setCategoria(livroAtualizado.getCategoria());
                 l.setAutor(livroAtualizado.getAutor());
                 l.setEditora(livroAtualizado.getEditora());
-                l.setQtdDisponivel(livroAtualizado.getQtdTotal());
+                l.setQtdDisponivel(livroAtualizado.getQtdDisponivel());
                 l.setQtdTotal(livroAtualizado.getQtdTotal());
                 l.setAnoPublicacao(livroAtualizado.getAnoPublicacao());
             }
