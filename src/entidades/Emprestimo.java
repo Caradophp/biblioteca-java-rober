@@ -190,9 +190,7 @@ public class Emprestimo {
             return false;
         }
 
-        WeekFields wf = WeekFields.of(Locale.getDefault());
-        LocalDate hoje = LocalDate.now();
-        if (dataDevolucaoPrevista.get(wf.weekOfWeekBasedYear()) != hoje.get(wf.weekOfWeekBasedYear())) {
+        if (Period.between(LocalDate.now(), this.getDataDevolucaoPrevista()).getDays() > 5) {
             System.out.println("Faz pouco tempo que você renovou esse empréstimo, portanto não pode renová-lo novamente.");
             return false;
         }
