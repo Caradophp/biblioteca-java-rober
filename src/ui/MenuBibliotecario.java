@@ -8,15 +8,37 @@ import entidades.Livro;
 import java.time.Year;
 import java.util.List;
 
+/**
+ * Classe responsável por exibir e gerenciar o menu de operações disponíveis
+ * para o bibliotecário. Permite realizar empréstimos, devoluções, além da
+ * gestão de livros e alunos cadastrados na biblioteca.
+ */
 public class MenuBibliotecario {
+
+    /** Objeto que representa o bibliotecário atualmente logado. */
     private final Bibliotecario bibliotecarioLogado;
+
+    /** Referência ao menu inicial, utilizada para acessar a biblioteca. */
     private final MenuInicial menuInicial;
 
+    /**
+     * Construtor que inicializa o menu do bibliotecário.
+     *
+     * @param bibliotecarioLogado bibliotecário autenticado
+     * @param menuInicial         referência ao menu inicial do sistema
+     */
     public MenuBibliotecario(Bibliotecario bibliotecarioLogado, MenuInicial menuInicial) {
         this.bibliotecarioLogado = bibliotecarioLogado;
         this.menuInicial = menuInicial;
     }
 
+    /**
+     * Inicia o menu principal do bibliotecário, exibindo opções como
+     * consultar livros, emprestar e devolver livros, e gerenciar o cadastro
+     * de livros e alunos.
+     *
+     * O menu permanece em loop até que o bibliotecário escolha sair.
+     */
     public void iniciar() {
         while (true) {
             System.out.println("===================================");
@@ -31,7 +53,6 @@ public class MenuBibliotecario {
             int escolha = MenuUtils.lerOpcaoMenu(5, true);
             switch (escolha) {
                 case 0:
-                    // retorna ao menu inicial
                     return;
                 case 1:
                     MenusGlobais.menuConsultarLivro(menuInicial.getBiblioteca());
@@ -52,27 +73,30 @@ public class MenuBibliotecario {
         }
     }
 
+    /**
+     * Exibe opções para selecionar um aluno e emprestar um livro a ele.
+     * Caso o aluno ou o livro não sejam encontrados, retorna ao menu anterior.
+     */
     public void menuEmprestarLivro() {
-        // lê matrícula do aluno para qual vai emprestar o livro
         Aluno aluno = MenuUtils.lerAluno(menuInicial.getBiblioteca());
         if (aluno == null) {
-            // retorna ao menu anterior
             return;
         }
 
         while (true) {
             System.out.printf("\nEmprestar livro para o aluno '%s' de matrícula %d:\n", aluno.getNomeAbreviado(), aluno.getMatricula());
-            Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(), "Selecione um livro (pelo número da lista) para emprestá-lo:");
+            Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(),
+                    "Selecione um livro (pelo número da lista) para emprestá-lo:");
             if (livro == null) {
-                // retorna ao menu anterior
                 return;
             }
 
             boolean confirmado = MenuUtils.aguardarConfirmacao("===============================\n" +
-                    String.format("Confirma o empréstimo do livro '%s' para o aluno '%s'?", livro.getNome(), aluno.getNomeAbreviado()));
+                    String.format("Confirma o empréstimo do livro '%s' para o aluno '%s'?",
+                            livro.getNome(), aluno.getNomeAbreviado()));
+
             if (!confirmado) {
                 System.out.println("Empréstimo do livro cancelado.");
-                // volta ao menu anterior
                 return;
             }
 
@@ -83,26 +107,33 @@ public class MenuBibliotecario {
         }
     }
 
+    /**
+     * Exibe os empréstimos pendentes de um aluno selecionado e permite
+     * realizar a devolução de um livro.
+     */
     public void menuVerEmprestimosAluno() {
         Aluno aluno = MenuUtils.lerAluno(menuInicial.getBiblioteca());
         if (aluno == null) {
-            // retorna ao menu anterior
             return;
         }
 
         while (true) {
             List<Emprestimo> emprestimosAluno = menuInicial.getBiblioteca().buscarEmprestimosPendentes(aluno);
-            Emprestimo emprestimo = MenusGlobais.menuSelecaoEmprestimo(emprestimosAluno, "Selecione um livro para devolvê-lo à biblioteca: ", true);
+            Emprestimo emprestimo = MenusGlobais.menuSelecaoEmprestimo(
+                    emprestimosAluno,
+                    "Selecione um livro para devolvê-lo à biblioteca: ",
+                    true
+            );
+
             if (emprestimo == null) {
-                // retorna ao menu inicial
                 return;
             }
 
             boolean confirmado = MenuUtils.aguardarConfirmacao("===================================\n" +
                     String.format("Confirma a devolução do livro '%s'?", emprestimo.getLivro().getNome()) +
                     (emprestimo.estaAtrasado() ? " Tenha certeza que a multa de atraso foi paga" : ""));
+
             if (!confirmado) {
-                // retorna ao menu de seleção de empréstimos
                 continue;
             }
 
@@ -113,6 +144,10 @@ public class MenuBibliotecario {
         }
     }
 
+    /**
+     * Exibe o menu de gestão de livros, permitindo adicionar, editar
+     * ou remover livros da biblioteca.
+     */
     public void menuGestaoLivros() {
         while (true) {
             System.out.println("===================================");
@@ -124,7 +159,6 @@ public class MenuBibliotecario {
             int escolha = MenuUtils.lerOpcaoMenu(3, true);
             switch (escolha) {
                 case 0:
-                    // retorna ao menu inicial
                     return;
                 case 1:
                     menuCadastrarLivro();
@@ -139,15 +173,19 @@ public class MenuBibliotecario {
         }
     }
 
+    /**
+     * Coleta dados via entrada do usuário para criar um novo livro
+     * e enviá-lo para cadastro na biblioteca.
+     */
     public void menuCadastrarLivro() {
         Livro livro = new Livro();
 
         System.out.println("Informe dados para inclusão de um novo livro:");
         long isbn = MenuUtils.lerNovoISBN(menuInicial.getBiblioteca());
         if (isbn == 0) {
-            // retorna ao menu anterior
             return;
         }
+
         livro.setIsbn(isbn);
         livro.setNome(MenuUtils.lerString("Nome do livro: "));
         livro.setEditora(MenuUtils.lerString("Editora: "));
@@ -164,8 +202,13 @@ public class MenuBibliotecario {
         }
     }
 
+    /**
+     * Permite selecionar um livro e editar seus dados.
+     * Campos vazios não são alterados.
+     */
     public void menuEditarLivro() {
-        Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(), "Selecione um livro (pelo número da lista) para editar os dados dele: ");
+        Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(),
+                "Selecione um livro (pelo número da lista) para editar os dados dele: ");
         if (livro == null) { return; }
 
         String nome, editora, autor, categoria, anoPublicacao, qtdTotal;
@@ -204,7 +247,6 @@ public class MenuBibliotecario {
 
         qtdTotal = MenuUtils.lerString("Quantidade total de cópias: ");
         if (!qtdTotal.isEmpty()) {
-            // a quantidade total mínima precisa ser o número de cópias emprestadas (qtdTotal - qtdDisponivel)
             try {
                 int intQtdTotal = Integer.parseInt(qtdTotal);
                 int qtdEmprestada = livro.getQtdTotal() - livro.getQtdDisponivel();
@@ -225,8 +267,13 @@ public class MenuBibliotecario {
         }
     }
 
+    /**
+     * Permite selecionar um livro e removê-lo da biblioteca,
+     * com confirmação do bibliotecário.
+     */
     public void menuRemoverLivro() {
-        Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(), "Selecione um livro (pelo número da lista) para removê-lo da biblioteca: ");
+        Livro livro = MenusGlobais.menuBuscarPorLivro(menuInicial.getBiblioteca(),
+                "Selecione um livro (pelo número da lista) para removê-lo da biblioteca: ");
         if (livro == null) { return; }
 
         boolean confirmado = MenuUtils.aguardarConfirmacao("=================================\n" +
@@ -243,6 +290,10 @@ public class MenuBibliotecario {
         }
     }
 
+    /**
+     * Exibe o menu de gestão de alunos, permitindo cadastrar, editar
+     * ou remover alunos da biblioteca.
+     */
     public void menuGestaoAlunos() {
         while (true) {
             System.out.println("===================================");
@@ -254,7 +305,6 @@ public class MenuBibliotecario {
             int escolha = MenuUtils.lerOpcaoMenu(3, true);
             switch (escolha) {
                 case 0:
-                    // retorna ao menu inicial
                     return;
                 case 1:
                     menuCadastrarAluno();
@@ -269,15 +319,18 @@ public class MenuBibliotecario {
         }
     }
 
+    /**
+     * Coleta dados via entrada do usuário para cadastrar um novo aluno.
+     */
     public void menuCadastrarAluno() {
         Aluno aluno = new Aluno();
 
         System.out.println("Informe dados para inclusão de um novo aluno:");
         long matricula = MenuUtils.lerNovaMatricula(menuInicial.getBiblioteca());
         if (matricula == 0) {
-            // retorna ao menu anterior
             return;
         }
+
         aluno.setMatricula(matricula);
         aluno.setNome(MenuUtils.lerString("Nome completo: "));
         aluno.setCurso(MenuUtils.lerString("Curso: "));
@@ -292,6 +345,10 @@ public class MenuBibliotecario {
         }
     }
 
+    /**
+     * Permite editar os dados de um aluno selecionado.
+     * Campos vazios não são alterados.
+     */
     public void menuEditarAluno() {
         Aluno aluno = MenuUtils.lerAluno(menuInicial.getBiblioteca());
         if (aluno == null) { return; }
@@ -337,6 +394,9 @@ public class MenuBibliotecario {
         }
     }
 
+    /**
+     * Permite remover um aluno do sistema, mediante confirmação.
+     */
     public void menuRemoverAluno() {
         Aluno aluno = MenuUtils.lerAluno(menuInicial.getBiblioteca());
         if (aluno == null) { return; }

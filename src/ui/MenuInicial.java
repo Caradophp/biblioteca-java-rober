@@ -8,19 +8,42 @@ import entidades.Pessoa;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Classe responsável por exibir o menu inicial do sistema de biblioteca.
+ * Permite login de alunos e bibliotecários e controla o fluxo inicial
+ * do programa, incluindo a criação do primeiro bibliotecário caso não exista.
+ */
 public class MenuInicial {
-    // scanner usado em todas as classes
+
+    /** Scanner utilizado globalmente pelo sistema para leitura de entrada do usuário. */
     public static final Scanner reader = new Scanner(System.in);
+
+    /** Instância da biblioteca utilizada para operações de cadastro, busca e login. */
     private final Biblioteca biblioteca;
 
+    /**
+     * Construtor para inicializar o menu inicial com a biblioteca carregada.
+     *
+     * @param biblioteca instância da biblioteca do sistema
+     */
     public MenuInicial(Biblioteca biblioteca) {
         this.biblioteca = biblioteca;
     }
 
+    /**
+     * Retorna a instância da biblioteca associada ao menu.
+     *
+     * @return biblioteca do sistema
+     */
     public Biblioteca getBiblioteca() {
         return this.biblioteca;
     }
 
+    /**
+     * Inicia o menu inicial, exibindo as opções principais.
+     * Caso não haja bibliotecários cadastrados, força o cadastro do primeiro.
+     * Caso existam, permite login e navegação.
+     */
     public void iniciar() {
         while (true) {
             System.out.println("============================");
@@ -35,14 +58,14 @@ public class MenuInicial {
                 int opcao = MenuUtils.lerOpcaoMenu(1, true);
                 switch (opcao) {
                     case 0:
-                        // fecha o Scanner e garante que o programa encerre
+                        // fecha o Scanner e encerra o programa corretamente
                         reader.close();
                         System.exit(0);
                     case 1:
                         this.menuLogin();
                 }
             } else {
-                // como não existem bibliotecários cadastrados, o usuário recebe o prompt para criar o primeiro
+                // fluxo para cadastro de bibliotecário quando não há nenhum registrado
                 System.out.println("Nenhum bibliotecário cadastrado no momento.");
                 this.cadastrarBibliotecario();
                 this.iniciar();
@@ -50,6 +73,11 @@ public class MenuInicial {
         }
     }
 
+    /**
+     * Exibe o menu de login, solicitando email e senha.
+     * Permite o acesso de alunos e bibliotecários,
+     * encaminhando-os aos respectivos menus.
+     */
     private void menuLogin() {
         System.out.println("\n==========================");
         System.out.println("          LOGIN");
@@ -60,6 +88,7 @@ public class MenuInicial {
         String senha = reader.nextLine();
 
         Pessoa pessoaLogada = this.biblioteca.fazerLogin(email, senha);
+
         if (pessoaLogada == null) {
             System.out.println("\nLogin inválido. Favor tentar novamente.");
             // retorna ao menu inicial
@@ -73,6 +102,10 @@ public class MenuInicial {
         }
     }
 
+    /**
+     * Realiza o cadastro do primeiro bibliotecário.
+     * Esse método é chamado automaticamente caso o sistema não possua nenhum bibliotecário cadastrado.
+     */
     private void cadastrarBibliotecario() {
         Bibliotecario bibliotecario = new Bibliotecario();
 

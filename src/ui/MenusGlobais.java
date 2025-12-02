@@ -7,18 +7,38 @@ import utils.Utils;
 
 import java.util.List;
 
+/**
+ * Classe que contém menus reutilizáveis e globais do sistema,
+ * como consulta de livros e seleção de empréstimos.
+ */
 public class MenusGlobais {
+
+    /**
+     * Exibe as informações de um livro selecionado pelo usuário.
+     * O método apresenta um menu interno para buscar o livro,
+     * imprime seus detalhes e aguarda o usuário pressionar Enter.
+     *
+     * @param biblioteca instância da biblioteca usada para realizar buscas
+     */
     public static void menuConsultarLivro(Biblioteca biblioteca) {
         Livro l = menuBuscarPorLivro(biblioteca, "Selecione um livro (pelo número da lista) para ver mais informaçõe sobre ele: ");
 
         if (l != null) {
             System.out.println(l);
-            // apenas espera que o usuário digite qualquer coisa para voltar ao menu
             System.out.println("\n(Enter para continuar)");
             MenuUtils.lerString("> ");
         }
     }
 
+    /**
+     * Exibe um menu permitindo ao usuário buscar livros por nome,
+     * categoria ou ISBN. Após a busca, exibe outro menu para que
+     * o usuário selecione um livro da lista retornada.
+     *
+     * @param biblioteca   instância da biblioteca usada para realizar buscas
+     * @param textoSelecao texto exibido na tela para solicitar a seleção do livro
+     * @return o livro selecionado pelo usuário ou {@code null} caso retorne ao menu anterior
+     */
     public static Livro menuBuscarPorLivro(Biblioteca biblioteca, String textoSelecao) {
         Livro livro = null;
         while (true) {
@@ -55,6 +75,15 @@ public class MenusGlobais {
         }
     }
 
+    /**
+     * Exibe uma lista de livros para seleção, numerando cada item.
+     * Permite retornar ao menu anterior caso {@code temOpcaoVoltar} seja verdadeiro.
+     *
+     * @param livros        lista de livros a serem exibidos para escolha
+     * @param textoSelecao  texto exibido antes da seleção final
+     * @param temOpcaoVoltar se {@code true}, inclui a opção "0 - Voltar"
+     * @return o livro selecionado ou {@code null} se o usuário escolher voltar
+     */
     public static Livro menuSelecaoLivro(List<Livro> livros, String textoSelecao, boolean temOpcaoVoltar) {
         System.out.println("=====================================");
         if (livros.isEmpty()) {
@@ -81,10 +110,20 @@ public class MenusGlobais {
         if (!textoSelecao.isEmpty()) {
             System.out.println("\n" + textoSelecao);
         }
+
         int escolha = MenuUtils.lerOpcaoMenu(livros.size(), temOpcaoVoltar);
         return escolha == 0 ? null : livros.get(escolha-1);
     }
 
+    /**
+     * Exibe uma lista de empréstimos para seleção, mostrando detalhes como
+     * datas, renovações e possíveis atrasos. Permite voltar ao menu anterior.
+     *
+     * @param emprestimos    lista de empréstimos a serem exibidos
+     * @param textoSelecao   texto apresentado antes da seleção
+     * @param temOpcaoVoltar indica se a opção de voltar deve ser exibida
+     * @return o empréstimo selecionado ou {@code null} caso o usuário volte
+     */
     public static Emprestimo menuSelecaoEmprestimo(List<Emprestimo> emprestimos, String textoSelecao, boolean temOpcaoVoltar) {
         System.out.println("=====================================");
         if (emprestimos.isEmpty()) {
@@ -117,6 +156,7 @@ public class MenusGlobais {
         if (!textoSelecao.isEmpty()) {
             System.out.println("\n" + textoSelecao);
         }
+
         int escolha = MenuUtils.lerOpcaoMenu(emprestimos.size(), temOpcaoVoltar);
         return escolha == 0 ? null : emprestimos.get(escolha-1);
     }
