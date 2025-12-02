@@ -49,8 +49,9 @@ public class MenuBibliotecario {
             System.out.println("3. Ver empréstimos de aluno e devolver livro");
             System.out.println("4. Gestão de livros");
             System.out.println("5. Gestão de alunos");
+            System.out.println("6. Gestão de bibliotecarios");
 
-            int escolha = MenuUtils.lerOpcaoMenu(5, true);
+            int escolha = MenuUtils.lerOpcaoMenu(6, true);
             switch (escolha) {
                 case 0:
                     return;
@@ -69,6 +70,10 @@ public class MenuBibliotecario {
                 case 5:
                     menuGestaoAlunos();
                     break;
+                case 6:
+                    menuGestaoBibliotecarios();
+                    break;
+
             }
         }
     }
@@ -412,6 +417,121 @@ public class MenuBibliotecario {
             }
         } else {
             System.out.println("Exclusão do aluno cancelada.");
+        }
+    }
+
+    public void menuGestaoBibliotecarios() {
+        while (true) {
+            System.out.println("===================================");
+            System.out.println("0. Voltar");
+            System.out.println("1. Adicionar bibliotecario");
+            System.out.println("2. Editar bibliotecario");
+            System.out.println("3. Remover bibliotecario");
+
+            int escolha = MenuUtils.lerOpcaoMenu(3, true);
+            switch (escolha) {
+                case 0:
+                    return;
+                case 1:
+                    menuCadastrarBibliotecario();
+                    break;
+                case 2:
+                    menuEditarBibliotecario();
+                    break;
+                case 3:
+                    menuRemoverBibliotecario();
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Coleta dados via entrada do usuário para cadastrar um novo aluno.
+     */
+    public void menuCadastrarBibliotecario() {
+        Bibliotecario bibliotecario = new Bibliotecario();
+
+        System.out.println("Informe dados para inclusão de um novo bibliotecario:");
+        long registro = MenuUtils.lerNovoRegistro(menuInicial.getBiblioteca());
+        if (registro == 0) {
+            return;
+        }
+
+        bibliotecario.setRegistro(registro);
+        bibliotecario.setNome(MenuUtils.lerString("Nome completo: "));
+        bibliotecario.setTelefone(MenuUtils.lerLong("Telefone: "));
+        bibliotecario.setEmail(MenuUtils.lerString("Email: "));
+        bibliotecario.setSenha(MenuUtils.lerString("Senha: "));
+
+        if (menuInicial.getBiblioteca().inserirBibliotecario(bibliotecario)) {
+            System.out.println("Bibliotecario incluído com sucesso.");
+        } else {
+            System.out.println("Algum erro ocorreu que impediu a inclusão do Bibliotecario. Tente novamente.");
+        }
+    }
+
+    /**
+     * Permite editar os dados de um aluno selecionado.
+     * Campos vazios não são alterados.
+     */
+    public void menuEditarBibliotecario() {
+        Bibliotecario bibliotecario = MenuUtils.lerBibliotecario(menuInicial.getBiblioteca());
+        if (bibliotecario == null) { return; }
+
+        String nome, curso, email, senha, telefone;
+        System.out.println(bibliotecario);
+        System.out.println("\nInforme dados para alterar as informações acima (Enter para não alterar): ");
+        System.out.println("(Não é possível editar o resgistro)");
+
+        nome = MenuUtils.lerString("Nome completo: ");
+        if (!nome.isEmpty()) {
+            bibliotecario.setNome(nome);
+        }
+
+        telefone = MenuUtils.lerString("Telefone: ");
+        if (!telefone.isEmpty()) {
+            try {
+                bibliotecario.setTelefone(Long.parseLong(telefone));
+            } catch (NumberFormatException e) {
+                System.out.println("Valor inválido. Telefone não alterado.");
+            }
+        }
+
+        email = MenuUtils.lerString("Email: ");
+        if (!email.isEmpty()) {
+            bibliotecario.setEmail(email);
+        }
+
+        senha = MenuUtils.lerString("Nova senha: ");
+        if (!senha.isEmpty()) {
+            bibliotecario.setSenha(senha);
+        }
+
+        if (menuInicial.getBiblioteca().atualizarBibliotecario(bibliotecario)) {
+            System.out.println("Os dados do bibliotecario foram atualizados com sucesso.");
+        } else {
+            System.out.println("Algum erro impediu a atualização dos dados do bibliotecario. Tente novamente.");
+        }
+    }
+
+    /**
+     * Permite remover um aluno do sistema, mediante confirmação.
+     */
+    public void menuRemoverBibliotecario() {
+        Bibliotecario bibliotecario = MenuUtils.lerBibliotecario(menuInicial.getBiblioteca());
+        if (bibliotecario == null) { return; }
+
+        boolean confirmado = MenuUtils.aguardarConfirmacao("=================================\n" +
+                String.format("Confirma a exclusão do bibliotecario '%s'?", bibliotecario.getNome()));
+
+        if (confirmado) {
+            if (menuInicial.getBiblioteca().removerFuncionario((int) bibliotecario.getRegistro())) {
+                System.out.println("Bibliotecario excluído com sucesso.");
+            } else {
+                System.out.println("Algum erro impediu a exclusão do Bibliotecario. Tente novamente.");
+            }
+        } else {
+            System.out.println("Exclusão do Bibliotecario cancelada.");
         }
     }
 }

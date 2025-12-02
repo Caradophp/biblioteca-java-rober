@@ -193,6 +193,16 @@ public class Biblioteca {
         return bibliotecarioManipulator.getBibliotecarios();
     }
 
+    public Bibliotecario buscarBibliotecario(long registro) {
+        for ( Bibliotecario bibliotecario : bibliotecarioManipulator.getBibliotecarios()) {
+            if (bibliotecario.getRegistro() == registro) {
+                return bibliotecario;
+            }
+        }
+
+        return null;
+    }
+
     public boolean atualizarBibliotecario(Bibliotecario bibliotecarioAtualizado) {
         return bibliotecarioManipulator.atualizarBibliotecario(bibliotecarioAtualizado);
     }

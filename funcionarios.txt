@@ -30,3 +30,4 @@
 10028;Roberta Assis;roberta.assis@mail.com;Rob2024;41911009977;30/04/2024
 10029;Gustavo Neri;gustavo.neri@mail.com;Neri1234;11900998866;01/05/2024
 10030;Daniela Ramos;daniela.ramos@mail.com;Dan2024;21999887755;02/05/2024
+45464;Marcos;marcos@hotmail.com;123;474747474;02/12/2025

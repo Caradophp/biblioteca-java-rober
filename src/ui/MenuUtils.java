@@ -2,6 +2,7 @@ package ui;
 
 import biblioteca.Biblioteca;
 import entidades.Aluno;
+import entidades.Bibliotecario;
 import entidades.Livro;
 
 import java.util.List;
@@ -56,6 +57,23 @@ public class MenuUtils {
         }
     }
 
+    public static long lerNovoRegistro(Biblioteca biblioteca) {
+        while (true) {
+            long registro = MenuUtils.lerLong("Resgistro do bibliotecario (0 para voltar): ");
+
+            if (registro == 0) {
+                return 0;
+            }
+
+            Bibliotecario bibliotecario = biblioteca.buscarBibliotecario(registro);
+            if (bibliotecario == null) {
+                return registro;
+            } else {
+                System.out.println("Já existe um aluno cadastrado com essa matrícula.");
+            }
+        }
+    }
+
     /**
      * Lê uma matrícula existente na biblioteca e retorna o aluno correspondente.
      * Caso o usuário digite 0, retorna {@code null}.
@@ -75,6 +93,24 @@ public class MenuUtils {
             Aluno aluno = biblioteca.buscarAlunoPorMatricula(matricula);
             if (aluno != null) {
                 return aluno;
+            } else {
+                System.out.println("Nenhum aluno encontrado com essa matrícula.");
+            }
+        }
+    }
+
+    public static Bibliotecario lerBibliotecario(Biblioteca biblioteca) {
+        while (true) {
+            System.out.println("============================");
+            long registro = MenuUtils.lerLong("Registro do bibliotecario (0 para voltar): ");
+
+            if (registro == 0) {
+                return null;
+            }
+
+            Bibliotecario bibliotecario = biblioteca.buscarBibliotecario(registro);
+            if (bibliotecario != null) {
+                return bibliotecario;
             } else {
                 System.out.println("Nenhum aluno encontrado com essa matrícula.");
             }
