@@ -1,1 +1,30 @@
 25110463;Luciano Silva Friebe Feigl;luciano@mail.com;123;27988610153;Ciência da Computação
+25110464;Mariana Duarte Ribeiro;mariana.ribeiro@mail.com;abc123;11988776655;Engenharia de Software
+25110465;Rafael Gomes Pereira;rafael.pereira@mail.com;senha1;21999887766;Sistemas de Informação
+25110466;Ana Beatriz Moura;ana.moura@mail.com;ana2024;31988774433;Ciência da Computação
+25110467;João Pedro Almeida;joao.almeida@mail.com;joao123;41966554433;Engenharia de Computação
+25110468;Camila Siqueira Lopes;camila.lopes@mail.com;camila1;11944332211;Sistemas de Informação
+25110469;Felipe Andrade Costa;felipe.costa@mail.com;felipe@1;21933221177;Ciência da Computação
+25110470;Larissa Rocha Fernandes;larissa.fernandes@mail.com;lari2024;31922110099;Engenharia de Software
+25110471;Bruno Henrique Souza;bruno.souza@mail.com;bhs123;41911009988;Sistemas de Informação
+25110472;Patrícia Moreira Lima;patricia.lima@mail.com;pat123;11900998877;Ciência da Computação
+25110473;Eduardo Ramos Silva;eduardo.silva@mail.com;edu321;21988776644;Engenharia de Computação
+25110474;Juliana Prado Martins;juliana.prado@mail.com;juli2024;31977665544;Sistemas de Informação
+25110475;Diego Santos Carvalho;diego.carvalho@mail.com;dsc2024;41966554422;Ciência da Computação
+25110476;Beatriz Figueira Torres;beatriz.torres@mail.com;bia1234;11955443322;Engenharia de Software
+25110477;Ricardo Neves Oliveira;ricardo.oliveira@mail.com;rick2024;21944332211;Sistemas de Informação
+25110478;Natália Freire Mourão;nat.freire@mail.com;nati2024;31933221100;Ciência da Computação
+25110479;César Augusto Nogueira;cesar.nogueira@mail.com;cesar1;41922110088;Engenharia de Software
+25110480;Marcela Dias Castro;marcela.castro@mail.com;mdc2024;11911009977;Sistemas de Informação
+25110481;Paulo Henrique Teles;paulo.teles@mail.com;pauloH;21900998866;Ciência da Computação
+25110482;Helena Furtado Ramos;helena.ramos@mail.com;hel123;31999887755;Engenharia de Computação
+25110483;Gustavo Neri Azevedo;gustavo.azevedo@mail.com;neri2024;41988776655;Sistemas de Informação
+25110484;Roberta Assis Medeiros;roberta.medeiros@mail.com;rob@24;11977665544;Ciência da Computação
+25110485;Tiago Brito Sena;tiago.sena@mail.com;tiago1;21966554433;Engenharia de Software
+25110486;Melissa Cardoso Andrade;melissa.andrade@mail.com;mel2024;31955443322;Sistemas de Informação
+25110487;Hugo Azevedo Ramos;hugo.ramos@mail.com;hugo123;41944332211;Ciência da Computação
+25110488;Sabrina Teles Moreira;sabrina.moreira@mail.com;sab2024;11933221144;Engenharia de Software
+25110489;Vitor Martins Rocha;vitor.rocha@mail.com;vtr2024;21922110099;Sistemas de Informação
+25110490;Aline Castro Pereira;aline.pereira@mail.com;aline1;31911009988;Ciência da Computação
+25110491;Daniela Ramos Furtado;daniela.furtado@mail.com;dani2024;41900998877;Engenharia de Software
+25110492;Marcos Paulo de Arruda;marcos.arruda@mail.com;mpa321;11999887766;Sistemas de Informação
