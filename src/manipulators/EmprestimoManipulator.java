@@ -15,6 +15,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe responsável por gerenciar operações relacionadas a empréstimos,
+ * incluindo criação, renovação, devolução e persistência em arquivo.
+ */
 public class EmprestimoManipulator {
 
     private final LivroManipulator livroManipulator;
@@ -23,19 +27,33 @@ public class EmprestimoManipulator {
     private List<Emprestimo> emprestimos = new ArrayList<>();
     private final Path arquivoEmprestimos = Paths.get("emprestimos.txt");
 
+    /**
+     * Construtor que recebe manipuladores auxiliares e carrega os empréstimos do arquivo.
+     */
     public EmprestimoManipulator(LivroManipulator livroManipul, AlunoManipulator alunoManipul) {
         this.livroManipulator = livroManipul;
         this.alunoManipulator = alunoManipul;
         emprestimos = buscarTodosEmprestimos();
     }
 
+    /**
+     * Retorna a lista atual de empréstimos em memória.
+     */
     public List<Emprestimo> getEmprestimos() {
         return emprestimos;
     }
 
-    /* ===========================
+    /* ============================================================
        FAZER NOVO EMPRÉSTIMO
-       ========================== */
+       ============================================================ */
+
+    /**
+     * Realiza um novo empréstimo se o livro existir, houver disponibilidade
+     * e o aluno estiver cadastrado.
+     *
+     * @param emprestimo objeto contendo informações do novo empréstimo
+     * @return true se o empréstimo foi realizado com sucesso
+     */
     public boolean fazerEmprestimo(Emprestimo emprestimo) {
 
         Livro livro = livroManipulator.buscarLivroPorCodigo(emprestimo.getCodigoLivro());
@@ -57,18 +75,25 @@ public class EmprestimoManipulator {
 
         emprestimo.setLivro(livro);
 
-        int qtdDisponivel = livro.getQtdDisponivel() - 1;
-        livro.setQtdDisponivel(qtdDisponivel);
+        livro.setQtdDisponivel(livro.getQtdDisponivel() - 1);
         emprestimos.add(emprestimo);
         escreverEmprestimoNoArquivo(emprestimo);
-        livroManipulator.atualizarLivro(livro);
 
+        livroManipulator.atualizarLivro(livro);
         return true;
     }
 
-    /* ===========================
+    /* ============================================================
        RENOVAR EMPRÉSTIMO
-       ========================== */
+       ============================================================ */
+
+    /**
+     * Renova o empréstimo correspondente ao código informado,
+     * respeitando o limite máximo de renovações definido na classe Emprestimo.
+     *
+     * @param codigoEmprestimo código do empréstimo a renovar
+     * @return true se a renovação ocorreu; false se não foi possível
+     */
     public boolean renovarEmprestimo(long codigoEmprestimo) {
 
         boolean renovou = false;
@@ -79,7 +104,7 @@ public class EmprestimoManipulator {
         for (Emprestimo e : emprestimos) {
 
             if (e.getCodigoEmprestimo() == codigoEmprestimo) {
-               renovou = e.renovarEmprestimo();
+                renovou = e.renovarEmprestimo();
             }
 
             novaLista.add(e);
@@ -90,9 +115,16 @@ public class EmprestimoManipulator {
         return renovou;
     }
 
-    /* ===========================
+    /* ============================================================
        DEVOLVER LIVRO
-       ========================== */
+       ============================================================ */
+
+    /**
+     * Registra a devolução de um livro e atualiza sua quantidade disponível.
+     *
+     * @param codigoEmprestimo código do empréstimo
+     * @return true se o livro foi devolvido
+     */
     public boolean devolverLivro(long codigoEmprestimo) {
 
         boolean devolvido = false;
@@ -117,10 +149,15 @@ public class EmprestimoManipulator {
         return devolvido;
     }
 
+    /* ============================================================
+       CARREGAR EMPRÉSTIMOS DO ARQUIVO
+       ============================================================ */
 
-    /* ===========================
-       BUSCAR TODOS NO ARQUIVO
-       ========================== */
+    /**
+     * Lê todos os empréstimos armazenados no arquivo e reconstrói os objetos.
+     *
+     * @return lista com todos os empréstimos carregados
+     */
     private List<Emprestimo> buscarTodosEmprestimos() {
 
         List<Emprestimo> lista = new ArrayList<>();
@@ -146,12 +183,14 @@ public class EmprestimoManipulator {
                 e.setQtdRenovacoes(Integer.parseInt(l[6]));
 
                 String[] d1 = l[3].split("/");
-                e.setDataEmprestimo(LocalDate.of(Integer.parseInt(d1[2]),
+                e.setDataEmprestimo(LocalDate.of(
+                        Integer.parseInt(d1[2]),
                         Integer.parseInt(d1[1]),
                         Integer.parseInt(d1[0])));
 
                 String[] d2 = l[4].split("/");
-                e.setDataDevolucaoPrevista(LocalDate.of(Integer.parseInt(d2[2]),
+                e.setDataDevolucaoPrevista(LocalDate.of(
+                        Integer.parseInt(d2[2]),
                         Integer.parseInt(d2[1]),
                         Integer.parseInt(d2[0])));
 
@@ -167,24 +206,25 @@ public class EmprestimoManipulator {
         return lista;
     }
 
-
-    /* ===========================
+    /* ============================================================
        MÉTODOS AUXILIARES
-       ========================== */
+       ============================================================ */
 
     /**
-     * Limpa o conteúdo do arquivo
+     * Apaga todo o conteúdo de um arquivo, limpando-o completamente.
      */
     private void limparArquivo(Path arquivo) {
         try (OutputStream os = new FileOutputStream(arquivo.toString())) {
-            // Somente abrir já limpa
+            // Abrir o arquivo já remove o conteúdo
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Escreve um empréstimo individual no arquivo
+     * Escreve um empréstimo no arquivo no formato de linha de texto.
+     *
+     * @param e empréstimo a ser gravado
      */
     private void escreverEmprestimoNoArquivo(Emprestimo e) {
 

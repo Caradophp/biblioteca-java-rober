@@ -1,6 +1,5 @@
 package manipulators;
 
-import entidades.Aluno;
 import entidades.Bibliotecario;
 
 import java.io.FileOutputStream;
@@ -14,24 +13,43 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe responsável por manipular dados de bibliotecários,
+ * permitindo inserir, atualizar, remover e carregar registros
+ * armazenados em um arquivo texto.
+ */
 public class BibliotecarioManipulator {
 
     private List<Bibliotecario> bibliotecarios = new ArrayList<>();
     private final Path arquivoFuncionarios = Paths.get("funcionarios.txt");
 
+    /**
+     * Construtor que carrega todos os bibliotecários do arquivo.
+     */
     public BibliotecarioManipulator() {
         bibliotecarios = buscarTodosBibliotecarios();
     }
 
+    /**
+     * Retorna a quantidade de bibliotecários cadastrados.
+     */
     public int getNumBibliotecarios() {
         return this.bibliotecarios.size();
     }
 
+    /**
+     * Retorna a lista atual de bibliotecários em memória.
+     */
     public List<Bibliotecario> getBibliotecarios() {
         return bibliotecarios;
     }
 
-    /** INSERIR BIBLIOTECARIO */
+    /**
+     * Insere um novo bibliotecário, evitando registros e e-mails duplicados.
+     *
+     * @param bibliotecario novo bibliotecário a ser adicionado
+     * @return true se o cadastro foi inserido; false se já existe
+     */
     public boolean inserirBibliotecario(Bibliotecario bibliotecario) {
 
         for (Bibliotecario b : bibliotecarios) {
@@ -48,7 +66,12 @@ public class BibliotecarioManipulator {
         return true;
     }
 
-    /** REMOVER BIBLIOTECARIO */
+    /**
+     * Remove um bibliotecário pelo registro e reescreve o arquivo.
+     *
+     * @param registro número de registro do bibliotecário
+     * @return true se removido com sucesso
+     */
     public boolean removerFuncionario(int registro) {
 
         List<Bibliotecario> novaLista = new ArrayList<>();
@@ -72,7 +95,12 @@ public class BibliotecarioManipulator {
         }
     }
 
-    /** ATUALIZAR BIBLIOTECARIO */
+    /**
+     * Atualiza os dados de um bibliotecário existente.
+     *
+     * @param bibliotecarioAtualizado objeto contendo os novos dados
+     * @return true após atualização
+     */
     public boolean atualizarBibliotecario(Bibliotecario bibliotecarioAtualizado) {
 
         List<Bibliotecario> novaLista = new ArrayList<>();
@@ -95,7 +123,11 @@ public class BibliotecarioManipulator {
         return true;
     }
 
-    /** BUSCAR TODOS DO ARQUIVO */
+    /**
+     * Lê todos os bibliotecários do arquivo e os retorna como lista.
+     *
+     * @return lista de bibliotecários carregados do arquivo
+     */
     private List<Bibliotecario> buscarTodosBibliotecarios() {
 
         List<Bibliotecario> lista = new ArrayList<>();
@@ -122,9 +154,11 @@ public class BibliotecarioManipulator {
 
                 String[] data = l[5].split("/");
                 b.setDataAdmissao(
-                        LocalDate.of(Integer.parseInt(data[2]),
+                        LocalDate.of(
+                                Integer.parseInt(data[2]),
                                 Integer.parseInt(data[1]),
-                                Integer.parseInt(data[0]))
+                                Integer.parseInt(data[0])
+                        )
                 );
 
                 lista.add(b);
@@ -137,24 +171,32 @@ public class BibliotecarioManipulator {
         return lista;
     }
 
-    /** LIMPAR ARQUIVO */
+    /**
+     * Limpa todo o conteúdo de um arquivo texto.
+     *
+     * @param arquivo caminho do arquivo a ser limpo
+     */
     private void limparArquivo(Path arquivo) {
         try (OutputStream os = new FileOutputStream(arquivo.toString())) {
-            // Apenas abrir o arquivo já limpa o conteúdo
+            // Abrir já apaga o conteúdo
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    /** ESCREVER REGISTRO NO ARQUIVO */
+    /**
+     * Escreve um bibliotecário no arquivo em formato de linha.
+     *
+     * @param b bibliotecário a ser gravado
+     */
     private void escreverBibliotecarioNoArquivo(Bibliotecario b) {
 
         String linha = b.getRegistro() + ";" +
-                       b.getNome() + ";" +
-                       b.getEmail() + ";" +
-                       b.getSenha() + ";" +
-                       b.getTelefone() + ";" +
-                       b.getDataAdmissao();
+                b.getNome() + ";" +
+                b.getEmail() + ";" +
+                b.getSenha() + ";" +
+                b.getTelefone() + ";" +
+                b.getDataAdmissao();
 
         try {
             Files.write(arquivoFuncionarios, linha.getBytes(), StandardOpenOption.APPEND);

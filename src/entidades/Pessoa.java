@@ -3,7 +3,7 @@ package entidades;
 import java.util.Objects;
 
 /**
- * Classe base que representa uma Pessoa no sistema da biblioteca.
+ * Classe base abstrata que representa uma Pessoa no sistema da biblioteca.
  * Contém atributos comuns a Alunos e Bibliotecários.
  */
 public abstract class Pessoa {

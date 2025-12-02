@@ -13,22 +13,37 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe responsável por manipular os dados de alunos,
+ * realizando operações de cadastro, remoção, atualização
+ * e leitura de registros armazenados em arquivo texto.
+ */
 public class AlunoManipulator {
 
     private List<Aluno> alunos = new ArrayList<>();
     private final Path arquivoAlunos = Paths.get("alunos.txt");
 
+    /**
+     * Construtor que carrega todos os alunos já cadastrados no arquivo.
+     */
     public AlunoManipulator() {
         alunos = buscarTodosAlunos();
     }
 
+    /**
+     * Retorna a lista atual de alunos carregada em memória.
+     */
     public List<Aluno> getAlunos() {
         return alunos;
     }
 
-    /** CADASTRAR ALUNO */
+    /**
+     * Cadastra um novo aluno, impedindo matrículas ou e-mails duplicados.
+     *
+     * @param aluno novo aluno a ser cadastrado
+     * @return true se o cadastro foi realizado; false caso já exista
+     */
     public boolean cadastrarAluno(Aluno aluno) {
-
         for (Aluno a : alunos) {
             if (a.getMatricula() == aluno.getMatricula()
                     || a.getEmail().equalsIgnoreCase(aluno.getEmail())) {
@@ -39,11 +54,15 @@ public class AlunoManipulator {
 
         alunos.add(aluno);
         escreverAlunoNoArquivo(aluno);
-
         return true;
     }
 
-    /** REMOVER ALUNO */
+    /**
+     * Remove um aluno pela matrícula e reescreve o arquivo sem ele.
+     *
+     * @param matricula matrícula do aluno a ser removido
+     * @return true se removido com sucesso
+     */
     public boolean removerAluno(long matricula) {
 
         List<Aluno> novaLista = new ArrayList<>();
@@ -67,7 +86,12 @@ public class AlunoManipulator {
         }
     }
 
-    /** ATUALIZAR ALUNO */
+    /**
+     * Atualiza os dados de um aluno já existente.
+     *
+     * @param alunoAtualizado objeto contendo os novos dados
+     * @return true após atualizar e gravar no arquivo
+     */
     public boolean atualizarAluno(Aluno alunoAtualizado) {
 
         List<Aluno> novaLista = new ArrayList<>();
@@ -91,7 +115,12 @@ public class AlunoManipulator {
         return true;
     }
 
-    /** BUSCAR ALUNO POR MATRÍCULA */
+    /**
+     * Busca um aluno específico pela matrícula.
+     *
+     * @param matricula matrícula desejada
+     * @return o aluno encontrado ou null caso não exista
+     */
     public Aluno buscarAlunoPorMatricula(long matricula) {
         for (Aluno a : alunos) {
             if (a.getMatricula() == matricula) {
@@ -101,7 +130,11 @@ public class AlunoManipulator {
         return null;
     }
 
-    /** CARREGAR ALUNOS DO ARQUIVO */
+    /**
+     * Lê todos os alunos armazenados no arquivo e retorna como lista.
+     *
+     * @return lista de alunos carregada do arquivo
+     */
     private List<Aluno> buscarTodosAlunos() {
 
         List<Aluno> lista = new ArrayList<>();
@@ -136,7 +169,11 @@ public class AlunoManipulator {
         return lista;
     }
 
-    /** LIMPAR ARQUIVO */
+    /**
+     * Limpa todo o conteúdo do arquivo de alunos.
+     *
+     * @param arquivo caminho do arquivo a ser esvaziado
+     */
     private void limparArquivo(Path arquivo) {
         try (OutputStream os = new FileOutputStream(arquivo.toString())) {
             // Abrir já limpa o arquivo
@@ -145,15 +182,19 @@ public class AlunoManipulator {
         }
     }
 
-    /** ESCREVER ALUNO NO ARQUIVO */
+    /**
+     * Escreve um aluno no arquivo em formato de linha separada por ponto e vírgula.
+     *
+     * @param a aluno a ser gravado
+     */
     private void escreverAlunoNoArquivo(Aluno a) {
 
         String linha = a.getMatricula() + ";" +
-                       a.getNome() + ";" +
-                       a.getEmail() + ";" +
-                       a.getSenha() + ";" +
-                       a.getTelefone() + ";" +
-                       a.getCurso();
+                a.getNome() + ";" +
+                a.getEmail() + ";" +
+                a.getSenha() + ";" +
+                a.getTelefone() + ";" +
+                a.getCurso();
 
         try {
             Files.write(arquivoAlunos, linha.getBytes(), StandardOpenOption.APPEND);

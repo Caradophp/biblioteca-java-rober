@@ -13,15 +13,32 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe responsável por manipular operações relacionadas a livros.
+ * Inclui cadastro, busca, atualização, remoção e persistência em arquivo texto.
+ *
+ * O arquivo utilizado para armazenamento é "livros.txt", localizado no diretório raiz do projeto.
+ */
 public class LivroManipulator {
 
+    /** Lista de livros atualmente carregada na memória. */
     private List<Livro> livros = new ArrayList<>();
+
+    /** Caminho do arquivo físico utilizado para armazenar os livros. */
     private final Path arquivoLivros = Paths.get("livros.txt");
 
+    /**
+     * Construtor que inicializa o manipulador carregando todos os livros do arquivo.
+     */
     public LivroManipulator() {
         livros = buscarTodosLivros();
     }
 
+    /**
+     * Retorna a lista de livros carregada na memória.
+     *
+     * @return lista de livros
+     */
     public List<Livro> getLivros() {
         return livros;
     }
@@ -29,6 +46,14 @@ public class LivroManipulator {
     /* ==========================================================
        CADASTRAR LIVRO
        ========================================================== */
+
+    /**
+     * Cadastra um novo livro caso ainda não exista outro com o mesmo ISBN.
+     * O livro é adicionado à lista interna e persistido no arquivo.
+     *
+     * @param livro objeto livro a ser cadastrado
+     * @return true se o cadastro for bem-sucedido, false caso o ISBN já exista
+     */
     public boolean cadastrarLivro(Livro livro) {
 
         for (Livro l : livros) {
@@ -47,6 +72,13 @@ public class LivroManipulator {
     /* ==========================================================
        BUSCAR TODOS OS LIVROS NO ARQUIVO
        ========================================================== */
+
+    /**
+     * Lê todos os livros presentes no arquivo "livros.txt" e retorna a lista completa.
+     * Caso o arquivo não exista, ele é criado.
+     *
+     * @return lista de livros carregados do arquivo
+     */
     private List<Livro> buscarTodosLivros() {
 
         List<Livro> listaLivros = new ArrayList<>();
@@ -86,10 +118,17 @@ public class LivroManipulator {
     /* ==========================================================
        BUSCAR POR NOME
        ========================================================== */
-    public List<Livro> buscarLivrosPorNome(String nome) {
-    	List<Livro> livrosEncontrados = new ArrayList<Livro>();
 
-    	nome = nome.toLowerCase();
+    /**
+     * Busca livros cujo nome contém o texto informado (case insensitive).
+     *
+     * @param nome parte do nome do livro para buscar
+     * @return lista de livros encontrados
+     */
+    public List<Livro> buscarLivrosPorNome(String nome) {
+        List<Livro> livrosEncontrados = new ArrayList<>();
+
+        nome = nome.toLowerCase();
         for (Livro livro : livros) {
             if (livro.getNome().toLowerCase().contains(nome)) {
                 livrosEncontrados.add(livro);
@@ -98,10 +137,16 @@ public class LivroManipulator {
 
         return livrosEncontrados;
     }
-    
+
+    /**
+     * Busca livros por categoria exata (case insensitive).
+     *
+     * @param categoria categoria desejada
+     * @return lista de livros encontrados
+     */
     public List<Livro> buscarLivrosPorCategoria(String categoria) {
-    	List<Livro> livrosEncontrados = new ArrayList<Livro>();
-    	
+        List<Livro> livrosEncontrados = new ArrayList<>();
+
         for (Livro livro : livros) {
             if (livro.getCategoria().equalsIgnoreCase(categoria)) {
                 livrosEncontrados.add(livro);
@@ -113,6 +158,13 @@ public class LivroManipulator {
     /* ==========================================================
        BUSCAR POR ISBN
        ========================================================== */
+
+    /**
+     * Busca um livro específico pelo seu ISBN.
+     *
+     * @param isbn código ISBN a ser pesquisado
+     * @return livro encontrado ou null se não existir
+     */
     public Livro buscarLivroPorCodigo(long isbn) {
         for (Livro livro : livros) {
             if (livro.getIsbn() == isbn) {
@@ -125,6 +177,16 @@ public class LivroManipulator {
     /* ==========================================================
        ATUALIZAR LIVRO
        ========================================================== */
+
+    /**
+     * Atualiza um livro existente com base no ISBN.
+     * O ISBN não pode ser alterado.
+     *
+     * Após atualizar os dados, o arquivo é reescrito completamente.
+     *
+     * @param livroAtualizado objeto contendo os novos dados
+     * @return true se o livro foi atualizado, false caso contrário
+     */
     public boolean atualizarLivro(Livro livroAtualizado) {
 
         List<Livro> novaLista = new ArrayList<>();
@@ -152,6 +214,14 @@ public class LivroManipulator {
     /* ==========================================================
        REMOVER LIVRO
        ========================================================== */
+
+    /**
+     * Remove um livro com o ISBN informado.
+     * Após a remoção, o arquivo é reescrito completamente.
+     *
+     * @param isbn código ISBN do livro a ser removido
+     * @return true se a remoção foi bem-sucedida, false caso ocorra algum erro
+     */
     public boolean removerLivro(long isbn) {
 
         List<Livro> novaLista = new ArrayList<>();
@@ -178,6 +248,13 @@ public class LivroManipulator {
     /* ==========================================================
        LIMPAR ARQUIVO
        ========================================================== */
+
+    /**
+     * Limpa completamente o conteúdo do arquivo informado.
+     * Abrir o arquivo no modo padrão já apaga o conteúdo.
+     *
+     * @param arquivo caminho do arquivo a ser limpo
+     */
     private void limparArquivo(Path arquivo) {
         try (OutputStream os = new FileOutputStream(arquivo.toString())) {
             // Abrir já apaga o arquivo
@@ -189,6 +266,12 @@ public class LivroManipulator {
     /* ==========================================================
        ESCREVER LIVRO NO ARQUIVO
        ========================================================== */
+
+    /**
+     * Escreve um único livro no arquivo de armazenamento, adicionando-o ao final.
+     *
+     * @param livro livro a ser gravado
+     */
     public void escreverLivroNoArquivo(Livro livro) {
 
         String linha = livro.getAnoPublicacao() + ";" +
